@@ -1,50 +1,53 @@
 import React from "react";
 import * as Babylon from 'babylonjs';
 import * as Materials from 'babylonjs-materials';
-import SceneComponent from "../babylon_components/SceneComponent";
+import * as GUI from 'babylonjs-gui';
+
+import SceneComponent from "../Components/SceneComponent";
+import * as GizmoInterface from "../Modules/GizmoInterface";
+
+import * as Planetas from "./SistemaSolar"
+
+import milky_way from "../Resources/2k_stars_milky_way.jpg";
 
 const onSceneReady = (e) => {
 
-    // Crear un escenario sencillo en Babylon
-    const { canvas, scene, engine } = e;
+    const { canvas, scene, engine } = e
 
-    // Crear una cámara
-    const camera = new Babylon.ArcRotateCamera("Camera", 0, 0, 0, new Babylon.Vector3(0, 0, 0), scene);
+    /***** CONFIGURAMOS LA ESCENA ******/
 
-    // Crear una luz
-    const light = new Babylon.HemisphericLight("light", new Babylon.Vector3(0, 1, 0), scene);
+    scene.clearColor = new Babylon.Color3(0, 0, 0)
 
-    // Crear un cubo
-    const box = Babylon.MeshBuilder.CreateBox("box", { size: 2 }, scene);
+    GizmoInterface.GizmoInterface(scene)
 
-    // Crear un material
-    const material = new Materials.SimpleMaterial("material", scene);
+    /***********************************/
 
-    // Crear una textura
-    const texture = new Babylon.Texture("https://i.imgur.com/4Q7YQ2g.jpg", scene);
+    // CREAMOS LA CÁMARA
+    const camera = new Babylon.FreeCamera("camera", new Babylon.Vector3(0, 90, -150), scene)
 
-    // Asignar la textura al material
-    material.diffuseTexture = texture;
+    camera.setTarget(Babylon.Vector3.Zero())
 
-    // Asignar el material al cubo
-    box.material = material;
+    camera.attachControl(canvas, true)
 
-    // Posicionar la cámara
-    camera.setPosition(new Babylon.Vector3(-5, 5, -5));
+    // CREAMOS LA LUZ
+    const light = new Babylon.PointLight("light", new Babylon.Vector3(0, -10, 0), scene)
+    light.intensity = 5
 
-    // Apuntar la cámara al cubo
-    camera.setTarget(Babylon.Vector3.Zero());
+    // CREAMOS EL SUELO
+    const ground = Babylon.MeshBuilder.CreateGround("ground", { width: 200, height: 200 }, scene)
+    const groundMaterial = new Babylon.StandardMaterial("groundMaterial", scene)
+    groundMaterial.diffuseTexture = new Babylon.Texture(milky_way, scene)
+    ground.material = groundMaterial
 
-    // Activar la cámara
-    camera.attachControl(canvas, true);
+    // CREAMOS EL CIELO
+    const skyBoxMaterial = new Materials.SkyMaterial("skyBoxMaterial", scene)
+    skyBoxMaterial.backFaceCulling = false
+    const skybox = Babylon.Mesh.CreateBox("skyBox", 1000.0, scene)
+    skybox.material = skyBoxMaterial
 
-    // Activar la luz
-    light.intensity = 0.7;
+    // CREAMOS LOS PLANETAS
+    var planetas = new Planetas(scene)
 
-    // Activar el cubo
-    box.position.y = 1;
-
-    // Activar el motor
     engine.runRenderLoop(() => {
             
         if (scene) {
