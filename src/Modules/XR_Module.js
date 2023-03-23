@@ -10,13 +10,11 @@ import * as GUI from "babylonjs-gui";
    */
 export async function XR_Experience(ground, skybox, scene) {
 
-
     let inmersive_state = "inline";
     let reference_floor = "local-floor"
 
     let avaliableVR = await BABYLON.WebXRSessionManager.IsSessionSupportedAsync("immersive-vr");
     let avaliableAR = await BABYLON.WebXRSessionManager.IsSessionSupportedAsync("immersive-ar");
-
 
     console.log("AR mode avaliable: " + avaliableAR);
     console.log("VR mode avaliable: " + avaliableVR);
@@ -31,7 +29,6 @@ export async function XR_Experience(ground, skybox, scene) {
 
         }
     }
-
 
     const xr = scene.createDefaultXRExperienceAsync({
         disableDefaultUI: true,
@@ -52,17 +49,13 @@ export async function XR_Experience(ground, skybox, scene) {
 
         }
 
-
     });
-
 
     return xr.then((xrExperience) => {
 
         xrExperience.baseExperience.onStateChangedObservable.add((XRstate) => {
 
             if (avaliableVR) {
-
-
 
                 switch (XRstate) {
                     case BABYLON.WebXRState.IN_XR:
@@ -80,7 +73,6 @@ export async function XR_Experience(ground, skybox, scene) {
                 }
 
             }
-
 
             if (avaliableAR) {
 
@@ -113,8 +105,6 @@ export async function XR_Experience(ground, skybox, scene) {
 
             }
 
-
-
         });
 
         var advancedTextureFullScreen = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI", true, scene);
@@ -124,13 +114,12 @@ export async function XR_Experience(ground, skybox, scene) {
         button1.height = "40px";
         button1.color = "white";
         button1.cornerRadius = 20;
-        button1.background = "green";
+        button1.background = "blue";
         button1.fontSize = "20px"
         button1.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
         button1.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
         button1.topInPixels = -5;
         button1.leftInPixels =-5;
-
 
         button1.onPointerUpObservable.add(function () {
 
@@ -143,10 +132,8 @@ export async function XR_Experience(ground, skybox, scene) {
                 xrExperience.baseExperience.exitXRAsync();
             }
 
-
         });
         advancedTextureFullScreen.addControl(button1);
-
 
         // GUI
         var meshGUI = BABYLON.MeshBuilder.CreatePlane("plane", {
@@ -158,43 +145,8 @@ export async function XR_Experience(ground, skybox, scene) {
         meshGUI.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
         var advancedTexture = GUI.AdvancedDynamicTexture.CreateForMesh(meshGUI);
 
-        var container = new GUI.Rectangle("container");
-        container.width = 1;
-        container.height = 1;
-        container.thickness = 0;
-        container.background = "white";
-        container.alpha = 0.05;
-        container.zIndex = -1;
-
-        advancedTexture.addControl(container);
-        advancedTexture.scaleTo(300, 150);
-
-        var button1 = GUI.Button.CreateSimpleButton("but1", "A modo XR");
-        //button1.width = "400px";
-        //button1.height = "100px";
-        button1.color = "white";
-        button1.fontSize = 28;
-        button1.background = "green";
-        button1.onPointerUpObservable.add(function () {
-
-            if (xrExperience.baseExperience.state === BABYLON.WebXRState.NOT_IN_XR) {
-
-                xrExperience.baseExperience.enterXRAsync(inmersive_state, reference_floor);
-
-            } else if (xrExperience.baseExperience.state === BABYLON.WebXRState.IN_XR) {
-
-                xrExperience.baseExperience.exitXRAsync();
-            }
-
-        });
-        advancedTexture.addControl(button1);
-
-        meshGUI.position.addInPlaceFromFloats(0, 2, 0);
-
-
-        console.log("Se ha cargado funciones XR satisfactoriamente.");
         return xrExperience;
-    })
 
+    })
 
 }

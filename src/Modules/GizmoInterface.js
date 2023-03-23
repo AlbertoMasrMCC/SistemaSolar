@@ -4,30 +4,25 @@ import * as BABYLON from "babylonjs";
 
 export function GizmoInterface(scene) {
 
-
     var attachedMesh = null;
     var attachedMesh_mass = 0;
     var holding = false;
 
     const gizmoManager = new BABYLON.GizmoManager(scene, 1);
 
-
     gizmoManager.scaleGizmoEnabled = false;
     gizmoManager.positionGizmoEnabled = false;
     gizmoManager.rotationGizmoEnabled = false;
     gizmoManager.boundingBoxGizmoEnabled = true;
 
-    gizmoManager.gizmos.boundingBoxGizmo.fixedDragMeshBoundsSize=true;
+    gizmoManager.gizmos.boundingBoxGizmo.fixedDragMeshBoundsSize=false;
     gizmoManager.gizmos.boundingBoxGizmo.ignoreChildren=true;
-    
 
     gizmoManager.usePointerToAttachGizmos = false;
     gizmoManager.clearGizmoOnEmptyPointerEvent = true;
 
-
     scene.onPointerObservable.add((pointerInfo) => {
        
-
         switch (pointerInfo.type) {
             case BABYLON.PointerEventTypes.POINTERDOWN:
                 if (!holding && pointerInfo.pickInfo.pickedMesh && pointerInfo.pickInfo.pickedMesh.XRpickable) {
@@ -37,11 +32,9 @@ export function GizmoInterface(scene) {
                     gizmoManager.attachToMesh(attachedMesh);
                     
                     if (attachedMesh.physicsImpostor) {
-                       
-                      
+          
                         attachedMesh_mass = attachedMesh.physicsImpostor.mass;
                         attachedMesh.physicsImpostor.setMass(0);
-                       
 
                     }
                 }
