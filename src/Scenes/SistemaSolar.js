@@ -15,7 +15,9 @@ import neptuno_img from "../Resources/2k_neptune.jpg"
 export function crearPlanetas(scene) {
 
     var degrees_to_radians = function(degrees) {
+
         return degrees * (Math.PI / 180)
+
     }
 
     const sol = Babylon.MeshBuilder.CreateSphere("sol", {diameter: 1.3}, scene)
@@ -25,7 +27,6 @@ export function crearPlanetas(scene) {
     solMaterial.emissiveColor = new Babylon.Color3(1, 1, 1)
     sol.material = solMaterial
     sol.rotation.y = degrees_to_radians(90)
-    sol.XRpickable = true
 
     const mercurio = Babylon.MeshBuilder.CreateSphere("mercurio", {diameter: 0.1}, scene)
     mercurio.position.set(1, 1, 0)
@@ -34,7 +35,6 @@ export function crearPlanetas(scene) {
     mercurio.material = mercurioMaterial
     mercurio.rotation.x = degrees_to_radians(0.1)
     mercurio.rotation.y = degrees_to_radians(90)
-    mercurio.XRpickable = true
 
     const venus = Babylon.MeshBuilder.CreateSphere("venus", {diameter: 0.18}, scene)
     venus.position.set(2, 1, 0)
@@ -43,7 +43,6 @@ export function crearPlanetas(scene) {
     venus.material = venusMaterial
     mercurio.rotation.x = degrees_to_radians(177)
     venus.rotation.y = degrees_to_radians(90)
-    venus.XRpickable = true
 
     const tierra = Babylon.MeshBuilder.CreateSphere("tierra", {diameter: 0.25}, scene)
     tierra.position.set(3, 1, 0)
@@ -53,14 +52,12 @@ export function crearPlanetas(scene) {
     tierra.rotation.x = degrees_to_radians(23.5)
     tierra.rotation.y = degrees_to_radians(90)
     tierra.rotation.z = degrees_to_radians(180)
-    tierra.XRpickable = true
 
     const luna = Babylon.MeshBuilder.CreateSphere("luna", {diameter: 0.05}, scene)
     luna.position.set(3.3, 1, 0)
     let lunaMaterial = new Babylon.StandardMaterial("lunaMaterial", scene)
     lunaMaterial.diffuseTexture = new Babylon.Texture(luna_img, scene)
     luna.material = lunaMaterial
-    luna.XRpickable = true
 
     const marte = Babylon.MeshBuilder.CreateSphere("marte", {diameter: 0.18}, scene)
     marte.position.set(4, 1, 0)
@@ -69,7 +66,6 @@ export function crearPlanetas(scene) {
     marte.material = marteMaterial
     marte.rotation.x = degrees_to_radians(25)
     marte.rotation.y = degrees_to_radians(90)
-    marte.XRpickable = true
 
     const jupiter = Babylon.MeshBuilder.CreateSphere("jupiter", {diameter: 0.7}, scene)
     jupiter.position.set(5, 1, 0)
@@ -78,7 +74,6 @@ export function crearPlanetas(scene) {
     jupiter.material = jupiterMaterial
     jupiter.rotation.x = degrees_to_radians(3)
     jupiter.rotation.y = degrees_to_radians(90)
-    jupiter.XRpickable = true
 
     const saturno = Babylon.MeshBuilder.CreateSphere("saturno", {diameter: 0.5}, scene)
     saturno.position.set(6, 1, 0)
@@ -87,16 +82,14 @@ export function crearPlanetas(scene) {
     saturno.material = saturnoMaterial
     saturno.rotation.x = degrees_to_radians(-27)
     saturno.rotation.y = degrees_to_radians(90)
-    saturno.XRpickable = true
 
-    const saturnoAnillos = Babylon.MeshBuilder.CreateTorus("saturnoAnillos", {diameter: 0.8, thickness: 0.2, tessellation: 10}, scene)
+    const saturnoAnillos = Babylon.MeshBuilder.CreateTorus("saturnoAnillos", {diameter: 0.8, thickness: 0.2, tessellation: 100}, scene)
     saturnoAnillos.scaling = new Babylon.Vector3(1, 0.001, 1)
     let saturnoAnillosMaterial = new Babylon.StandardMaterial("saturnoAnillosMaterial", scene)
     saturnoAnillosMaterial.diffuseTexture = new Babylon.Texture(saturno_anillos_img, scene)
     saturnoAnillos.rotation.x = degrees_to_radians(-27)
     saturnoAnillos.material = saturnoAnillosMaterial
     saturnoAnillos.position.set(6, 1, 0)
-    saturnoAnillos.XRpickable = true
 
     const urano = Babylon.MeshBuilder.CreateSphere("urano", {diameter: 0.5}, scene)
     urano.position.set(7, 1, 0)
@@ -105,7 +98,6 @@ export function crearPlanetas(scene) {
     urano.material = uranoMaterial
     urano.rotation.x = degrees_to_radians(98)
     urano.rotation.y = degrees_to_radians(90)
-    urano.XRpickable = true
 
     const neptuno = Babylon.MeshBuilder.CreateSphere("neptuno", {diameter: 0.4}, scene)
     neptuno.position.set(8, 1, 0)
@@ -114,17 +106,16 @@ export function crearPlanetas(scene) {
     neptuno.material = neptunoMaterial
     neptuno.rotation.x = degrees_to_radians(28)
     neptuno.rotation.y = degrees_to_radians(90)
-    neptuno.XRpickable = true
 
     return [sol, mercurio, venus, tierra, luna, marte, jupiter, saturno, saturnoAnillos, urano, neptuno]
 
 }
 
-export function crearOrbitas(scene) {
+export function crearOrbitas() {
 
     var mercurioOrbita = []
-    var n = 880 // numero de puntos
-    var r = 1 // radio de la orbita
+    var n = 880
+    var r = 1
     for (var i = 0; i < n; i++) {
         var theta = 2 * Math.PI * i / n
         var x = r * Math.cos(theta)
@@ -134,8 +125,8 @@ export function crearOrbitas(scene) {
     mercurioOrbita.push(mercurioOrbita[0])
 
     var venusOrbita = []
-    var n = 1270 // numero de puntos
-    var r = 2 // radio de la orbita
+    var n = 1270
+    var r = 2
     for (var i = 0; i < n; i++) {
         var theta = 2 * Math.PI * i / n
         var x = r * Math.cos(theta)
@@ -145,8 +136,8 @@ export function crearOrbitas(scene) {
     venusOrbita.push(venusOrbita[0])
 
     var tierraOrbita = []
-    var n = 1210 // numero de puntos
-    var r = 3 // radio de la orbita
+    var n = 1210
+    var r = 3
     for (var i = 0; i < n; i++) {
         var theta = 2 * Math.PI * i / n
         var x = r * Math.cos(theta)
@@ -156,8 +147,8 @@ export function crearOrbitas(scene) {
     tierraOrbita.push(tierraOrbita[0])
 
     var marteOrbita = []
-    var n = 1710 // numero de puntos
-    var r = 4 // radio de la orbita
+    var n = 1710
+    var r = 4
     for (var i = 0; i < n; i++) {
         var theta = 2 * Math.PI * i / n
         var x = r * Math.cos(theta)
@@ -167,8 +158,8 @@ export function crearOrbitas(scene) {
     marteOrbita.push(marteOrbita[0])
 
     var jupiterOrbita = []
-    var n = 8660 // numero de puntos
-    var r = 5 // radio de la orbita
+    var n = 8660
+    var r = 5
     for (var i = 0; i < n; i++) {
         var theta = 2 * Math.PI * i / n
         var x = r * Math.cos(theta)
@@ -178,8 +169,8 @@ export function crearOrbitas(scene) {
     jupiterOrbita.push(jupiterOrbita[0])
 
     var saturnoOrbita = []
-    var n = 17920 // numero de puntos
-    var r = 6 // radio de la orbita
+    var n = 17920
+    var r = 6
     for (var i = 0; i < n; i++) {
         var theta = 2 * Math.PI * i / n
         var x = r * Math.cos(theta)
@@ -189,8 +180,8 @@ export function crearOrbitas(scene) {
     saturnoOrbita.push(saturnoOrbita[0])
 
     var uranoOrbita = []
-    var n = 43800 // numero de puntos
-    var r = 7 // radio de la orbita
+    var n = 43800
+    var r = 7
     for (var i = 0; i < n; i++) {
         var theta = 2 * Math.PI * i / n
         var x = r * Math.cos(theta)
@@ -200,8 +191,8 @@ export function crearOrbitas(scene) {
     uranoOrbita.push(uranoOrbita[0])
 
     var neptunoOrbita = []
-    var n = 75190 // numero de puntos
-    var r = 8 // radio de la orbita
+    var n = 75190
+    var r = 8
     for (var i = 0; i < n; i++) {
         var theta = 2 * Math.PI * i / n
         var x = r * Math.cos(theta)
@@ -240,7 +231,6 @@ export function crearCirculos(scene, orbitas) {
 
 export function asociarPlanetasOrbitas(planetas, orbitas, circulos) {
 
-    // Planetas meshes
     let SOL = 0
     let MERCURIO = 1
     let VENUS = 2
@@ -253,7 +243,6 @@ export function asociarPlanetasOrbitas(planetas, orbitas, circulos) {
     let URANO = 9
     let NEPTUNO = 10
 
-    // Circulos meshes
     let MERCURIO_CIRCULO = 0
     let VENUS_CIRCULO = 1
     let TIERRA_CIRCULO = 2
@@ -274,3 +263,20 @@ export function asociarPlanetasOrbitas(planetas, orbitas, circulos) {
     planetas[NEPTUNO].parent = circulos[NEPTUNO_CIRCULO]
 
 }
+
+export function agregarHighLight(mesh, selectedMesh, highlightLayer) {
+
+    if (selectedMesh) {
+
+        selectedMesh.isSelected = false;
+        highlightLayer.removeMesh(selectedMesh);
+
+    }
+
+    mesh.isSelected = true;
+    highlightLayer.addMesh(mesh, new Babylon.Color3(0, 255, 0));
+    selectedMesh = mesh;
+    return selectedMesh;
+
+  }
+  

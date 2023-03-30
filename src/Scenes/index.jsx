@@ -4,7 +4,6 @@ import * as Materials from 'babylonjs-materials';
 import * as GUI from 'babylonjs-gui';
 
 import SceneComponent from "../Components/SceneComponent";
-import * as GizmoInterface from "../Modules/GizmoInterface";
 import * as XR_Module from "../Modules/XR_Module";
 
 import * as SistemaSolar from "./SistemaSolar"
@@ -15,11 +14,11 @@ const onSceneReady = (e) => {
 
     const { canvas, scene, engine } = e
 
+    // Activamos el debuger
+    // scene.debugLayer.show()
+
     // DAMOS UN COLOR OSCURO A LA ESCENA
     scene.clearColor = new Babylon.Color3(0, 0, 0)
-
-    // CARGAMOS EL MÓDULO GIZMO
-    GizmoInterface.GizmoInterface(scene)
 
     // CREAMOS LA CÁMARA
     const camera = new Babylon.FreeCamera("camera", new Babylon.Vector3(0, 9, -15), scene)
@@ -27,7 +26,7 @@ const onSceneReady = (e) => {
     camera.attachControl(canvas, true)
 
     // CREAMOS LA LUZ
-    const light = new Babylon.PointLight("light", new Babylon.Vector3(0, -10, 0), scene)
+    const light = new Babylon.PointLight("light", new Babylon.Vector3(0, -1, 0), scene)
     light.intensity = 5
 
     // CREAMOS EL SUELO
@@ -44,13 +43,34 @@ const onSceneReady = (e) => {
 
     // CREANDO EL SISTEMA SOLAR
     var planetas = SistemaSolar.crearPlanetas(scene)
-    var orbitas = SistemaSolar.crearOrbitas(scene)
+    var orbitas = SistemaSolar.crearOrbitas()
     var circulos = SistemaSolar.crearCirculos(scene, orbitas)
     SistemaSolar.asociarPlanetasOrbitas(planetas, orbitas, circulos)
     var [ sol, mercurio, venus, tierra, luna, marte, jupiter, saturno, saturnoAnillos, urano, neptuno ] = planetas
     var [ mercurioOrbita, venusOrbita, tierraOrbita, marteOrbita, jupiterOrbita, saturnoOrbita, uranoOrbita, neptunoOrbita ] = orbitas
     var [ mercurioCirculo, venusCirculo, tierraCirculo, marteCirculo, jupiterCirculo, saturnoCirculo, uranoCirculo, neptunoCirculo ] = circulos
 
+    // Variable global para hacer referencia al objeto seleccionado
+    var highlightLayer = new Babylon.HighlightLayer('highlightLayer', scene);
+
+    let selectedMesh = null;
+
+    // CREAMOS EL ACTION MANAGER PARA LOS PLANETAS Y ASIGNAMOS EL HIGHLIGHT LAYER AL OBJETO SELECCIONADO
+    planetas.forEach(mesh => {
+
+        mesh.actionManager = new Babylon.ActionManager(scene);
+        mesh.actionManager.registerAction(
+
+            new Babylon.ExecuteCodeAction(Babylon.ActionManager.OnPickTrigger, () => {
+
+                selectedMesh = SistemaSolar.agregarHighLight(mesh, selectedMesh, highlightLayer);
+
+            })
+            
+        );
+
+    });
+    
     // CARGAMOS EL MÓDULO XR
     const XR = XR_Module.XR_Experience(ground, skybox, scene);
     
