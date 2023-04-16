@@ -1,11 +1,9 @@
 import React from "react";
 import * as Babylon from 'babylonjs';
 import * as Materials from 'babylonjs-materials';
-import * as GUI from 'babylonjs-gui';
 
 import SceneComponent from "../Components/SceneComponent";
 import * as XR_Module from "../Modules/XR_Module";
-
 import * as SistemaSolar from "./SistemaSolar"
 
 import milky_way from "../Resources/2k_stars_milky_way.jpg";
@@ -45,17 +43,20 @@ const onSceneReady = (e) => {
     var planetas = SistemaSolar.crearPlanetas(scene)
     var orbitas = SistemaSolar.crearOrbitas()
     var circulos = SistemaSolar.crearCirculos(scene, orbitas)
-    SistemaSolar.asociarPlanetasOrbitas(planetas, orbitas, circulos)
+    var [paneles, advancedTexture] = SistemaSolar.crearPaneles(planetas)
+    var botones = SistemaSolar.crearBotones(advancedTexture, planetas) 
+    SistemaSolar.asociarPlanetasOrbitas(planetas, circulos)
     var [ sol, mercurio, venus, tierra, luna, marte, jupiter, saturno, saturnoAnillos, urano, neptuno ] = planetas
     var [ mercurioOrbita, venusOrbita, tierraOrbita, marteOrbita, jupiterOrbita, saturnoOrbita, uranoOrbita, neptunoOrbita ] = orbitas
     var [ mercurioCirculo, venusCirculo, tierraCirculo, marteCirculo, jupiterCirculo, saturnoCirculo, uranoCirculo, neptunoCirculo ] = circulos
+    var [ solPanel, mercurioPanel, venusPanel, tierraPanel, martePanel, jupiterPanel, saturnoPanel, saturnoAnillosPanel, uranoPanel, neptunoPanel ] = paneles
+    var [ solBoton, mercurioBoton, venusBoton, tierraBoton, marteBoton, jupiterBoton, saturnoBoton, uranoBoton, neptunoBoton ] = botones
 
-    // Variable global para hacer referencia al objeto seleccionado
+    // Variable global para hacer referencia al objeto seleccionado y poder cambiar su color
     var highlightLayer = new Babylon.HighlightLayer('highlightLayer', scene);
-
     let selectedMesh = null;
 
-    // CREAMOS EL ACTION MANAGER PARA LOS PLANETAS Y ASIGNAMOS EL HIGHLIGHT LAYER AL OBJETO SELECCIONADO
+    // Agregamos el comportamiento a los planetas
     planetas.forEach(mesh => {
 
         mesh.actionManager = new Babylon.ActionManager(scene);
@@ -64,6 +65,10 @@ const onSceneReady = (e) => {
             new Babylon.ExecuteCodeAction(Babylon.ActionManager.OnPickTrigger, () => {
 
                 selectedMesh = SistemaSolar.agregarHighLight(mesh, selectedMesh, highlightLayer);
+
+                // Activar el panel y botones de prueba del planeta seleccionado
+                SistemaSolar.activarPanel(mesh, paneles)
+                SistemaSolar.activarBoton(mesh, botones)
 
             })
             

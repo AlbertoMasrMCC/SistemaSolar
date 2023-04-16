@@ -1,4 +1,5 @@
 import * as Babylon from 'babylonjs'
+import * as GUI from 'babylonjs-gui';
 
 import sol_img from "../Resources/2k_sun.jpg"
 import mercurio_img from "../Resources/2k_mercury.jpg"
@@ -12,13 +13,37 @@ import saturno_img from "../Resources/2k_saturn.jpg"
 import urano_img from "../Resources/2k_uranus.jpg"
 import neptuno_img from "../Resources/2k_neptune.jpg"
 
-export function crearPlanetas(scene) {
+function degrees_to_radians(degrees) {
 
-    var degrees_to_radians = function(degrees) {
+    return degrees * (Math.PI / 180)
 
-        return degrees * (Math.PI / 180)
+}
+
+function orbit_planet(points, ratio) {
+
+    var orbit = []
+
+    for (var i = 0; i < points; i++) {
+
+        var theta = 2 * Math.PI * i / points
+        var x = ratio * Math.cos(theta)
+        var z = ratio * Math.sin(theta)
+
+        orbit.push(new Babylon.Vector3(x, 0, z))
 
     }
+
+    orbit.push(orbit[0])
+
+    return orbit
+}
+
+/**
+ * Función para crear los planetas del sistema solar
+ * @param {Babylon.Scene} scene la escena de Babylon
+ * @returns {Babylon.Mesh} Array con los planetas del sistema solar
+**/
+export function crearPlanetas(scene) {
 
     const sol = Babylon.MeshBuilder.CreateSphere("sol", {diameter: 1.3}, scene)
     sol.position.set(0, 1, 0)
@@ -26,6 +51,7 @@ export function crearPlanetas(scene) {
     solMaterial.diffuseTexture = new Babylon.Texture(sol_img, scene)
     solMaterial.emissiveColor = new Babylon.Color3(1, 1, 1)
     sol.material = solMaterial
+    sol.isPickable = true
     sol.rotation.y = degrees_to_radians(90)
 
     const mercurio = Babylon.MeshBuilder.CreateSphere("mercurio", {diameter: 0.1}, scene)
@@ -111,100 +137,31 @@ export function crearPlanetas(scene) {
 
 }
 
+/** 
+ * Función que crea las órbitas de los planetas
+ * @returns {Array Babylon.Mesh} Array con las órbitas de los planetas
+**/
 export function crearOrbitas() {
 
-    var mercurioOrbita = []
-    var n = 880
-    var r = 1
-    for (var i = 0; i < n; i++) {
-        var theta = 2 * Math.PI * i / n
-        var x = r * Math.cos(theta)
-        var z = r * Math.sin(theta)
-        mercurioOrbita.push(new Babylon.Vector3(x, 0, z))
-    }
-    mercurioOrbita.push(mercurioOrbita[0])
-
-    var venusOrbita = []
-    var n = 1270
-    var r = 2
-    for (var i = 0; i < n; i++) {
-        var theta = 2 * Math.PI * i / n
-        var x = r * Math.cos(theta)
-        var z = r * Math.sin(theta)
-        venusOrbita.push(new Babylon.Vector3(x, 0, z))
-    }
-    venusOrbita.push(venusOrbita[0])
-
-    var tierraOrbita = []
-    var n = 1210
-    var r = 3
-    for (var i = 0; i < n; i++) {
-        var theta = 2 * Math.PI * i / n
-        var x = r * Math.cos(theta)
-        var z = r * Math.sin(theta)
-        tierraOrbita.push(new Babylon.Vector3(x, 0, z))
-    }
-    tierraOrbita.push(tierraOrbita[0])
-
-    var marteOrbita = []
-    var n = 1710
-    var r = 4
-    for (var i = 0; i < n; i++) {
-        var theta = 2 * Math.PI * i / n
-        var x = r * Math.cos(theta)
-        var z = r * Math.sin(theta)
-        marteOrbita.push(new Babylon.Vector3(x, 0, z))
-    }
-    marteOrbita.push(marteOrbita[0])
-
-    var jupiterOrbita = []
-    var n = 8660
-    var r = 5
-    for (var i = 0; i < n; i++) {
-        var theta = 2 * Math.PI * i / n
-        var x = r * Math.cos(theta)
-        var z = r * Math.sin(theta)
-        jupiterOrbita.push(new Babylon.Vector3(x, 0, z))
-    }
-    jupiterOrbita.push(jupiterOrbita[0])
-
-    var saturnoOrbita = []
-    var n = 17920
-    var r = 6
-    for (var i = 0; i < n; i++) {
-        var theta = 2 * Math.PI * i / n
-        var x = r * Math.cos(theta)
-        var z = r * Math.sin(theta)
-        saturnoOrbita.push(new Babylon.Vector3(x, 0, z))
-    }
-    saturnoOrbita.push(saturnoOrbita[0])
-
-    var uranoOrbita = []
-    var n = 43800
-    var r = 7
-    for (var i = 0; i < n; i++) {
-        var theta = 2 * Math.PI * i / n
-        var x = r * Math.cos(theta)
-        var z = r * Math.sin(theta)
-        uranoOrbita.push(new Babylon.Vector3(x, 0, z))
-    }
-    uranoOrbita.push(uranoOrbita[0])
-
-    var neptunoOrbita = []
-    var n = 75190
-    var r = 8
-    for (var i = 0; i < n; i++) {
-        var theta = 2 * Math.PI * i / n
-        var x = r * Math.cos(theta)
-        var z = r * Math.sin(theta)
-        neptunoOrbita.push(new Babylon.Vector3(x, 0, z))
-    }
-    neptunoOrbita.push(neptunoOrbita[0])
+    var mercurioOrbita = orbit_planet(880, 1)
+    var venusOrbita = orbit_planet(1270, 2)
+    var tierraOrbita = orbit_planet(1210, 3)
+    var marteOrbita = orbit_planet(1710, 4)
+    var jupiterOrbita = orbit_planet(8660, 5)
+    var saturnoOrbita = orbit_planet(17920, 6)
+    var uranoOrbita = orbit_planet(43800, 7)
+    var neptunoOrbita = orbit_planet(75190, 8)
 
     return [mercurioOrbita, venusOrbita, tierraOrbita, marteOrbita, jupiterOrbita, saturnoOrbita, uranoOrbita, neptunoOrbita]
 
 }
 
+/**
+ * Función que crea los círculos que representan las órbitas de los planetas
+ * @param {Babylon.Scene} scene Escena de Babylon
+ * @param {Array Babylon.Mesh} orbitas Array con las órbitas de los planetas
+ * @returns {Array Babylon.Mesh} Array con los círculos que representan las órbitas de los planetas
+**/
 export function crearCirculos(scene, orbitas) {
 
     let MERCURIO = 0
@@ -229,7 +186,157 @@ export function crearCirculos(scene, orbitas) {
 
 }
 
-export function asociarPlanetasOrbitas(planetas, orbitas, circulos) {
+/** 
+ * Función que crea los paneles de información de los planetas
+ * @param {Array Babylon.Mesh} planetas Array con los planetas
+ * @returns {Array Babylon.GUI.Rectangle} Array con los paneles de información de los planetas
+**/
+export function crearPaneles(planetas) {
+
+    let advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+
+    let paneles = []
+
+    // Crear un panel con texto para cada planeta
+    for (let i = 0; i < planetas.length; i++) {
+
+        let panel = new GUI.Rectangle("panel" + i);
+        panel.width = "300px";
+        panel.height = "150px";
+        panel.cornerRadius = 20;
+        panel.color = "white";
+        panel.thickness = 4;
+        panel.background = "black";
+        panel.alpha = 0.8;
+        panel.isVisible = false;
+        advancedTexture.addControl(panel);
+        panel.linkWithMesh(planetas[i]);
+        panel.linkOffsetY = -120;
+
+        let texto = new GUI.TextBlock();
+
+        var textoPanel = ""
+
+        switch (planetas[i].name.toUpperCase()) {
+
+            case "SOL":
+                textoPanel = "El Sol es una bola gigante de gas incandescente compuesto principalmente de hidrógeno y helio. En el centro del Sol, la presión y la temperatura son tan altas que los átomos de hidrógeno se fusionan para formar helio, liberando energía en el proceso. Esta reacción nuclear es lo que mantiene al Sol caliente y brillante, y es responsable de la mayor parte de la energía que recibimos en la Tierra."
+                break;
+
+            case "MERCURIO":
+                textoPanel = "Es el planeta más cercano al Sol y el más pequeño del sistema solar. Tiene una superficie muy arrugada debido a la contracción térmica y no tiene atmósfera."
+                break;
+
+            case "VENUS":
+                textoPanel = "Es el segundo planeta del sistema solar y es conocido como el planeta gemelo de la Tierra, ya que tiene un tamaño y una masa similar. Sin embargo, su superficie es extremadamente caliente debido al efecto invernadero y su atmósfera es muy densa, principalmente compuesta de dióxido de carbono."
+                break;
+
+            case "TIERRA":
+                textoPanel = "Es el tercer planeta del sistema solar y el único conocido que tiene vida. Tiene una atmósfera rica en oxígeno y una temperatura y presión ideales para la vida. Además, es el único planeta del sistema solar que tiene agua líquida en su superficie."
+                break;
+
+            case "LUNA":
+                textoPanel = "La luna es el único satélite natural de la Tierra y es el quinto satélite más grande del sistema solar."
+                break;
+
+            case "MARTE":
+                textoPanel = "Es el cuarto planeta del sistema solar y es conocido como el planeta rojo debido a su superficie rocosa. Tiene una atmósfera delgada y fría y su superficie está llena de cráteres y volcanes. Es posible que en el pasado haya tenido agua líquida en su superficie."
+                break;
+
+            case "JUPITER":
+                textoPanel = "Es el planeta más grande del sistema solar y tiene una atmósfera muy colorida y turbulenta, principalmente compuesta de hidrógeno y helio. Tiene muchas lunas, siendo las más conocidas Io, Europa, Ganímedes y Calisto."
+                break;
+
+            case "SATURNO":
+                textoPanel = "Es el segundo planeta más grande del sistema solar y es conocido por sus espectaculares anillos. Tiene una atmósfera similar a la de Júpiter y también tiene muchas lunas."
+                break;
+
+            case "SATURNOANILLOS":
+                textoPanel = "Los anillos de Saturno son un fenómeno fascinante del sistema solar. A pesar de que están compuestos principalmente de pequeñas partículas de hielo y roca, los anillos tienen una enorme masa que se estima en más de 3 x 10^19 kilogramos."
+                break;
+
+            case "URANO":
+                textoPanel = "Es el séptimo planeta del sistema solar y tiene una atmósfera similar a la de Júpiter y Saturno, principalmente compuesta de hidrógeno y helio. Tiene un sistema de anillos y muchas lunas."
+                break;
+
+            case "NEPTUNO":
+                textoPanel = "Es el octavo y último planeta del sistema solar y tiene una atmósfera similar a la de Urano. También tiene un sistema de anillos y muchas lunas, siendo la más conocida Tritón."
+                break;
+
+        }
+
+        texto.text = textoPanel;
+        texto.color = "white";
+        texto.fontSize = 12;
+        texto.textWrapping = true;
+        panel.addControl(texto);
+
+        paneles.push(panel)
+
+    }
+
+    return [paneles, advancedTexture]
+
+}
+
+/**
+ * Función que crea los botones para iniciar las pruebas de los planetas
+ * @param {Babylon.GUI.AdvancedDynamicTexture} advancedTexture Textura avanzada de Babylon
+ * @param {Array Babylon.Mesh} planetas Array con los planetas
+ * @returns {Array Babylon.GUI.Button} Array con los botones para iniciar las pruebas de los planetas
+**/
+export function crearBotones(advancedTexture, planetas) {
+
+        let SATURNO_ANILLOS = 8
+    
+        let controladores = []
+    
+        // Crear un botón para cada planeta
+        for (let i = 0; i < planetas.length; i++) {
+
+            if (i === SATURNO_ANILLOS) {
+                continue
+            }
+    
+            let boton = GUI.Button.CreateSimpleButton("boton" + i, "Iniciar prueba de " + planetas[i].name.toUpperCase());
+            boton.width = "250px";
+            boton.height = "80px";
+            boton.cornerRadius = 20;
+            boton.color = "white";
+            boton.thickness = 4;
+            boton.background = "black";
+            boton.alpha = 0.8;
+            boton.paddingTop = "10px";
+            boton.paddingBottom = "10px";
+            boton.paddingLeft = "10px";
+            boton.paddingRight = "10px";
+            boton.onPointerEnterObservable.add(function () {
+                boton.background = "white";
+                boton.color = "black";
+            });
+            boton.onPointerOutObservable.add(function () {
+                boton.background = "black";
+                boton.color = "white";
+            });
+            boton.isVisible = false;
+            advancedTexture.addControl(boton);
+            boton.linkWithMesh(planetas[i]);
+            boton.linkOffsetY = 80;
+
+            controladores.push(boton)
+    
+        }
+    
+        return controladores
+    
+}
+
+/**
+ * Función que asocia los planetas con sus órbitas
+ * @param {Array Babylon.Mesh} planetas Array con los planetas
+ * @param {Array Babylon.Mesh} circulos Array con los círculos que representan las órbitas
+**/
+export function asociarPlanetasOrbitas(planetas, circulos) {
 
     let SOL = 0
     let MERCURIO = 1
@@ -264,6 +371,13 @@ export function asociarPlanetasOrbitas(planetas, orbitas, circulos) {
 
 }
 
+/**
+ * Función que agrega un efecto de resaltado a un Mesh
+ * @param {Babylon.Mesh} mesh Mesh al que se le agregará el efecto de resaltado
+ * @param {Babylon.Mesh} selectedMesh Mesh que se encuentra seleccionado
+ * @param {Babylon.HighlightLayer} highlightLayer Capa de resaltado de Babylon
+ * @returns {Babylon.Mesh} Mesh que se encuentra seleccionado
+**/
 export function agregarHighLight(mesh, selectedMesh, highlightLayer) {
 
     if (selectedMesh) {
@@ -274,9 +388,56 @@ export function agregarHighLight(mesh, selectedMesh, highlightLayer) {
     }
 
     mesh.isSelected = true;
-    highlightLayer.addMesh(mesh, new Babylon.Color3(0, 255, 0));
+    highlightLayer.addMesh(mesh, new Babylon.Color3(0, 255, 0)); // Color verde
     selectedMesh = mesh;
     return selectedMesh;
 
-  }
-  
+}
+
+/**
+ * Función que activa el panel de información de un Mesh
+ * @param {Babylon.Mesh} selectedMesh Mesh que se encuentra seleccionado
+ * @param {Array Babylon.GUI.Rectangle} paneles Array con los paneles de información
+ * @returns {Babylon.GUI.Rectangle} Panel de información del Mesh seleccionado
+**/
+export function activarPanel(selectedMesh, paneles) {
+
+    for (let i = 0; i < paneles.length; i++) {
+
+        if (paneles[i].linkedMesh === selectedMesh) {
+
+            paneles[i].isVisible = true;
+
+        } else {
+
+            paneles[i].isVisible = false;
+
+        }
+
+    }
+
+}
+
+/**
+ * Función que activa el botón para iniciar las pruebas de un Mesh
+ * @param {Babylon.Mesh} selectedMesh Mesh que se encuentra seleccionado
+ * @param {Array Babylon.GUI.Button} botones Array con los botones para iniciar las pruebas de los planetas
+ * @returns {Babylon.GUI.Button} Botón para iniciar las pruebas del Mesh seleccionado
+**/
+export function activarBoton(selectedMesh, botones) {
+    
+        for (let i = 0; i < botones.length; i++) {
+    
+            if (botones[i].linkedMesh === selectedMesh) {
+    
+                botones[i].isVisible = true;
+    
+            } else {
+    
+                botones[i].isVisible = false;
+    
+            }
+    
+        }
+    
+}
