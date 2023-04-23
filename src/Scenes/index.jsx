@@ -1,18 +1,38 @@
 import React from "react";
 import * as Babylon from 'babylonjs';
+import * as GUI from 'babylonjs-gui';
 import * as Materials from 'babylonjs-materials';
 
 import SceneComponent from "../Components/SceneComponent";
 import * as XR_Module from "../Modules/XR_Module";
-import * as SistemaSolar from "./SistemaSolar"
 
 import milky_way from "../Resources/2k_stars_milky_way.jpg";
 
+import * as EscenaPlanetas from "./EscenaPlanetas";
+import * as SistemaSolar from "./SistemaSolar"
+
+// La primera posición corresponde al sol, la segunda a mercurio, la tercera a venus, la cuarta a la tierra, la quinta a marte, la sexta a jupiter, la séptima a saturno, la octava a urano y la novena a neptuno
+const NIVELES_PASADOS = [false, false, false, false, false, false, false, false, false]
+
+export function pasoNivel(indexNivel, nivelPasado){
+
+    NIVELES_PASADOS[indexNivel] = nivelPasado
+
+}
+
+export function getNivel(indexNivel){
+
+    return NIVELES_PASADOS[indexNivel]
+
+}
+
 const onSceneReady = (e) => {
+
+    var sceneIndex =  -1;
 
     const { canvas, scene, engine } = e
 
-    // Activamos el debuger
+    // ACTIVAMOS EL DEBUGGER
     // scene.debugLayer.show()
 
     // DAMOS UN COLOR OSCURO A LA ESCENA
@@ -43,16 +63,18 @@ const onSceneReady = (e) => {
     var planetas = SistemaSolar.crearPlanetas(scene)
     var orbitas = SistemaSolar.crearOrbitas()
     var circulos = SistemaSolar.crearCirculos(scene, orbitas)
-    var [paneles, advancedTexture] = SistemaSolar.crearPaneles(planetas)
-    var botones = SistemaSolar.crearBotones(advancedTexture, planetas) 
+    var [paneles, texturaPaneles] = SistemaSolar.crearPaneles(planetas)
+    var botones = SistemaSolar.crearBotones(texturaPaneles, planetas) 
     SistemaSolar.asociarPlanetasOrbitas(planetas, circulos)
+
+    // Asignamos los planetas a variables para poder acceder a ellos más fácilmente
     var [ sol, mercurio, venus, tierra, luna, marte, jupiter, saturno, saturnoAnillos, urano, neptuno ] = planetas
     var [ mercurioOrbita, venusOrbita, tierraOrbita, marteOrbita, jupiterOrbita, saturnoOrbita, uranoOrbita, neptunoOrbita ] = orbitas
     var [ mercurioCirculo, venusCirculo, tierraCirculo, marteCirculo, jupiterCirculo, saturnoCirculo, uranoCirculo, neptunoCirculo ] = circulos
     var [ solPanel, mercurioPanel, venusPanel, tierraPanel, martePanel, jupiterPanel, saturnoPanel, saturnoAnillosPanel, uranoPanel, neptunoPanel ] = paneles
     var [ solBoton, mercurioBoton, venusBoton, tierraBoton, marteBoton, jupiterBoton, saturnoBoton, uranoBoton, neptunoBoton ] = botones
 
-    // Variable global para hacer referencia al objeto seleccionado y poder cambiar su color
+    // Variable global para hacer referencia al objeto seleccionado
     var highlightLayer = new Babylon.HighlightLayer('highlightLayer', scene);
     let selectedMesh = null;
 
@@ -75,11 +97,61 @@ const onSceneReady = (e) => {
         );
 
     });
+
+    canvas.addEventListener('click', function(event) {
+
+        // Verificar si el clic se originó dentro del mesh seleccionado
+        if (selectedMesh && selectedMesh.actionManager && selectedMesh.actionManager.hasSpecificTrigger(Babylon.ActionManager.OnPickTrigger)) {
+        
+            const pickResult = scene.pick(scene.pointerX, scene.pointerY);
+
+            if (pickResult && pickResult.pickedMesh === selectedMesh) {
+
+                return;
+
+            }
+
+        }
+    
+        // Si el clic no se originó dentro del mesh seleccionado, quitar el highlight y ocultar el panel y botones
+        if (selectedMesh) {
+
+            SistemaSolar.quitarHighLight(selectedMesh, highlightLayer);
+            SistemaSolar.desactivarPanel(selectedMesh, paneles);
+            SistemaSolar.desactivarBoton(selectedMesh, botones);
+            selectedMesh = null;
+
+        }
+        
+    });  
+
+    // Agregamos el comportamiento a los botones de "Iniciar prueba"
+    botones.forEach(boton => {
+
+        boton.onPointerClickObservable.add(() => {
+            
+            // Obtenemos el index de la escena del planeta seleccionado, esto nos permitirá saber qué escena cargar
+            sceneIndex = SistemaSolar.obtenerIndexEscenaPlaneta(selectedMesh.name.toUpperCase())
+
+        });
+
+    });
+    
+    /// Agregamos la escena de cada planeta
+    var sceneSol = EscenaPlanetas.crearEscenaSol(engine, canvas)
+    var sceneMercurio = EscenaPlanetas.crearEscenaMercurio(engine, canvas)
+    var sceneVenus = EscenaPlanetas.crearEscenaVenus(engine, canvas)
+    var sceneTierra = EscenaPlanetas.crearEscenaTierra(engine, canvas)
+    var sceneMarte = EscenaPlanetas.crearEscenaMarte(engine, canvas)
+    var sceneJupiter = EscenaPlanetas.crearEscenaJupiter(engine, canvas)
+    var sceneSaturno = EscenaPlanetas.crearEscenaSaturno(engine, canvas)
+    var sceneUrano = EscenaPlanetas.crearEscenaUrano(engine, canvas)
+    var sceneNeptuno = EscenaPlanetas.crearEscenaNeptuno(engine, canvas)
     
     // CARGAMOS EL MÓDULO XR
     const XR = XR_Module.XR_Experience(ground, skybox, scene);
     
-    // DAMOS COMPORTAMIENTO
+    // DAMOS COMPORTAMIENTO AL RENDERIZADO DE LA ESCENA
     var mercurioMovimiento = 0
     var venusMovimiento = 0
     var tierraMovimiento = 0
@@ -143,11 +215,62 @@ const onSceneReady = (e) => {
     })
 
     engine.runRenderLoop(() => {
+
+        switch (sceneIndex) {
+        
+            case 0:
+                scene.dispose()
+            break;
+
+            case 1:
+                scene.dispose()
+                sceneSol.render()
+            break;
+
+            case 2:
+                scene.dispose()
+                sceneMercurio.render()
+            break;
+
+            case 3:
+                scene.dispose()
+                sceneVenus.render()
+            break;
+
+            case 4:
+                scene.dispose()
+                sceneTierra.render()
+            break;
+
+            case 5:
+                scene.dispose()
+                sceneMarte.render()
+            break;
+
+            case 6:
+                scene.dispose()
+                sceneJupiter.render()
+            break;
+
+            case 7:
+                scene.dispose()
+                sceneSaturno.render()
+            break;
+
+            case 8:
+                scene.dispose()
+                sceneUrano.render()
+            break;
+
+            case 9:
+                scene.dispose()
+                sceneNeptuno.render()
+            break;
             
-        if (scene) {
-
-            scene.render();
-
+            default:
+                scene.render()
+            break;
+        
         }
 
     });

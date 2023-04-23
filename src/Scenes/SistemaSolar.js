@@ -38,6 +38,62 @@ function orbit_planet(points, ratio) {
     return orbit
 }
 
+export function obtenerIndexEscenaPlaneta(planeta) {
+
+    let escenaPlaneta = null
+
+    switch (planeta) {
+
+        case "SOL":
+            escenaPlaneta = 1
+            break;
+
+        case "MERCURIO":
+            escenaPlaneta = 2
+            break;
+
+        case "VENUS":
+            escenaPlaneta = 3
+            break;
+
+        case "TIERRA":
+            escenaPlaneta = 4
+            break;
+
+        case "LUNA":
+            //
+            break;
+
+        case "MARTE":
+            escenaPlaneta = 5
+            break;
+
+        case "JUPITER":
+            escenaPlaneta = 6
+            break;
+
+        case "SATURNO":
+            escenaPlaneta = 7
+            break;
+
+        case "SATURNOANILLOS":
+            // 
+            break;
+
+        case "URANO":
+            escenaPlaneta = 8
+            break;
+
+        case "NEPTUNO":
+            escenaPlaneta = 9
+            break;
+
+    }
+
+    return escenaPlaneta
+
+}
+
 /**
  * Función para crear los planetas del sistema solar
  * @param {Babylon.Scene} scene la escena de Babylon
@@ -395,10 +451,25 @@ export function agregarHighLight(mesh, selectedMesh, highlightLayer) {
 }
 
 /**
+ * Función que quita un efecto de resaltado a un Mesh
+ * @param {Babylon.Mesh} selectedMesh Mesh que se encuentra seleccionado
+ * @param {Babylon.HighlightLayer} highlightLayer Capa de resaltado de Babylon
+**/
+export function quitarHighLight(selectedMesh, highlightLayer) {
+
+    if (selectedMesh) {
+
+        selectedMesh.isSelected = false;
+        highlightLayer.removeMesh(selectedMesh);
+
+    }
+
+}
+
+/**
  * Función que activa el panel de información de un Mesh
  * @param {Babylon.Mesh} selectedMesh Mesh que se encuentra seleccionado
  * @param {Array Babylon.GUI.Rectangle} paneles Array con los paneles de información
- * @returns {Babylon.GUI.Rectangle} Panel de información del Mesh seleccionado
 **/
 export function activarPanel(selectedMesh, paneles) {
 
@@ -419,25 +490,64 @@ export function activarPanel(selectedMesh, paneles) {
 }
 
 /**
+ * Función que desactiva el panel de información de un Mesh
+ * @param {Babylon.Mesh} selectedMesh Mesh que se encuentra seleccionado
+ * @param {Array Babylon.GUI.Rectangle} paneles Array con los paneles de información
+**/
+export function desactivarPanel(selectedMesh, paneles) {
+
+    for (let i = 0; i < paneles.length; i++) {
+
+        if (paneles[i].linkedMesh === selectedMesh) {
+
+            paneles[i].isVisible = false;
+
+        }
+
+    }
+
+}
+
+/**
  * Función que activa el botón para iniciar las pruebas de un Mesh
  * @param {Babylon.Mesh} selectedMesh Mesh que se encuentra seleccionado
  * @param {Array Babylon.GUI.Button} botones Array con los botones para iniciar las pruebas de los planetas
- * @returns {Babylon.GUI.Button} Botón para iniciar las pruebas del Mesh seleccionado
 **/
 export function activarBoton(selectedMesh, botones) {
-    
-        for (let i = 0; i < botones.length; i++) {
-    
-            if (botones[i].linkedMesh === selectedMesh) {
-    
-                botones[i].isVisible = true;
-    
-            } else {
-    
-                botones[i].isVisible = false;
-    
-            }
-    
+
+    for (let i = 0; i < botones.length; i++) {
+
+        if (botones[i].linkedMesh === selectedMesh) {
+
+            botones[i].isVisible = true;
+
+        } else {
+
+            botones[i].isVisible = false;
+
+            botones[i].onPointerClickObservable.clear();
+
         }
-    
+
+    }
+
+}
+
+/**
+ * Función que desactiva el botón para iniciar las pruebas de un Mesh
+ * @param {Babylon.Mesh} selectedMesh Mesh que se encuentra seleccionado
+ * @param {Array Babylon.GUI.Button} botones Array con los botones para iniciar las pruebas de los planetas
+**/
+export function desactivarBoton(selectedMesh, botones) {
+
+    for (let i = 0; i < botones.length; i++) {
+
+        if (botones[i].linkedMesh === selectedMesh) {
+
+            botones[i].isVisible = false;
+
+        }
+
+    }
+
 }
