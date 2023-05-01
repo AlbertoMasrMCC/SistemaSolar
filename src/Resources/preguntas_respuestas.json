@@ -1,0 +1,170 @@
+[
+    
+    {
+        "id": 0,
+        "test": [
+            {
+                "question": "¿De qué está hecho el sol?",
+                "answers": [
+                    "De fuego",
+                    "De agua",
+                    "De aire",
+                    "De rocas"
+                ],
+                "correctAnswer": 0
+            },
+            {
+
+                "question": "¿Por qué el sol es importante para la tierra?",
+                "answers": [
+                    "Porque nos da luz y calor",
+                    "Porque nos da agua",
+                    "Porque nos da comida",
+                    "Porque nos da oxígeno"
+                ],
+                "correctAnswer": 0
+            },
+            {
+                "question": "¿Cuál es el planeta más cercano al sol?",
+                "answers": [
+                    "Marte",
+                    "Venus",
+                    "Tierra",
+                    "Mercurio"
+                ],
+                "correctAnswer": 3
+            },
+            {
+                "question": "¿Cuál es el planeta más lejano al sol?",
+                "answers": [
+                    "Mercurio",
+                    "Venus",
+                    "Tierra",
+                    "Neptuno"
+                ],
+                "correctAnswer": 3
+            }
+        ]
+    },
+    {
+        "id": 1,
+        "test": [
+            {
+                "question": "Cuál es el primer planeta del sistema solar?",
+                "answers": [
+                    "Mercurio",
+                    "Venus",
+                    "Tierra",
+                    "Marte"
+                ],
+                "correctAnswer": 0
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "test": [
+            {
+                "question": "Cuál es el segundo planeta del sistema solar?",
+                "answers": [
+                    "Mercurio",
+                    "Venus",
+                    "Tierra",
+                    "Marte"
+                ],
+                "correctAnswer": 1
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "test": [
+            {
+                "question": "Cuál es el tercer planeta del sistema solar?",
+                "answers": [
+                    "Mercurio",
+                    "Venus",
+                    "Tierra",
+                    "Marte"
+                ],
+                "correctAnswer": 2
+            }
+        ]
+    },
+    {
+        "id": 4,
+        "test": [
+            {
+                "question": "Cuál es el cuarto planeta del sistema solar?",
+                "answers": [
+                    "Mercurio",
+                    "Venus",
+                    "Tierra",
+                    "Marte"
+                ],
+                "correctAnswer": 3
+            }
+        ]
+    },
+    {
+        "id": 5,
+        "test": [
+            {
+                "question": "Cuál es el quinto planeta del sistema solar?",
+                "answers": [
+                    "Jupiter",
+                    "Saturno",
+                    "Urano",
+                    "Neptuno"
+                ],
+                "correctAnswer": 0
+            }
+        ]
+    },
+    {
+        "id": 6,
+        "test": [
+            {
+                "question": "Cuál es el sexto planeta del sistema solar?",
+                "answers": [
+                    "Jupiter",
+                    "Saturno",
+                    "Urano",
+                    "Neptuno"
+                ],
+                "correctAnswer": 1
+            }
+        ]
+    },
+    {
+        "id": 7,
+        "test": [
+            {
+                "question": "Cuál es el séptimo planeta del sistema solar?",
+                "answers": [
+                    "Jupiter",
+                    "Saturno",
+                    "Urano",
+                    "Neptuno"
+                ],
+                "correctAnswer": 2
+            }
+        ]
+    },
+    {
+        "id": 8,
+        "test": [
+            {
+                "question": "Cuál es el octavo planeta del sistema solar?",
+                "answers": [
+                    "Jupiter",
+                    "Saturno",
+                    "Urano",
+                    "Neptuno"
+                ],
+                "correctAnswer": 3
+            }
+        ]
+    }
+
+]

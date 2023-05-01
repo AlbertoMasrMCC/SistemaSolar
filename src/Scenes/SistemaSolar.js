@@ -1,6 +1,8 @@
 import * as Babylon from 'babylonjs'
 import * as GUI from 'babylonjs-gui';
 
+import * as PaginaPrincipal from "./index";
+
 import sol_img from "../Resources/2k_sun.jpg"
 import mercurio_img from "../Resources/2k_mercury.jpg"
 import venus_img from "../Resources/2k_venus_surface.jpg"
@@ -344,19 +346,21 @@ export function crearPaneles(planetas) {
 export function crearBotones(advancedTexture, planetas) {
 
         let SATURNO_ANILLOS = 8
+        let LUNA = 4
     
         let controladores = []
     
         // Crear un botón para cada planeta
         for (let i = 0; i < planetas.length; i++) {
 
-            if (i === SATURNO_ANILLOS) {
+            if (i === SATURNO_ANILLOS || i === LUNA) {
                 continue
             }
     
-            let boton = GUI.Button.CreateSimpleButton("boton" + i, "Iniciar prueba de " + planetas[i].name.toUpperCase());
+            let boton = GUI.Button.CreateSimpleButton("boton" + i);
             boton.width = "250px";
             boton.height = "80px";
+            boton.textBlock.text = "Iniciar prueba de " + planetas[i].name.toUpperCase()
             boton.cornerRadius = 20;
             boton.color = "white";
             boton.thickness = 4;
@@ -385,6 +389,30 @@ export function crearBotones(advancedTexture, planetas) {
     
         return controladores
     
+}
+
+export function validarNivelPasadoBoton(selectedMesh, botones) {
+
+    for (let i = 0; i < botones.length; i++) {
+
+        if (botones[i].linkedMesh === selectedMesh) {
+
+            var nivelpasado = PaginaPrincipal.getNiveles()
+
+            if (nivelpasado[i]) {
+
+                botones[i].isEnabled = false
+                botones[i].color = "green"
+                botones[i].background = "green"
+                botones[i].textBlock.color = "white"
+                botones[i].textBlock.text = "¡Nivel pasado!"
+
+            }
+
+        }
+
+    }
+
 }
 
 /**
@@ -444,7 +472,7 @@ export function agregarHighLight(mesh, selectedMesh, highlightLayer) {
     }
 
     mesh.isSelected = true;
-    highlightLayer.addMesh(mesh, new Babylon.Color3(0, 255, 0)); // Color verde
+    highlightLayer.addMesh(mesh, new Babylon.Color3(255, 255, 255));
     selectedMesh = mesh;
     return selectedMesh;
 

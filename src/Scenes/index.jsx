@@ -1,6 +1,5 @@
 import React from "react";
 import * as Babylon from 'babylonjs';
-import * as GUI from 'babylonjs-gui';
 import * as Materials from 'babylonjs-materials';
 
 import SceneComponent from "../Components/SceneComponent";
@@ -11,8 +10,34 @@ import milky_way from "../Resources/2k_stars_milky_way.jpg";
 import * as EscenaPlanetas from "./EscenaPlanetas";
 import * as SistemaSolar from "./SistemaSolar"
 
+// Obtenemos los parámetros de la URL
+var urlParams = new URLSearchParams(window.location.search);
+
+// Obtenemos los parámetros de la URL, en caso de que no existan, se asigna false
+var sol = urlParams.get('sol') || false;
+var mercurio = urlParams.get('mercurio') || false;
+var venus = urlParams.get('venus') || false;
+var tierra = urlParams.get('tierra') || false;
+var marte = urlParams.get('marte') || false;
+var jupiter = urlParams.get('jupiter') || false;
+var saturno = urlParams.get('saturno') || false;
+var urano = urlParams.get('urano') || false;
+var neptuno = urlParams.get('neptuno') || false;
+
+// Convertimos los parámetros a booleanos
+sol = sol === 'true'
+mercurio = mercurio === 'true'
+venus = venus === 'true'
+tierra = tierra === 'true'
+marte = marte === 'true'
+jupiter = jupiter === 'true'
+saturno = saturno === 'true'
+urano = urano === 'true'
+neptuno = neptuno === 'true'
+
+// Creamos un array con los niveles pasados
 // La primera posición corresponde al sol, la segunda a mercurio, la tercera a venus, la cuarta a la tierra, la quinta a marte, la sexta a jupiter, la séptima a saturno, la octava a urano y la novena a neptuno
-const NIVELES_PASADOS = [false, false, false, false, false, false, false, false, false]
+var NIVELES_PASADOS = [sol, mercurio, venus, tierra, marte, jupiter, saturno, urano, neptuno]
 
 export function pasoNivel(indexNivel, nivelPasado){
 
@@ -26,11 +51,17 @@ export function getNivel(indexNivel){
 
 }
 
+export function getNiveles(){
+
+    return NIVELES_PASADOS
+
+}
+
 const onSceneReady = (e) => {
 
-    var sceneIndex =  -1;
-
     const { canvas, scene, engine } = e
+
+    var sceneIndex =  -1;
 
     // ACTIVAMOS EL DEBUGGER
     // scene.debugLayer.show()
@@ -91,6 +122,9 @@ const onSceneReady = (e) => {
                 // Activar el panel y botones de prueba del planeta seleccionado
                 SistemaSolar.activarPanel(mesh, paneles)
                 SistemaSolar.activarBoton(mesh, botones)
+                SistemaSolar.validarNivelPasadoBoton(mesh, botones)
+
+
 
             })
             
@@ -129,7 +163,7 @@ const onSceneReady = (e) => {
     botones.forEach(boton => {
 
         boton.onPointerClickObservable.add(() => {
-            
+
             // Obtenemos el index de la escena del planeta seleccionado, esto nos permitirá saber qué escena cargar
             sceneIndex = SistemaSolar.obtenerIndexEscenaPlaneta(selectedMesh.name.toUpperCase())
 
@@ -138,15 +172,15 @@ const onSceneReady = (e) => {
     });
     
     /// Agregamos la escena de cada planeta
-    var sceneSol = EscenaPlanetas.crearEscenaSol(engine, canvas)
-    var sceneMercurio = EscenaPlanetas.crearEscenaMercurio(engine, canvas)
-    var sceneVenus = EscenaPlanetas.crearEscenaVenus(engine, canvas)
-    var sceneTierra = EscenaPlanetas.crearEscenaTierra(engine, canvas)
-    var sceneMarte = EscenaPlanetas.crearEscenaMarte(engine, canvas)
-    var sceneJupiter = EscenaPlanetas.crearEscenaJupiter(engine, canvas)
-    var sceneSaturno = EscenaPlanetas.crearEscenaSaturno(engine, canvas)
-    var sceneUrano = EscenaPlanetas.crearEscenaUrano(engine, canvas)
-    var sceneNeptuno = EscenaPlanetas.crearEscenaNeptuno(engine, canvas)
+    var sceneSol = EscenaPlanetas.crearEscenaSol(engine, canvas, 0)
+    var sceneMercurio = EscenaPlanetas.crearEscenaMercurio(engine, canvas, 1)
+    var sceneVenus = EscenaPlanetas.crearEscenaVenus(engine, canvas, 2)
+    var sceneTierra = EscenaPlanetas.crearEscenaTierra(engine, canvas, 3)
+    var sceneMarte = EscenaPlanetas.crearEscenaMarte(engine, canvas, 4)
+    var sceneJupiter = EscenaPlanetas.crearEscenaJupiter(engine, canvas, 5)
+    var sceneSaturno = EscenaPlanetas.crearEscenaSaturno(engine, canvas, 6)
+    var sceneUrano = EscenaPlanetas.crearEscenaUrano(engine, canvas, 7)
+    var sceneNeptuno = EscenaPlanetas.crearEscenaNeptuno(engine, canvas, 8)
     
     // CARGAMOS EL MÓDULO XR
     const XR = XR_Module.XR_Experience(ground, skybox, scene);
