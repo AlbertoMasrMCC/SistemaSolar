@@ -553,8 +553,6 @@ export function activarBoton(selectedMesh, botones) {
 
             botones[i].isVisible = false;
 
-            botones[i].onPointerClickObservable.clear();
-
         }
 
     }

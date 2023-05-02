@@ -13,7 +13,7 @@ import * as SistemaSolar from "./SistemaSolar"
 // Obtenemos los parámetros de la URL
 var urlParams = new URLSearchParams(window.location.search);
 
-// Obtenemos los parámetros de la URL, en caso de que no existan, se asigna false
+// Obtenemos los parámetros de la URL, en caso de que no existan se asigna false
 var sol = urlParams.get('sol') || false;
 var mercurio = urlParams.get('mercurio') || false;
 var venus = urlParams.get('venus') || false;
@@ -57,7 +57,7 @@ export function getNiveles(){
 
 }
 
-const onSceneReady = (e) => {
+const onSceneReady = async (e) => {
 
     const { canvas, scene, engine } = e
 
@@ -124,8 +124,6 @@ const onSceneReady = (e) => {
                 SistemaSolar.activarBoton(mesh, botones)
                 SistemaSolar.validarNivelPasadoBoton(mesh, botones)
 
-
-
             })
             
         );
@@ -147,7 +145,7 @@ const onSceneReady = (e) => {
 
         }
     
-        // Si el clic no se originó dentro del mesh seleccionado, quitar el highlight y ocultar el panel y botones
+        // Si el clic no se originó dentro del mesh seleccionado, quitar el highlight, ocultar el panel y botones
         if (selectedMesh) {
 
             SistemaSolar.quitarHighLight(selectedMesh, highlightLayer);
@@ -172,18 +170,18 @@ const onSceneReady = (e) => {
     });
     
     /// Agregamos la escena de cada planeta
-    var sceneSol = EscenaPlanetas.crearEscenaSol(engine, canvas, 0)
-    var sceneMercurio = EscenaPlanetas.crearEscenaMercurio(engine, canvas, 1)
-    var sceneVenus = EscenaPlanetas.crearEscenaVenus(engine, canvas, 2)
-    var sceneTierra = EscenaPlanetas.crearEscenaTierra(engine, canvas, 3)
-    var sceneMarte = EscenaPlanetas.crearEscenaMarte(engine, canvas, 4)
-    var sceneJupiter = EscenaPlanetas.crearEscenaJupiter(engine, canvas, 5)
-    var sceneSaturno = EscenaPlanetas.crearEscenaSaturno(engine, canvas, 6)
-    var sceneUrano = EscenaPlanetas.crearEscenaUrano(engine, canvas, 7)
-    var sceneNeptuno = EscenaPlanetas.crearEscenaNeptuno(engine, canvas, 8)
+    var sceneSol = await EscenaPlanetas.crearEscena(engine, canvas, 0)
+    var sceneMercurio = await EscenaPlanetas.crearEscena(engine, canvas, 1)
+    var sceneVenus = await EscenaPlanetas.crearEscena(engine, canvas, 2)
+    var sceneTierra = await EscenaPlanetas.crearEscena(engine, canvas, 3)
+    var sceneMarte = await EscenaPlanetas.crearEscena(engine, canvas, 4)
+    var sceneJupiter = await EscenaPlanetas.crearEscena(engine, canvas, 5)
+    var sceneSaturno = await EscenaPlanetas.crearEscena(engine, canvas, 6)
+    var sceneUrano = await EscenaPlanetas.crearEscena(engine, canvas, 7)
+    var sceneNeptuno = await EscenaPlanetas.crearEscena(engine, canvas, 8)
     
     // CARGAMOS EL MÓDULO XR
-    const XR = XR_Module.XR_Experience(ground, skybox, scene);
+    XR_Module.XR_Experience(ground, skybox, scene);
     
     // DAMOS COMPORTAMIENTO AL RENDERIZADO DE LA ESCENA
     var mercurioMovimiento = 0

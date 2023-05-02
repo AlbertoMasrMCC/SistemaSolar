@@ -1,10 +1,11 @@
 import * as Babylon from 'babylonjs'
 import * as GUI from 'babylonjs-gui';
+import ammo from "ammo.js";
 
-import hdr from '../Resources/room.hdr'
+import fondo_planetas from '../Resources/escena_planetas/index.js';
 
 import * as PaginaPrincipal from "./index";
-import { WindowsUI } from "../Modules/WindowUI";
+import { FormulariosUI } from "../Modules/FormularioUI";
 import preguntas_respuestas from '../Resources/preguntas_respuestas.json'
 
 /**
@@ -13,16 +14,21 @@ import preguntas_respuestas from '../Resources/preguntas_respuestas.json'
  * @param {HTMLCanvasElement} canvas lienzo
  * @returns {Babylon.Scene} subScene Escena del planeta Sol
 **/
-export function crearEscenaSol(engine, canvas, idTest) {
+export async function crearEscena(engine, canvas, idTest) {
 
-    var preguntas_respuestas_sol = preguntas_respuestas[idTest]
+    var preguntas_respuestas_escena = preguntas_respuestas[idTest]
 
     var subScene = new Babylon.Scene(engine);
-    var camera = new Babylon.ArcRotateCamera("camera1", 0, 0, -3, Babylon.Vector3.Zero(), subScene);
+    var camera = new Babylon.ArcRotateCamera("camera"+ idTest, 0, 0, -3, Babylon.Vector3.Zero(), subScene);
     camera.setPosition(new Babylon.Vector3(0, 0, -3));
     camera.attachControl(canvas, false);
 
-    var ventanas = WindowsUI(preguntas_respuestas_sol, subScene);
+    subScene.enablePhysics(new Babylon.Vector3(0, 0, 0), new Babylon.AmmoJSPlugin(true, await ammo()));
+  
+    subScene.collitionsEnabled = true;
+    camera.checkCollisions = true;
+
+    var ventanas = FormulariosUI(preguntas_respuestas_escena, subScene);
 
     function mostrarOcultarVentana(ventana, mostrar) {
         ventana.barMesh.isVisible = mostrar;
@@ -103,21 +109,24 @@ export function crearEscenaSol(engine, canvas, idTest) {
     }
     
 
-    var skybox3 = Babylon.Mesh.CreateBox("skyBox3", 200, subScene);
-    var skyboxMaterial3 = new Babylon.StandardMaterial("skyBox3", subScene);
-    skyboxMaterial3.backFaceCulling = false;
-    skyboxMaterial3.reflectionTexture = new Babylon.HDRCubeTexture(hdr, subScene, 512);
-    skyboxMaterial3.reflectionTexture.coordinatesMode = Babylon.Texture.SKYBOX_MODE;
-    skyboxMaterial3.diffuseColor = new Babylon.Color3(0, 0, 0);
-    skyboxMaterial3.specularColor = new Babylon.Color3(0, 0, 0);
-    skyboxMaterial3.colisionMask = 0;
-    skybox3.material = skyboxMaterial3;
+    var skybox = Babylon.Mesh.CreateBox("skyBox", 200, subScene);
+    var skyboxMaterial = new Babylon.StandardMaterial("skyBox", subScene);
+    skyboxMaterial.backFaceCulling = false;
+    skyboxMaterial.reflectionTexture = new Babylon.HDRCubeTexture(fondo_planetas[idTest], subScene, 512);
+    skyboxMaterial.reflectionTexture.coordinatesMode = Babylon.Texture.SKYBOX_MODE;
+    skyboxMaterial.diffuseColor = new Babylon.Color3(0, 0, 0);
+    skyboxMaterial.specularColor = new Babylon.Color3(0, 0, 0);
+    skyboxMaterial.colisionMask = 0;
+    
+    skybox.collisionsEnabled = true;
+    skybox.checkCollisions = true;
+    skybox.material = skyboxMaterial;
 
     // Crear textura avanzada
     var advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 
     // Agregar botón para regresar a escena anterior en parte superior izquierda
-    var button = GUI.Button.CreateSimpleButton("but", "Regresar");
+    var button = GUI.Button.CreateSimpleButton("button"+ idTest, "Regresar");
     button.width = "150px"
     button.height = "40px"
     button.color = "white"
@@ -134,278 +143,6 @@ export function crearEscenaSol(engine, canvas, idTest) {
     });
 
     advancedTexture.addControl(button);
-
-    return subScene;
-
-}
-
-/**
- * 
- * @param {Babylon.Engine} engine motor de renderizado
- * @param {HTMLCanvasElement} canvas lienzo
- * @returns {Babylon.Scene} subScene Escena del planeta Mercurio
-**/
-export function crearEscenaMercurio(engine, canvas, idTest) {
-
-    var canvas = canvas
-    //instance of a scene
-    var subScene = new Babylon.Scene(engine);
-
-    //first we create a camera
-    var camera = new Babylon.ArcRotateCamera("camera1", 0, 0, 10, Babylon.Vector3.Zero(), subScene);
-
-    camera.attachControl(canvas, true);
-
-    //then we create a light
-    var light = new Babylon.HemisphericLight("light1", new Babylon.Vector3(0, 1, 0), subScene);
-    //then we create a box
-    var box = Babylon.MeshBuilder.CreateBox("box1", { size: 2 }, subScene);
-    //then we create a ground
-    var ground = Babylon.MeshBuilder.CreateGround("ground1", { width: 6, height: 6 }, subScene);
-
-    //then we create a material
-    var material = new Babylon.StandardMaterial("material1", subScene);
-    material.diffuseColor = new Babylon.Color3(1, 0, 0);    
-    //then we apply the material to the box
-    box.material = material;
-
-    return subScene;
-
-}
-
-/**
- * 
- * @param {Babylon.Engine} engine motor de renderizado
- * @param {HTMLCanvasElement} canvas lienzo
- * @returns {Babylon.Scene} subScene Escena del planeta Venus
-**/
-export function crearEscenaVenus(engine, canvas, idTest) {
-
-    var canvas = canvas
-    //instance of a scene
-    var subScene = new Babylon.Scene(engine);
-
-    //first we create a camera
-    var camera = new Babylon.ArcRotateCamera("camera1", 0, 0, 10, Babylon.Vector3.Zero(), subScene);
-
-    camera.attachControl(canvas, true);
-
-    //then we create a light
-    var light = new Babylon.HemisphericLight("light1", new Babylon.Vector3(0, 1, 0), subScene);
-    //then we create a box
-    var box = Babylon.MeshBuilder.CreateBox("box1", { size: 2 }, subScene);
-    //then we create a ground
-    var ground = Babylon.MeshBuilder.CreateGround("ground1", { width: 6, height: 6 }, subScene);
-
-    //then we create a material
-    var material = new Babylon.StandardMaterial("material1", subScene);
-    material.diffuseColor = new Babylon.Color3(1, 0, 0);    
-    //then we apply the material to the box
-    box.material = material;
-
-    return subScene;
-
-}
-
-/**
- * 
- * @param {Babylon.Engine} engine motor de renderizado
- * @param {HTMLCanvasElement} canvas lienzo
- * @returns {Babylon.Scene} subScene Escena del planeta Tierra
-**/
-export function crearEscenaTierra(engine, canvas, idTest) {
-
-    var canvas = canvas
-    //instance of a scene
-    var subScene = new Babylon.Scene(engine);
-
-    //first we create a camera
-    var camera = new Babylon.ArcRotateCamera("camera1", 0, 0, 10, Babylon.Vector3.Zero(), subScene);
-
-    camera.attachControl(canvas, true);
-
-    //then we create a light
-    var light = new Babylon.HemisphericLight("light1", new Babylon.Vector3(0, 1, 0), subScene);
-    //then we create a box
-    var box = Babylon.MeshBuilder.CreateBox("box1", { size: 2 }, subScene);
-    //then we create a ground
-    var ground = Babylon.MeshBuilder.CreateGround("ground1", { width: 6, height: 6 }, subScene);
-
-    //then we create a material
-    var material = new Babylon.StandardMaterial("material1", subScene);
-    material.diffuseColor = new Babylon.Color3(1, 0, 0);    
-    //then we apply the material to the box
-    box.material = material;
-
-    return subScene;
-
-}
-
-/**
- * 
- * @param {Babylon.Engine} engine motor de renderizado
- * @param {HTMLCanvasElement} canvas lienzo
- * @returns {Babylon.Scene} subScene Escena del planeta Marte
-**/
-export function crearEscenaMarte(engine, canvas, idTest) {
-
-    var canvas = canvas
-    //instance of a scene
-    var subScene = new Babylon.Scene(engine);
-
-    //first we create a camera
-    var camera = new Babylon.ArcRotateCamera("camera1", 0, 0, 10, Babylon.Vector3.Zero(), subScene);
-
-    camera.attachControl(canvas, true);
-
-    //then we create a light
-    var light = new Babylon.HemisphericLight("light1", new Babylon.Vector3(0, 1, 0), subScene);
-    //then we create a box
-    var box = Babylon.MeshBuilder.CreateBox("box1", { size: 2 }, subScene);
-    //then we create a ground
-    var ground = Babylon.MeshBuilder.CreateGround("ground1", { width: 6, height: 6 }, subScene);
-
-    //then we create a material
-    var material = new Babylon.StandardMaterial("material1", subScene);
-    material.diffuseColor = new Babylon.Color3(1, 0, 0);    
-    //then we apply the material to the box
-    box.material = material;
-
-    return subScene;
-
-}
-
-/**
- * 
- * @param {Babylon.Engine} engine motor de renderizado
- * @param {HTMLCanvasElement} canvas lienzo
- * @returns {Babylon.Scene} subScene Escena del planeta Jupiter
-**/
-export function crearEscenaJupiter(engine, canvas, idTest) {
-
-    var canvas = canvas
-    //instance of a scene
-    var subScene = new Babylon.Scene(engine);
-
-    //first we create a camera
-    var camera = new Babylon.ArcRotateCamera("camera1", 0, 0, 10, Babylon.Vector3.Zero(), subScene);
-
-    camera.attachControl(canvas, true);
-
-    //then we create a light
-    var light = new Babylon.HemisphericLight("light1", new Babylon.Vector3(0, 1, 0), subScene);
-    //then we create a box
-    var box = Babylon.MeshBuilder.CreateBox("box1", { size: 2 }, subScene);
-    //then we create a ground
-    var ground = Babylon.MeshBuilder.CreateGround("ground1", { width: 6, height: 6 }, subScene);
-
-    //then we create a material
-    var material = new Babylon.StandardMaterial("material1", subScene);
-    material.diffuseColor = new Babylon.Color3(1, 0, 0);    
-    //then we apply the material to the box
-    box.material = material;
-
-    return subScene;
-
-}
-
-/**
- * 
- * @param {Babylon.Engine} engine motor de renderizado
- * @param {HTMLCanvasElement} canvas lienzo
- * @returns {Babylon.Scene} subScene Escena del planeta Saturno
-**/
-export function crearEscenaSaturno(engine, canvas, idTest) {
-
-    var canvas = canvas
-    //instance of a scene
-    var subScene = new Babylon.Scene(engine);
-
-    //first we create a camera
-    var camera = new Babylon.ArcRotateCamera("camera1", 0, 0, 10, Babylon.Vector3.Zero(), subScene);
-
-    camera.attachControl(canvas, true);
-
-    //then we create a light
-    var light = new Babylon.HemisphericLight("light1", new Babylon.Vector3(0, 1, 0), subScene);
-    //then we create a box
-    var box = Babylon.MeshBuilder.CreateBox("box1", { size: 2 }, subScene);
-    //then we create a ground
-    var ground = Babylon.MeshBuilder.CreateGround("ground1", { width: 6, height: 6 }, subScene);
-
-    //then we create a material
-    var material = new Babylon.StandardMaterial("material1", subScene);
-    material.diffuseColor = new Babylon.Color3(1, 0, 0);    
-    //then we apply the material to the box
-    box.material = material;
-
-    return subScene;
-
-}
-
-/**
- * 
- * @param {Babylon.Engine} engine motor de renderizado
- * @param {HTMLCanvasElement} canvas lienzo
- * @returns {Babylon.Scene} subScene Escena del planeta Urano
-**/
-export function crearEscenaUrano(engine, canvas, idTest) {
-
-    var canvas = canvas
-    //instance of a scene
-    var subScene = new Babylon.Scene(engine);
-
-    //first we create a camera
-    var camera = new Babylon.ArcRotateCamera("camera1", 0, 0, 10, Babylon.Vector3.Zero(), subScene);
-
-    camera.attachControl(canvas, true);
-
-    //then we create a light
-    var light = new Babylon.HemisphericLight("light1", new Babylon.Vector3(0, 1, 0), subScene);
-    //then we create a box
-    var box = Babylon.MeshBuilder.CreateBox("box1", { size: 2 }, subScene);
-    //then we create a ground
-    var ground = Babylon.MeshBuilder.CreateGround("ground1", { width: 6, height: 6 }, subScene);
-
-    //then we create a material
-    var material = new Babylon.StandardMaterial("material1", subScene);
-    material.diffuseColor = new Babylon.Color3(1, 0, 0);    
-    //then we apply the material to the box
-    box.material = material;
-
-    return subScene;
-
-}
-
-/**
- * 
- * @param {Babylon.Engine} engine motor de renderizado
- * @param {HTMLCanvasElement} canvas lienzo
- * @returns {Babylon.Scene} subScene Escena del planeta Neptuno
-**/
-export function crearEscenaNeptuno(engine, canvas, idTest) {
-
-    var canvas = canvas
-    //instance of a scene
-    var subScene = new Babylon.Scene(engine);
-
-    //first we create a camera
-    var camera = new Babylon.ArcRotateCamera("camera1", 0, 0, 10, Babylon.Vector3.Zero(), subScene);
-
-    camera.attachControl(canvas, true);
-
-    //then we create a light
-    var light = new Babylon.HemisphericLight("light1", new Babylon.Vector3(0, 1, 0), subScene);
-    //then we create a box
-    var box = Babylon.MeshBuilder.CreateBox("box1", { size: 2 }, subScene);
-    //then we create a ground
-    var ground = Babylon.MeshBuilder.CreateGround("ground1", { width: 6, height: 6 }, subScene);
-
-    //then we create a material
-    var material = new Babylon.StandardMaterial("material1", subScene);
-    material.diffuseColor = new Babylon.Color3(1, 0, 0);    
-    //then we apply the material to the box
-    box.material = material;
 
     return subScene;
 
