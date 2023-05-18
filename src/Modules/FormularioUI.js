@@ -1,8 +1,10 @@
 import * as BABYLON from 'babylonjs';
 import * as GUI from 'babylonjs-gui';
 
+import img_exito from "../Resources/exito.png";
+import img_error from "../Resources/error.png";
+
 /**
- * 
  * @param {String} name Nombre de la ventana
  * @param {String} question Pregunta a mostrar
  * @param {Array} answers Respuestas a mostrar
@@ -11,7 +13,7 @@ import * as GUI from 'babylonjs-gui';
  * @param {Boolean} ultima_pregunta Indica si es la última pregunta
  * @returns {Babylon.Mesh} Ventana con la pregunta y respuestas
 **/
-function FormularioUI(name, question, answers, correct_answer, scene, ultima_pregunta) {
+function formularioUI(name, question, answers, correct_answer, scene, ultima_pregunta) {
 
     var width = 1920
     var height = 1080
@@ -324,12 +326,161 @@ function FormularioUI(name, question, answers, correct_answer, scene, ultima_pre
 }
 
 /**
- * 
+ * @param {*} pasoPrueba valor booleano que indica si el paso de la prueba fue exitoso o no
+ * @param {*} scene Esceena de babylon
+ * @returns Ventana emergente con el mensaje de si el paso de la prueba fue exitoso o no
+*/
+export function mensajeEmergente(pasoPrueba, scene) {
+
+    var width = 1920
+    var height = 1080
+
+    /***** Barra superrir *****/
+    
+    var barMesh = BABYLON.MeshBuilder.CreatePlane("mensaje", {
+        width: width*0.001  ,
+        height: 150*0.001,
+        sideOrientation: BABYLON.Mesh.DOUBLESIDE,
+        isVisible: false
+    }, scene);
+
+    // Inicializamos el metadata
+    barMesh.metadata = {
+        customData: {
+        }
+      };
+
+    var bar_texture = GUI.AdvancedDynamicTexture.CreateForMesh(barMesh);
+    bar_texture.scaleTo(width, 150);
+
+    var bar_rectangle = new GUI.Rectangle("mensaje");
+
+    bar_rectangle.cornerRadius = 20;
+    bar_rectangle.color = "#2acaea";
+    bar_rectangle.thickness = 7;
+    bar_rectangle.background = '#00000066';
+
+    var bar_grid = new GUI.Grid("mensaje")
+    bar_grid.addRowDefinition(1);
+    bar_grid.addColumnDefinition(.77,false);
+
+    const win_text_name = new GUI.TextBlock("mensaje");
+    win_text_name.fontFamily = "Helvetica";
+    win_text_name.color = "white";
+    win_text_name.fontSize = 50;
+    win_text_name.textHorizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+    win_text_name.paddingLeftInPixels = 15;
+
+    bar_grid.addControl(win_text_name, 0, 0);
+
+    bar_rectangle.addControl(bar_grid);
+    bar_texture.addControl(bar_rectangle);
+
+    /***** Barra superior *****/
+
+    // contenido
+    var windowMesh = BABYLON.MeshBuilder.CreatePlane("mensaje", {
+        width: width * (0.001),
+        height: height * (0.001),
+        sideOrientation: BABYLON.Mesh.DOUBLESIDE,
+        isVisible: false
+    }, scene);
+
+    // Inicializamos el metadata
+    windowMesh.metadata = {
+        customData: {
+        }
+      };
+
+    var ajust_pos = windowMesh.getBoundingInfo().boundingBox.maximum.y + barMesh.getBoundingInfo().boundingBox.maximum.y
+    var change_axis = new BABYLON.Vector3(0, -ajust_pos, .02);
+
+    var local_pos = new BABYLON.Vector3(0, 0.5, 0);
+    barMesh.position = local_pos;
+
+    windowMesh.parent = barMesh;
+    windowMesh.position = change_axis;
+
+    var window_texture =  GUI.AdvancedDynamicTexture.CreateForMesh(windowMesh);
+    window_texture.scaleTo(width, height);
+
+    var window_rectangle = new GUI.Rectangle("mensaje");
+    window_rectangle.background = "#ffffffd9";
+    window_rectangle.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+    window_rectangle.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
+    window_rectangle.parent = windowMesh;
+
+    var windows_grid = new GUI.Grid("win_grid")
+    windows_grid.addRowDefinition(0.8, false);
+    windows_grid.addRowDefinition(0.2, false);
+    windows_grid.addRowDefinition(0.2, false);
+
+    var imagen = new GUI.Image("mensaje", "");
+    var mensaje;
+
+    if(pasoPrueba) {
+
+        imagen.source = img_exito;
+        mensaje = "¡Felicidades! Has pasado la prueba de nivel";
+
+    }
+    else {
+
+        imagen.source = img_error;
+        mensaje = "¡Lo sentimos! No has pasado la prueba de nivel";
+
+    }
+    imagen.autoScale = true;
+    imagen.paddingLeftInPixels = 15;
+    imagen.paddingRightInPixels = 15;
+    imagen.paddingTopInPixels = 15;
+    imagen.paddingBottomInPixels = 15;
+    imagen.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+    imagen.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
+
+    var text = new GUI.TextBlock("mensaje");
+    text.fontFamily = "Helvetica";
+    text.text = mensaje;
+    text.color = "black";
+    text.fontSize = 70;
+    text.paddingLeftInPixels = 15;
+    text.paddingRightInPixels = 15;
+    text.paddingTopInPixels = 15;
+    text.paddingBottomInPixels = 15;
+    text.textWrapping = true;
+
+    var botonGrid = new GUI.Grid("boton");
+    botonGrid.addColumnDefinition(0.3, false);
+    botonGrid.addColumnDefinition(0.4, false);
+    botonGrid.addColumnDefinition(0.3, false);
+    var boton = GUI.Button.CreateSimpleButton("mensaje", "Ok");
+    boton.color = "white";
+    boton.background = "green";
+    boton.fontSize = 60;
+    boton.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+    boton.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
+    boton.paddingBottomInPixels = 15;
+    botonGrid.addControl(boton, 0, 1);
+
+    windows_grid.parent = window_rectangle;
+
+    windows_grid.addControl(imagen, 0, 0);
+    windows_grid.addControl(text, 1, 0);
+    windows_grid.addControl(botonGrid, 2, 0);
+
+    window_rectangle.addControl(windows_grid);
+    window_texture.addControl(window_rectangle);
+
+    return {barMesh, bar_rectangle, windowMesh, window_rectangle, boton}
+
+}
+
+/**
  * @param {*} preguntas_respuestas_escena Preguntas y respuestas de la escena actual
  * @param {*} scene Escena actual
  * @returns {Array Babylon} Arreglo con las ventanas de preguntas y respuestas
 **/
-export function FormulariosUI(preguntas_respuestas_escena, scene) {
+export function formulariosUI(preguntas_respuestas_escena, scene) {
 
     var ventanas = [];
 
@@ -337,7 +488,7 @@ export function FormulariosUI(preguntas_respuestas_escena, scene) {
 
         var ultima_pregunta = i === preguntas_respuestas_escena["test"].length - 1 ? true : false;
 
-        var ventana = FormularioUI("Pregunta "+ (i + 1), preguntas_respuestas_escena["test"][i]["question"], preguntas_respuestas_escena["test"][i]["answers"], preguntas_respuestas_escena["test"][i]["correctAnswer"], scene, ultima_pregunta);
+        var ventana = formularioUI("Pregunta "+ (i + 1), preguntas_respuestas_escena["test"][i]["question"], preguntas_respuestas_escena["test"][i]["answers"], preguntas_respuestas_escena["test"][i]["correctAnswer"], scene, ultima_pregunta);
 
         ventanas.push(ventana);
 

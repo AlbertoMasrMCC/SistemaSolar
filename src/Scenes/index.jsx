@@ -86,7 +86,6 @@ const onSceneReady = async (e) => {
 
     // CREAMOS EL CIELO
     const skyBoxMaterial = new Materials.SkyMaterial("skyBoxMaterial", scene)
-    skyBoxMaterial.backFaceCulling = false
     const skybox = Babylon.Mesh.CreateBox("skyBox", 100.0, scene)
     skybox.material = skyBoxMaterial
 
@@ -170,18 +169,27 @@ const onSceneReady = async (e) => {
     });
     
     /// Agregamos la escena de cada planeta
+    console.log("Cargando escena sol")
     var sceneSol = await EscenaPlanetas.crearEscena(engine, canvas, 0)
+    console.log("Cargando escena Mercurio")
     var sceneMercurio = await EscenaPlanetas.crearEscena(engine, canvas, 1)
+    console.log("Cargando escena Venus")
     var sceneVenus = await EscenaPlanetas.crearEscena(engine, canvas, 2)
+    console.log("Cargando escena Tierra")
     var sceneTierra = await EscenaPlanetas.crearEscena(engine, canvas, 3)
+    console.log("Cargando escena Marte")
     var sceneMarte = await EscenaPlanetas.crearEscena(engine, canvas, 4)
+    console.log("Cargando escena Jupiter")
     var sceneJupiter = await EscenaPlanetas.crearEscena(engine, canvas, 5)
+    console.log("Cargando escena Saturno")
     var sceneSaturno = await EscenaPlanetas.crearEscena(engine, canvas, 6)
+    console.log("Cargando escena Urano")
     var sceneUrano = await EscenaPlanetas.crearEscena(engine, canvas, 7)
+    console.log("Cargando escena Neptuno")
     var sceneNeptuno = await EscenaPlanetas.crearEscena(engine, canvas, 8)
     
     // CARGAMOS EL MÓDULO XR
-    XR_Module.XR_Experience(ground, skybox, scene);
+    var xr_module = XR_Module.XR_Experience(ground, skybox, scene);
     
     // DAMOS COMPORTAMIENTO AL RENDERIZADO DE LA ESCENA
     var mercurioMovimiento = 0

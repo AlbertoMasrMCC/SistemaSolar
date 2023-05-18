@@ -5,11 +5,15 @@ import ammo from "ammo.js";
 import fondo_planetas from '../Resources/escena_planetas/index.js';
 
 import * as PaginaPrincipal from "./index";
-import { FormulariosUI } from "../Modules/FormularioUI";
+import { formulariosUI, mensajeEmergente } from "../Modules/FormularioUI";
 import preguntas_respuestas from '../Resources/preguntas_respuestas.json'
 
+import video_mercurio from '../Resources/mercurio.mp4'
+
+import * as XR_Module from "../Modules/XR_Module";
+import * as AV_Module from "../Modules/AV_Module";
+
 /**
- * 
  * @param {Babylon.Engine} engine motor de renderizado
  * @param {HTMLCanvasElement} canvas lienzo
  * @returns {Babylon.Scene} subScene Escena del planeta Sol
@@ -28,86 +32,126 @@ export async function crearEscena(engine, canvas, idTest) {
     subScene.collitionsEnabled = true;
     camera.checkCollisions = true;
 
-    var ventanas = FormulariosUI(preguntas_respuestas_escena, subScene);
+    if(idTest === 0) {
 
-    function mostrarOcultarVentana(ventana, mostrar) {
-        ventana.barMesh.isVisible = mostrar;
-        ventana.bar_rectangle.isVisible = mostrar;
-        ventana.windowMesh.isVisible = mostrar;
-        ventana.window_rectangle.isVisible = mostrar;
-    }
+        var videoPlayer = AV_Module.VideoTexture(video_mercurio, subScene)
 
-    function validarPasoPrueba() {
+        var ventanas = null
 
-        var contado_pruebas_pasadas = 0
+        function mostrarOcultarInformacion(mostrar) {
 
-        for(var i = 0; i < ventanas.length; i++) {
-
-            if(ventanas[i].windowMesh.metadata.pasonivel) {
-
-                contado_pruebas_pasadas++;
-
-            }
+            videoPlayer.ANote0Video.isVisible = mostrar
+            videoPlayer.ANote0VideoVidTex.isVisible = mostrar
+            videoPlayer.button_controls.isVisible = mostrar
+            videoPlayer.button_omited.isVisible = mostrar
+            videoPlayer.advancedTexture.isVisible = mostrar
 
         }
 
-        if(contado_pruebas_pasadas < 3)
-            return false;
-        else
-            return true;
+        videoPlayer.button_omited.onPointerClickObservable.add(function () {
+
+            debugger
+
+            ventanas = formulariosUI(preguntas_respuestas_escena, subScene);
+
+            videoPlayer.ANote0VideoVidTex.muted = true;
+            videoPlayer.ANote0VideoVidTex.video.pause();
+            
+            mostrarOcultarInformacion(false)
+    
+        })
 
     }
 
-    function redireccionar() {
+    // var ventanas = formulariosUI(preguntas_respuestas_escena, subScene);
 
-        var niveles = PaginaPrincipal.getNiveles();
+    // function mostrarOcultarVentana(ventana, mostrar) {
+    //     ventana.barMesh.isVisible = mostrar;
+    //     ventana.bar_rectangle.isVisible = mostrar;
+    //     ventana.windowMesh.isVisible = mostrar;
+    //     ventana.window_rectangle.isVisible = mostrar;
+    // }
 
-        window.location.href = `/?sol=${niveles[0]}&mercurio=${niveles[1]}&venus=${niveles[2]}&tierra=${niveles[3]}&marte=${niveles[4]}&jupiter=${niveles[5]}&saturno=${niveles[6]}&urano=${niveles[7]}&neptuno=${niveles[8]}`;
+    // function validarPasoPrueba() {
 
-    }
+    //     var contado_pruebas_pasadas = 0
+
+    //     for(var i = 0; i < ventanas.length; i++) {
+
+    //         if(ventanas[i].windowMesh.metadata.pasonivel) {
+
+    //             contado_pruebas_pasadas++;
+
+    //         }
+
+    //     }
+
+    //     if(contado_pruebas_pasadas < 3)
+    //         return false;
+    //     else
+    //         return true;
+
+    // }
+
+    // function redireccionar() {
+
+    //     var niveles = PaginaPrincipal.getNiveles();
+
+    //     window.location.href = `/?sol=${niveles[0]}&mercurio=${niveles[1]}&venus=${niveles[2]}&tierra=${niveles[3]}&marte=${niveles[4]}&jupiter=${niveles[5]}&saturno=${niveles[6]}&urano=${niveles[7]}&neptuno=${niveles[8]}`;
+
+    // }
     
-    for (var i = 0; i < ventanas.length; i++) {
+    // for (var i = 0; i < ventanas.length; i++) {
     
-        if (i === 0) {
-            mostrarOcultarVentana(ventanas[i], true);
-        }
+    //     if (i === 0) {
+    //         mostrarOcultarVentana(ventanas[i], true);
+    //     }
     
-        ventanas[i].btn_next.onPointerClickObservable.add(function () {
+    //     ventanas[i].btn_next.onPointerClickObservable.add(function () {
 
-            for (var j = 0; j < ventanas.length; j++) {
+    //         for (var j = 0; j < ventanas.length; j++) {
     
-                if (ventanas[j].barMesh.isVisible) {
-                    var ventana_actual = ventanas[j];
-                    var ventana_siguiente = ventanas[j + 1];
-                    break;
-                }
+    //             if (ventanas[j].barMesh.isVisible) {
+    //                 var ventana_actual = ventanas[j];
+    //                 var ventana_siguiente = ventanas[j + 1];
+    //                 break;
+    //             }
     
-            }
+    //         }
 
-            mostrarOcultarVentana(ventana_actual, false);
+    //         mostrarOcultarVentana(ventana_actual, false);
 
-            mostrarOcultarVentana(ventana_siguiente, true);
+    //         mostrarOcultarVentana(ventana_siguiente, true);
 
-        });
+    //     });
 
-        ventanas[i].btn_end.onPointerClickObservable.add(function () {
+    //     ventanas[i].btn_end.onPointerClickObservable.add(function () {
 
-            mostrarOcultarVentana(ventanas[ventanas.length - 1], false);
+    //         mostrarOcultarVentana(ventanas[ventanas.length - 1], false);
 
-            if(validarPasoPrueba()) {
-                alert("¡Felicidades! Has pasado la prueba");
-                PaginaPrincipal.pasoNivel(idTest, true);
-            } else {
-                alert("¡Lo sentimos! No has pasado la prueba");
-                PaginaPrincipal.pasoNivel(idTest, false);
-            }
+    //         var ventanaPasoPrueba = null
 
-            redireccionar();
+    //         if(validarPasoPrueba()) {
+    //             ventanaPasoPrueba = mensajeEmergente(true, subScene)
+    //             PaginaPrincipal.pasoNivel(idTest, true);
+    //         } else {
+    //             ventanaPasoPrueba = mensajeEmergente(false, subScene)
+    //             PaginaPrincipal.pasoNivel(idTest, false);
+    //         }
 
-        });
+    //         mostrarOcultarVentana(ventanaPasoPrueba, true);
 
-    }
-    
+    //         ventanaPasoPrueba.boton.onPointerClickObservable.add(function () {
+
+    //             mostrarOcultarVentana(ventanaPasoPrueba, false);
+
+    //             redireccionar();
+
+    //         });
+
+    //     });
+
+    // }
 
     var skybox = Babylon.Mesh.CreateBox("skyBox", 200, subScene);
     var skyboxMaterial = new Babylon.StandardMaterial("skyBox", subScene);
@@ -122,27 +166,27 @@ export async function crearEscena(engine, canvas, idTest) {
     skybox.checkCollisions = true;
     skybox.material = skyboxMaterial;
 
-    // Crear textura avanzada
-    var advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+    // // Crear textura avanzada
+    // var advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 
-    // Agregar botón para regresar a escena anterior en parte superior izquierda
-    var button = GUI.Button.CreateSimpleButton("button"+ idTest, "Regresar");
-    button.width = "150px"
-    button.height = "40px"
-    button.color = "white"
-    button.background = "green"
-    button.top = "10px"
-    button.left = "10px"
-    button.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
-    button.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
+    // // Agregar botón para regresar a escena anterior en parte superior izquierda
+    // var button = GUI.Button.CreateSimpleButton("button"+ idTest, "Regresar");
+    // button.width = "150px"
+    // button.height = "40px"
+    // button.color = "white"
+    // button.background = "green"
+    // button.top = "10px"
+    // button.left = "10px"
+    // button.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+    // button.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
 
-    button.onPointerUpObservable.add(function () {
+    // button.onPointerUpObservable.add(function () {
 
-        redireccionar();
+    //     redireccionar();
         
-    });
+    // });
 
-    advancedTexture.addControl(button);
+    // advancedTexture.addControl(button);
 
     return subScene;
 

@@ -40,6 +40,10 @@ function orbit_planet(points, ratio) {
     return orbit
 }
 
+/**
+ * {String} planeta Representacion String del planeta
+ * @returns {Integer} Index de la escena del planeta
+**/
 export function obtenerIndexEscenaPlaneta(planeta) {
 
     let escenaPlaneta = null
@@ -108,6 +112,7 @@ export function crearPlanetas(scene) {
     let solMaterial = new Babylon.StandardMaterial("solMaterial", scene)
     solMaterial.diffuseTexture = new Babylon.Texture(sol_img, scene)
     solMaterial.emissiveColor = new Babylon.Color3(1, 1, 1)
+    solMaterial.specularColor = new Babylon.Color3(0, 0, 0)
     sol.material = solMaterial
     sol.isPickable = true
     sol.rotation.y = degrees_to_radians(90)
@@ -258,18 +263,23 @@ export function crearPaneles(planetas) {
     // Crear un panel con texto para cada planeta
     for (let i = 0; i < planetas.length; i++) {
 
-        let panel = new GUI.Rectangle("panel" + i);
-        panel.width = "300px";
-        panel.height = "150px";
-        panel.cornerRadius = 20;
-        panel.color = "white";
-        panel.thickness = 4;
-        panel.background = "black";
-        panel.alpha = 0.8;
-        panel.isVisible = false;
-        advancedTexture.addControl(panel);
-        panel.linkWithMesh(planetas[i]);
-        panel.linkOffsetY = -120;
+        let scrollViewer = new GUI.ScrollViewer();
+        scrollViewer.width = "40%";
+        scrollViewer.height = "20%";
+        scrollViewer.cornerRadius = 20;
+        scrollViewer.color = "white";
+        scrollViewer.thickness = 4;
+        scrollViewer.background = "black";
+        scrollViewer.alpha = 0.8;
+        scrollViewer.isVisible = false;
+        advancedTexture.addControl(scrollViewer);
+        scrollViewer.linkWithMesh(planetas[i]);
+        scrollViewer.linkOffsetY = -130;
+
+        // Crear un StackPanel
+        let stackPanel = new GUI.StackPanel();
+        stackPanel.width = "100%";
+        scrollViewer.addControl(stackPanel);
 
         let texto = new GUI.TextBlock();
 
@@ -278,58 +288,64 @@ export function crearPaneles(planetas) {
         switch (planetas[i].name.toUpperCase()) {
 
             case "SOL":
-                textoPanel = "El Sol es una bola gigante de gas incandescente compuesto principalmente de hidrógeno y helio. En el centro del Sol, la presión y la temperatura son tan altas que los átomos de hidrógeno se fusionan para formar helio, liberando energía en el proceso. Esta reacción nuclear es lo que mantiene al Sol caliente y brillante, y es responsable de la mayor parte de la energía que recibimos en la Tierra."
+                textoPanel = "\u2022 La gravedad del sol mantiene a todos los planetas en sus órbitas alrededor de él \n\n\u2022 El Sol también emite radiación, incluyendo luz visible, rayos X y rayos ultravioleta, que afecta a los planetas \n\n\u2022 La temperatura en su superficie es alrededor de 5,500 grados Celsius \n\n\u2022 Es el responsable de la mayor parte de la energía que recibimos en la tierra \n\n\u2022 Tiene un diametro de 1.39 millones de kilometros"
                 break;
 
             case "MERCURIO":
-                textoPanel = "Es el planeta más cercano al Sol y el más pequeño del sistema solar. Tiene una superficie muy arrugada debido a la contracción térmica y no tiene atmósfera."
+                textoPanel = "\u2022 Tiene un diámetro de 4.880 kilómetros \n\n\u2022 Tarda aproximadamente 58.6 días terrestres en completar una rotación sobre su propio eje \n\n\u2022 Tarda 87.97 días terrestres en dar una vuelta alrededor del sol \n\n\u2022 Tiene una atmósfera muy delgada compuesta principalmente de sodio"
                 break;
 
             case "VENUS":
-                textoPanel = "Es el segundo planeta del sistema solar y es conocido como el planeta gemelo de la Tierra, ya que tiene un tamaño y una masa similar. Sin embargo, su superficie es extremadamente caliente debido al efecto invernadero y su atmósfera es muy densa, principalmente compuesta de dióxido de carbono."
+                textoPanel = "\u2022 Tiene un diámetro de 2,104 kilómetros \n\n\u2022 Tarda aproximadamente 243 días terrestres en completar una rotación sobre su propio eje \n\n\u2022 Tarda 224.7 días terrestres en dar una vuelta alrededor del sol \n\n\u2022 Tiene una atmósfera muy densa compuesta principalmente de dióxido de carbono"
                 break;
 
             case "TIERRA":
-                textoPanel = "Es el tercer planeta del sistema solar y el único conocido que tiene vida. Tiene una atmósfera rica en oxígeno y una temperatura y presión ideales para la vida. Además, es el único planeta del sistema solar que tiene agua líquida en su superficie."
+                textoPanel = "\u2022 Tiene un diámetro de 12,756 kilómetros \n\n\u2022 Tarda aproximadamente 23.9 horas terrestres en completar una rotación sobre su propio eje \n\n\u2022 Tarda 365.26 días terrestres en dar una vuelta alrededor del sol \n\n\u2022 Tiene una atmósfera compuesta principalmente de nitrógeno y oxígeno \n\n\u2022 Es el único planeta del sistema solar que tiene agua líquida en su superficie \n\n\u2022 Tiene un satélite natural llamado Luna \n\n\u2022 Es el único planeta en el sistema solar que tiene vida"
                 break;
 
             case "LUNA":
-                textoPanel = "La luna es el único satélite natural de la Tierra y es el quinto satélite más grande del sistema solar."
+                textoPanel = "\u2022 Tiene un diámetro de 3,474 kilómetros \n\n\u2022 Tarda aproximadamente 27.3 días terrestres en completar una rotación sobre su propio eje \n\n\u2022 Tarda 27.3 días terrestres en dar una vuelta alrededor de la tierra \n\n\u2022 No tiene atmósfera \n\n\u2022 Es el único satélite natural de la tierra"
                 break;
 
             case "MARTE":
-                textoPanel = "Es el cuarto planeta del sistema solar y es conocido como el planeta rojo debido a su superficie rocosa. Tiene una atmósfera delgada y fría y su superficie está llena de cráteres y volcanes. Es posible que en el pasado haya tenido agua líquida en su superficie."
+                textoPanel = "\u2022 Tiene un diámetro de 6,787 kilómetros \n\n\u2022 Tarda aproximadamente 24.6 horas terrestres en completar una rotación sobre su propio eje \n\n\u2022 Tarda 686.98 días terrestres en dar una vuelta alrededor del sol \n\n\u2022 Tiene una atmósfera muy delgada compuesta principalmente de dióxido de carbono \n\n\u2022 Tiene dos satélites naturales llamados Fobos y Deimos"
                 break;
 
             case "JUPITER":
-                textoPanel = "Es el planeta más grande del sistema solar y tiene una atmósfera muy colorida y turbulenta, principalmente compuesta de hidrógeno y helio. Tiene muchas lunas, siendo las más conocidas Io, Europa, Ganímedes y Calisto."
+                textoPanel = "\u2022 Tiene un diámetro de 142,984 kilómetros \n\n\u2022 Tarda aproximadamente 9.9 horas terrestres en completar una rotación sobre su propio eje \n\n\u2022 Tarda 11.86 años terrestres en dar una vuelta alrededor del sol \n\n\u2022 Tiene una atmósfera compuesta principalmente de hidrógeno y helio \n\n\u2022 Tiene muchos satelites naturales"
                 break;
 
             case "SATURNO":
-                textoPanel = "Es el segundo planeta más grande del sistema solar y es conocido por sus espectaculares anillos. Tiene una atmósfera similar a la de Júpiter y también tiene muchas lunas."
+                textoPanel = "\u2022 Tiene un diámetro de 120,536 kilómetros \n\n\u2022 Tarda aproximadamente 10.7 horas terrestres en completar una rotación sobre su propio eje \n\n\u2022 Tarda 29.46 años terrestres en dar una vuelta alrededor del sol \n\n\u2022 Tiene una atmósfera compuesta principalmente de hidrógeno y helio \n\n\u2022 Tiene un sistema de anillos y muchos satelites naturales"
                 break;
 
             case "SATURNOANILLOS":
-                textoPanel = "Los anillos de Saturno son un fenómeno fascinante del sistema solar. A pesar de que están compuestos principalmente de pequeñas partículas de hielo y roca, los anillos tienen una enorme masa que se estima en más de 3 x 10^19 kilogramos."
+                textoPanel = "\u2022 Los anillos de Saturno están compuestos principalmente de hielo y roca \n\n\u2022 Los anillos están compuestos de miles de anillos más pequeños \n\n\u2022 Los anillos tienen un diámetro de 270,000 kilómetros \n\n\u2022 Los anillos tienen un grosor de 20 metros"
                 break;
 
             case "URANO":
-                textoPanel = "Es el séptimo planeta del sistema solar y tiene una atmósfera similar a la de Júpiter y Saturno, principalmente compuesta de hidrógeno y helio. Tiene un sistema de anillos y muchas lunas."
+                textoPanel = "\u2022 Tiene un diámetro de 51,118 kilómetros \n\n\u2022 Tarda aproximadamente 17.2 horas terrestres en completar una rotación sobre su propio eje \n\n\u2022 Tarda 84.01 años terrestres en dar una vuelta alrededor del sol \n\n\u2022 Tiene una atmósfera compuesta principalmente de hidrógeno, helio y metano \n\n\u2022 Tiene muchos satelites naturales"
                 break;
 
             case "NEPTUNO":
-                textoPanel = "Es el octavo y último planeta del sistema solar y tiene una atmósfera similar a la de Urano. También tiene un sistema de anillos y muchas lunas, siendo la más conocida Tritón."
+                textoPanel = "\u2022 Tiene un diámetro de 49,528 kilómetros \n\n\u2022 Tarda aproximadamente 16.1 horas terrestres en completar una rotación sobre su propio eje \n\n\u2022 Tarda 164.79 años terrestres en dar una vuelta alrededor del sol \n\n\u2022 Tiene una atmósfera compuesta principalmente de hidrógeno, helio y metano \n\n\u2022 Tiene muchos satelites naturales"
                 break;
 
         }
 
         texto.text = textoPanel;
         texto.color = "white";
-        texto.fontSize = 12;
-        texto.textWrapping = true;
-        panel.addControl(texto);
+        texto.resizeToFit = true;
+        texto.textWrapping = GUI.TextWrapping.WordWrap;
+        texto.textHorizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+        texto.textVerticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
+        texto.paddingTop = "5%";
+        texto.paddingLeft = "5%";
+        texto.paddingRight = "5%";
+        texto.paddingBottom = "5%";
+        stackPanel.addControl(texto);
 
-        paneles.push(panel)
+        paneles.push(scrollViewer)
 
     }
 
@@ -358,18 +374,14 @@ export function crearBotones(advancedTexture, planetas) {
             }
     
             let boton = GUI.Button.CreateSimpleButton("boton" + i);
-            boton.width = "250px";
-            boton.height = "80px";
+            boton.width = "15%";
+            boton.height = "7%";
             boton.textBlock.text = "Iniciar prueba de " + planetas[i].name.toUpperCase()
             boton.cornerRadius = 20;
             boton.color = "white";
             boton.thickness = 4;
             boton.background = "black";
             boton.alpha = 0.8;
-            boton.paddingTop = "10px";
-            boton.paddingBottom = "10px";
-            boton.paddingLeft = "10px";
-            boton.paddingRight = "10px";
             boton.onPointerEnterObservable.add(function () {
                 boton.background = "white";
                 boton.color = "black";
@@ -391,6 +403,10 @@ export function crearBotones(advancedTexture, planetas) {
     
 }
 
+/**
+ * @param {Babylon.Mesh} selectedMesh Mesh seleccionado
+ * @param {Array Babylon.GUI.Button} botones Array con los botones para iniciar las pruebas de los planetas
+**/
 export function validarNivelPasadoBoton(selectedMesh, botones) {
 
     for (let i = 0; i < botones.length; i++) {
