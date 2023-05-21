@@ -18,14 +18,12 @@ function formularioUI(name, question, answers, correct_answer, scene, ultima_pre
     var width = 1920
     var height = 1080
 
-    // status bar
     var barMesh = BABYLON.MeshBuilder.CreatePlane("windown_plane"+ name, {
         width: width*0.001  ,
         height: 150*0.001,
         sideOrientation: BABYLON.Mesh.DOUBLESIDE
     }, scene);
 
-    // Inicializamos el metadata
     barMesh.metadata = {
         customData: {
         }
@@ -58,14 +56,12 @@ function formularioUI(name, question, answers, correct_answer, scene, ultima_pre
     bar_rectangle.addControl(bar_grid);
     bar_texture.addControl(bar_rectangle);
 
-    // contenido
     var windowMesh = BABYLON.MeshBuilder.CreatePlane("FormularioUI"+ name, {
         width: width * (0.001),
         height: height * (0.001),
         sideOrientation: BABYLON.Mesh.DOUBLESIDE
     }, scene);
 
-    // Inicializamos el metadata
     windowMesh.metadata = {
         customData: {
         }
@@ -93,7 +89,6 @@ function formularioUI(name, question, answers, correct_answer, scene, ultima_pre
     windows_grid.addRowDefinition(0.8, false);
     windows_grid.addRowDefinition(0.3, false);
 
-    // Sección de preguntas
     var windows_question_grid = new GUI.Grid("win_quest_grid"+ name)
     windows_question_grid.addRowDefinition(1, false);
 
@@ -110,7 +105,6 @@ function formularioUI(name, question, answers, correct_answer, scene, ultima_pre
 
     windows_question_grid.addControl(texto_pregunta, 0, 0);
 
-    // Sección de respuestas
     var windows_answer_grid = new GUI.Grid("win_answ_grid"+ name)
     windows_answer_grid.addRowDefinition(0.2, false);
     windows_answer_grid.addRowDefinition(0.8, false);
@@ -119,10 +113,8 @@ function formularioUI(name, question, answers, correct_answer, scene, ultima_pre
     windows_answer_grid.addColumnDefinition(1, false);
     windows_answer_grid.addColumnDefinition(1, false);
 
-    // almacenamos la respuesta correcta
     var selected_answer;
 
-    // Crear un radio button para cada respuesta
     var raddio_button_1 = new GUI.RadioButton("radio_button_1"+ name);
     raddio_button_1.width = "80px";
     raddio_button_1.height = "80px";
@@ -255,7 +247,6 @@ function formularioUI(name, question, answers, correct_answer, scene, ultima_pre
     windows_control_grid.addColumnDefinition(1, false);
     windows_control_grid.addColumnDefinition(1, false);
 
-    // Botón para ultima pregunta
     var btn_end = GUI.Button.CreateSimpleButton("but_end"+ name, "Finalizar");
     btn_end.color = "white";
     btn_end.background = "green";
@@ -266,7 +257,6 @@ function formularioUI(name, question, answers, correct_answer, scene, ultima_pre
     });
     windows_control_grid.addControl(btn_end, 0, 2);
     
-    // Botón para siguiente pregunta
     var btn_next = GUI.Button.CreateSimpleButton("but_next"+ name, "Siguiente");
     btn_next.color = "white";
     btn_next.background = "green";
@@ -335,7 +325,7 @@ export function mensajeEmergente(pasoPrueba, scene) {
     var width = 1920
     var height = 1080
 
-    /***** Barra superrir *****/
+    /***** Barra superror *****/
     
     var barMesh = BABYLON.MeshBuilder.CreatePlane("mensaje", {
         width: width*0.001  ,
@@ -344,7 +334,6 @@ export function mensajeEmergente(pasoPrueba, scene) {
         isVisible: false
     }, scene);
 
-    // Inicializamos el metadata
     barMesh.metadata = {
         customData: {
         }
@@ -378,7 +367,6 @@ export function mensajeEmergente(pasoPrueba, scene) {
 
     /***** Barra superior *****/
 
-    // contenido
     var windowMesh = BABYLON.MeshBuilder.CreatePlane("mensaje", {
         width: width * (0.001),
         height: height * (0.001),
@@ -386,7 +374,6 @@ export function mensajeEmergente(pasoPrueba, scene) {
         isVisible: false
     }, scene);
 
-    // Inicializamos el metadata
     windowMesh.metadata = {
         customData: {
         }

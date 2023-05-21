@@ -3,6 +3,8 @@ import * as GUI from 'babylonjs-gui';
 
 import * as PaginaPrincipal from "./index";
 
+import * as EscenaPlanetas from "./EscenaPlanetas";
+
 import sol_img from "../Resources/2k_sun.jpg"
 import mercurio_img from "../Resources/2k_mercury.jpg"
 import venus_img from "../Resources/2k_venus_surface.jpg"
@@ -40,30 +42,32 @@ function orbit_planet(points, ratio) {
     return orbit
 }
 
-/**
- * {String} planeta Representacion String del planeta
- * @returns {Integer} Index de la escena del planeta
+/** 
+ * @param {String} planeta - Nombre del planeta a crear
+ * @param {BABYLON.Engine} engine - Motor de babylon
+ * @param {BABYLON.Scene} canvas - Escena de babylon
+ * @returns {BABYLON.Scene} - Retorna la escena del planeta 
 **/
-export function obtenerIndexEscenaPlaneta(planeta) {
+export function obtenerEscenaPlaneta(planeta, engine, canvas) {
 
-    let escenaPlaneta = null
+    var escenaPlaneta = null
 
     switch (planeta) {
 
         case "SOL":
-            escenaPlaneta = 1
+            escenaPlaneta = EscenaPlanetas.crearEscena(engine, canvas, 0)
             break;
 
         case "MERCURIO":
-            escenaPlaneta = 2
+            escenaPlaneta = EscenaPlanetas.crearEscena(engine, canvas, 1)
             break;
 
         case "VENUS":
-            escenaPlaneta = 3
+            escenaPlaneta = EscenaPlanetas.crearEscena(engine, canvas, 2)
             break;
 
         case "TIERRA":
-            escenaPlaneta = 4
+            escenaPlaneta = EscenaPlanetas.crearEscena(engine, canvas, 3)
             break;
 
         case "LUNA":
@@ -71,15 +75,15 @@ export function obtenerIndexEscenaPlaneta(planeta) {
             break;
 
         case "MARTE":
-            escenaPlaneta = 5
+            escenaPlaneta = EscenaPlanetas.crearEscena(engine, canvas, 4)
             break;
 
         case "JUPITER":
-            escenaPlaneta = 6
+            escenaPlaneta = EscenaPlanetas.crearEscena(engine, canvas, 5)
             break;
 
         case "SATURNO":
-            escenaPlaneta = 7
+            escenaPlaneta = EscenaPlanetas.crearEscena(engine, canvas, 6)
             break;
 
         case "SATURNOANILLOS":
@@ -87,11 +91,14 @@ export function obtenerIndexEscenaPlaneta(planeta) {
             break;
 
         case "URANO":
-            escenaPlaneta = 8
+            escenaPlaneta = EscenaPlanetas.crearEscena(engine, canvas, 7)
             break;
 
         case "NEPTUNO":
-            escenaPlaneta = 9
+            escenaPlaneta = EscenaPlanetas.crearEscena(engine, canvas, 8)
+            break;
+
+        default:
             break;
 
     }

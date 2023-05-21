@@ -95,11 +95,13 @@ export async function XR_Experience(ground, skybox, scene) {
                             ground.visibility = 0
 
                         }
+
                         if (skybox) {
 
                             skybox.isVisible = false
 
                         }
+
                     break
                     case BABYLON.WebXRState.EXITING_XR:
                         // xr exit request was made. not yet done.
@@ -111,11 +113,13 @@ export async function XR_Experience(ground, skybox, scene) {
                             ground.visibility = 1
 
                         }
+
                         if (skybox) {
 
                             skybox.isVisible = true
 
                         }
+                        
                     break
 
                 }
@@ -126,45 +130,47 @@ export async function XR_Experience(ground, skybox, scene) {
 
         var advancedTextureFullScreen = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI", true, scene)
 
-        var button1 = GUI.Button.CreateSimpleButton("but1", "A modo XR")
-        button1.width = "150px"
-        button1.height = "40px"
-        button1.color = "white"
-        button1.cornerRadius = 20
-        button1.background = "blue"
-        button1.fontSize = "20px"
-        button1.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT
-        button1.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_BOTTOM
-        button1.topInPixels = -5
-        button1.leftInPixels =-5
+        var btnModoXR = GUI.Button.CreateSimpleButton("btnModoXR", "Entrar a modo AR")
+        btnModoXR.width = "200px"
+        btnModoXR.height = "40px"
+        btnModoXR.color = "white"
+        btnModoXR.cornerRadius = 20
+        btnModoXR.background = "blue"
+        btnModoXR.fontSize = "20px"
+        btnModoXR.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT
+        btnModoXR.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_BOTTOM
+        btnModoXR.topInPixels = -5
+        btnModoXR.leftInPixels =-5
 
-        button1.onPointerUpObservable.add(function () {
+        btnModoXR.onPointerUpObservable.add(function () {
 
             if (xrExperience.baseExperience.state === BABYLON.WebXRState.NOT_IN_XR) {
 
                 xrExperience.baseExperience.enterXRAsync(inmersive_state, reference_floor)
+                btnModoXR.textBlock.text = "Entrar a modo VR"
 
             } else if (xrExperience.baseExperience.state === BABYLON.WebXRState.IN_XR) {
 
                 xrExperience.baseExperience.exitXRAsync()
+                btnModoXR.textBlock.text = "Entrar a modo AR"
 
             }
 
         })
 
-        advancedTextureFullScreen.addControl(button1)
+        advancedTextureFullScreen.addControl(btnModoXR)
 
-        // GUI
-        var meshGUI = BABYLON.MeshBuilder.CreatePlane("plane", {
+        // // GUI
+        // var meshGUI = BABYLON.MeshBuilder.CreatePlane("plane", {
 
-            width: 1 * 1.8,
-            height: 1,
-            sideOrientation: BABYLON.Mesh.DOUBLESIDE
+        //     width: 1 * 1.8,
+        //     height: 1,
+        //     sideOrientation: BABYLON.Mesh.DOUBLESIDE
             
-        }, scene)
+        // }, scene)
 
-        meshGUI.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL
-        var advancedTexture = GUI.AdvancedDynamicTexture.CreateForMesh(meshGUI)
+        // meshGUI.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL
+        // var advancedTexture = GUI.AdvancedDynamicTexture.CreateForMesh(meshGUI)
 
         return xrExperience
 

@@ -4,12 +4,12 @@
         "id": 0,
         "test": [
             {
-                "question": "¿De qué está hecho el sol?",
+                "question": "¿Cuál es el diámetro aproximado del Sol?",
                 "answers": [
-                    "De fuego",
-                    "De agua",
-                    "De aire",
-                    "De rocas"
+                    "1.392.000 km",
+                    "1.392.000.000 km",
+                    "1.392.000.000.000 km",
+                    "1.392 km"
                 ],
                 "correctAnswer": 0
             },
@@ -25,24 +25,24 @@
                 "correctAnswer": 0
             },
             {
-                "question": "¿Cuál es el planeta más cercano al sol?",
+                "question": "¿De qué elementos se compone principalmente el sol?",
                 "answers": [
-                    "Marte",
-                    "Venus",
-                    "Tierra",
-                    "Mercurio"
+                    "De hidrógeno y oxígeno",
+                    "De oxígeno y carbono",
+                    "De nitrógeno y oxígeno",
+                    "De hidrógeno y helio"
                 ],
                 "correctAnswer": 3
             },
             {
-                "question": "¿Cuál es el planeta más lejano al sol?",
+                "question": "¿Qué diferencia al Sol de otras estrellas en términos de tamaño y temperatura?",
                 "answers": [
-                    "Mercurio",
-                    "Venus",
-                    "Tierra",
-                    "Neptuno"
+                    "Es más pequeño y más frío",
+                    "Es más grande y más caliente",
+                    "Es más grande y más frío",
+                    "Es más pequeño y más caliente"
                 ],
-                "correctAnswer": 3
+                "correctAnswer": 1
             }
         ]
     },
@@ -50,14 +50,44 @@
         "id": 1,
         "test": [
             {
-                "question": "Cuál es el primer planeta del sistema solar?",
+                "question": "¿Cuál es el período orbital de Mercurio alrededor del Sol?",
                 "answers": [
-                    "Mercurio",
-                    "Venus",
-                    "Tierra",
-                    "Marte"
+                    "365 días terrestres",
+                    "88 días terrestres",
+                    "687 días terrestres",
+                    "3650 días terrestres"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "¿Por qué Mercurio es conocido como un planeta terrestre?",
+                "answers": [
+                    "Porque es un planeta rocoso",
+                    "Porque es un planeta gaseoso",
+                    "Porque es un planeta helado",
+                    "Porque es un planeta de agua"
                 ],
                 "correctAnswer": 0
+            },
+            {
+                "question": "¿Cuál es la temperatura promedio en la superficie de Mercurio duante el día?",
+                "answers": [
+                    "1000 °C",
+                    "500 °C",
+                    "200 °C",
+                    "100 °C"
+                ],
+                "correctAnswer": 0
+            },
+            {
+                "question": "¿Por qué la temperatura de mercurio por las noches es alrededor de -180 °C?",
+                "answers": [
+                    "Porque no tiene agua",
+                    "Porque no tiene oxígeno",
+                    "Porque no tiene nitrógeno",
+                    "Porque no tiene atmósfera"
+                ],
+                "correctAnswer": 3
             }
         ]
     },
@@ -65,14 +95,50 @@
         "id": 2,
         "test": [
             {
-                "question": "Cuál es el segundo planeta del sistema solar?",
+                "question": "¿Cuánto tarda venus en dar vuelta sobre su propio eje?",
                 "answers": [
-                    "Mercurio",
-                    "Venus",
-                    "Tierra",
-                    "Marte"
+                    "88 días terrestres",
+                    "365 días terrestres",
+                    "687 días terrestres",
+                    "243 días terrestres"
+                ],
+                "correctAnswer": 3
+            },
+            {
+
+                "question": "¿Cuál es la temperatura promedio en la superficie de Venus?",
+                "answers": [
+                    "1000 °C",
+                    "500 °C",
+                    "200 °C",
+                    "100 °C"
+                ],
+                "correctAnswer": 0
+
+            },
+            {
+
+                "question": "¿Por qué venus es considerado el planeta más caliente del sistema solar?",
+                "answers": [
+                    "Porque es el más cercano al sol",
+                    "Porque es el más lejano al sol",
+                    "Porque tiene una atmósfera muy densa y atrapa el calor",
+                    "Porque tiene una atmósfera muy delgada"
                 ],
                 "correctAnswer": 1
+
+            },
+            {
+
+                "question": "¿Cuál es la composición de la atmósfera de Venus?",
+                "answers": [
+                    "Dióxido de carbono",
+                    "Nitrógeno",
+                    "Oxígeno",
+                    "Helio"
+                ],
+                "correctAnswer": 0
+
             }
         ]
     },
@@ -80,14 +146,50 @@
         "id": 3,
         "test": [
             {
-                "question": "Cuál es el tercer planeta del sistema solar?",
+                "question": "¿Cuál es la atmósfera predominante en la Tierra?",
                 "answers": [
-                    "Mercurio",
-                    "Venus",
-                    "Tierra",
-                    "Marte"
+                    "Dióxido de carbono",
+                    "Nitrógeno",
+                    "Oxígeno",
+                    "Helio"
                 ],
-                "correctAnswer": 2
+                "correctAnswer": 3
+            },
+            {
+
+                "question": "¿Por qué la Tierra es el único planeta conocido por tener vida?",
+                "answers": [
+                    "Porque contiene agua en estado líquido",
+                    "Porque contiene oxígeno",
+                    "Porque contiene nitrógeno",
+                    "Porque contiene dióxido de carbono"
+                ],
+                "correctAnswer": 0
+
+            },
+            {
+
+                "question": "¿Cuánto tarda la Tierra en dar vuelta sobre su propio eje?",
+                "answers": [
+                    "12 días terrestres",
+                    "55 días terrestres",
+                    "4 días terrestres",
+                    "1 días terrestres"
+                ],
+                "correctAnswer": 3
+
+            },
+            {
+
+                "question": "¿Cuánto tarda la Tierra en dar una vuelta alrededor del Sol?",
+                "answers": [
+                    "365 días terrestres",
+                    "88 días terrestres",
+                    "687 días terrestres",
+                    "3650 días terrestres"
+                ],
+                "correctAnswer": 0
+
             }
         ]
     },
@@ -95,14 +197,50 @@
         "id": 4,
         "test": [
             {
-                "question": "Cuál es el cuarto planeta del sistema solar?",
+                "question": "¿Por qué a Marte se le conoce como el planeta rojo?",
                 "answers": [
-                    "Mercurio",
-                    "Venus",
-                    "Tierra",
-                    "Marte"
+                    "Por la composición de su superficie rica en hierro",
+                    "Porque está cubierto de rocas",
+                    "Porque está cercas de la Tierra",
+                    "Porque está cubierto de lava"
                 ],
-                "correctAnswer": 3
+                "correctAnswer": 0
+            },
+            {
+
+                "question": "¿Cuál es la atmósfera predominante en Marte?",
+                "answers": [
+                    "Dióxido de carbono",
+                    "Nitrógeno",
+                    "Oxígeno",
+                    "Helio"
+                ],
+                "correctAnswer": 0
+
+            },
+            {
+
+                "question": "¿De qué está hecho mayormente la superficie de Marte?",
+                "answers": [
+                    "De agua",
+                    "De rocas",
+                    "De lava",
+                    "De hierro"
+                ],
+                "correctAnswer": 1
+
+            },
+            {
+
+                "question": "¿Cuánto tarda Marte en dar una vuelta alrededor del Sol?",
+                "answers": [
+                    "365 días terrestres",
+                    "88 días terrestres",
+                    "687 días terrestres",
+                    "3650 días terrestres"
+                ],
+                "correctAnswer": 2
+
             }
         ]
     },
@@ -110,14 +248,50 @@
         "id": 5,
         "test": [
             {
-                "question": "Cuál es el quinto planeta del sistema solar?",
+                "question": "¿Cuál es el diámetro aproximado de Júpiter?",
                 "answers": [
-                    "Jupiter",
-                    "Saturno",
-                    "Urano",
-                    "Neptuno"
+                    "1000 km",
+                    "5000 km",
+                    "10000 km",
+                    "50000 km"
+                ],
+                "correctAnswer": 3
+            },
+            {
+
+                "question": "¿Por qué es considerado un planeta gigante gaseoso?",
+                "answers": [
+                    "Por la composición de su atmósfera",
+                    "Por la composición de su superficie",
+                    "Porque está al lado de marte",
+                    "Porque se ve gigante desde la Tierra"
                 ],
                 "correctAnswer": 0
+
+            },
+            {
+
+                "question": "¿Cuánto tarda Júpiter en dar una vuelta alrededor del Sol?",
+                "answers": [
+                    "365 días terrestres",
+                    "88 días terrestres",
+                    "687 días terrestres",
+                    "3650 días terrestres"
+                ],
+                "correctAnswer": 2
+
+            },
+            {
+
+                "question": "¿Cómo ayuda Júpiter a la Tierra?",
+                "answers": [
+                    "Atrapa asteroides y cometas con su gravedad",
+                    "Atrapa meteoritos con su gravedad",
+                    "Atrapa satélites con su gravedad",
+                    "Atrapa naves espaciales con su gravedad"
+                ],
+                "correctAnswer": 0
+
             }
         ]
     },
@@ -125,14 +299,50 @@
         "id": 6,
         "test": [
             {
-                "question": "Cuál es el sexto planeta del sistema solar?",
+                "question": "¿Cuál es la composición principal de los anillos de Saturno?",
                 "answers": [
-                    "Jupiter",
-                    "Saturno",
-                    "Urano",
-                    "Neptuno"
+                    "Hielo",
+                    "Rocas",
+                    "Lava",
+                    "Hierro"
                 ],
-                "correctAnswer": 1
+                "correctAnswer": 0
+            },
+            {
+
+                "question": "¿Cuál es el número aproximado de lunas conocidas que orbitan Saturno?",
+                "answers": [
+                    "10",
+                    "20",
+                    "30",
+                    "40"
+                ],
+                "correctAnswer": 2
+
+            },
+            {
+
+                "question": "¿Cuánto tarda Saturno en dar una vuelta alrededor del Sol?",
+                "answers": [
+                    "30 años terrestres",
+                    "60 años terrestres",
+                    "90 años terrestres",
+                    "120 años terrestres"
+                ],
+                "correctAnswer": 0
+                
+            },
+            {
+
+                "question": "¿Qué posición ocupa en el sistema solar?",
+                "answers": [
+                    "El segundo",
+                    "El tercero",
+                    "El cuarto",
+                    "El sexto"
+                ],
+                "correctAnswer": 3
+
             }
         ]
     },
@@ -140,14 +350,50 @@
         "id": 7,
         "test": [
             {
-                "question": "Cuál es el séptimo planeta del sistema solar?",
+                "question": "¿Cuántas lunas conocidas orbitan alrededor de Urano?",
                 "answers": [
-                    "Jupiter",
-                    "Saturno",
-                    "Urano",
-                    "Neptuno"
+                    "10",
+                    "20",
+                    "30",
+                    "40"
+                ],
+                "correctAnswer": 1
+            },
+            {
+
+                "question": "¿Cuál es la composición principal de la atmósfera de Urano?",
+                "answers": [
+                    "Hidrógeno",
+                    "Helio",
+                    "Metano",
+                    "Oxígeno"
                 ],
                 "correctAnswer": 2
+
+            },
+            {
+
+                "question": "¿Cuál es la estructura interna de Urano y cómo se diferencia de otros planetas gaseosos?",
+                "answers": [
+                    "Tiene un núcleo rocoso y un manto de hielo",
+                    "Tiene un núcleo de hielo y un manto rocoso",
+                    "Tiene un núcleo de hierro y un manto de hielo",
+                    "Tiene un núcleo de hierro y un manto rocoso"
+                ],
+                "correctAnswer": 0
+
+            },
+            {
+
+                "question": "¿Cuánto tarda Urano en dar una vuelta alrededor del Sol?",
+                "answers": [
+                    "30 años terrestres",
+                    "60 años terrestres",
+                    "90 años terrestres",
+                    "120 años terrestres"
+                ],
+                "correctAnswer": 1
+
             }
         ]
     },
@@ -155,14 +401,50 @@
         "id": 8,
         "test": [
             {
-                "question": "Cuál es el octavo planeta del sistema solar?",
+                "question": "¿Qué posición ocupa en el sistema solar?",
                 "answers": [
-                    "Jupiter",
-                    "Saturno",
-                    "Urano",
-                    "Neptuno"
+                    "El primero",
+                    "El último",
+                    "El penúltimo",
+                    "El antepenúltimo"
                 ],
-                "correctAnswer": 3
+                "correctAnswer": 1
+            },
+            {
+
+                "question": "¿Cuál es la composición principal de la atmósfera de Neptuno?",
+                "answers": [
+                    "Hidrógeno",
+                    "Helio",
+                    "Metano",
+                    "Oxígeno"
+                ],
+                "correctAnswer": 2
+
+            },
+            {
+
+                "question": "¿Cuántas lunas conocidas orbitan alrededor de Neptuno?",
+                "answers": [
+                    "10",
+                    "20",
+                    "30",
+                    "40"
+                ],
+                "correctAnswer": 2
+
+            },
+            {
+
+                "question": "¿Por qué tarda mucho tiempo en dar una vuelta alrededor del Sol?",
+                "answers": [
+                    "Porque está muy lejos del Sol",
+                    "Porque es muy grande",
+                    "Porque es muy pequeño",
+                    "Porque es muy lento"
+                ],
+                "correctAnswer": 0
+
             }
         ]
     }

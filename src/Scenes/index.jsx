@@ -7,11 +7,10 @@ import * as XR_Module from "../Modules/XR_Module";
 
 import milky_way from "../Resources/2k_stars_milky_way.jpg";
 
-import * as EscenaPlanetas from "./EscenaPlanetas";
 import * as SistemaSolar from "./SistemaSolar"
 
 // Obtenemos los parámetros de la URL
-var urlParams = new URLSearchParams(window.location.search);
+const urlParams = new URLSearchParams(window.location.search);
 
 // Obtenemos los parámetros de la URL, en caso de que no existan se asigna false
 var sol = urlParams.get('sol') || false;
@@ -39,18 +38,29 @@ neptuno = neptuno === 'true'
 // La primera posición corresponde al sol, la segunda a mercurio, la tercera a venus, la cuarta a la tierra, la quinta a marte, la sexta a jupiter, la séptima a saturno, la octava a urano y la novena a neptuno
 var NIVELES_PASADOS = [sol, mercurio, venus, tierra, marte, jupiter, saturno, urano, neptuno]
 
+/** 
+ * @params {int} indexNivel - Indice del nivel que se quiere pasar
+ * @params {boolean} nivelPasado - Indica si el nivel ha sido pasado o no
+**/
 export function pasoNivel(indexNivel, nivelPasado){
 
     NIVELES_PASADOS[indexNivel] = nivelPasado
 
 }
 
+/**
+ * @params {int} indexNivel - Indice del nivel que se quiere obtener
+ * @returns {boolean} - Devuelve true si el nivel ha sido pasado y false en caso contrario
+**/
 export function getNivel(indexNivel){
 
     return NIVELES_PASADOS[indexNivel]
 
 }
 
+/**
+ * @returns {Array} - Devuelve un array con los niveles pasados
+**/
 export function getNiveles(){
 
     return NIVELES_PASADOS
@@ -61,10 +71,22 @@ const onSceneReady = async (e) => {
 
     const { canvas, scene, engine } = e
 
-    var sceneIndex =  -1;
+    // NO ALMACENA LA ESCENA ACTUAL
+    var escenaPlaneta = null
 
-    // ACTIVAMOS EL DEBUGGER
-    // scene.debugLayer.show()
+    // Se dará comportamiento a los planetas en el render loop
+    var mercurioMovimiento = 0
+    var venusMovimiento = 0
+    var tierraMovimiento = 0
+    var marteMovimiento = 0
+    var jupiterMovimiento = 0
+    var saturnoMovimiento = 0
+    var uranoMovimiento = 0
+    var neptunoMovimiento = 0
+
+    // Variable global para hacer referencia al objeto seleccionado
+    var highlightLayer = new Babylon.HighlightLayer('highlightLayer', scene);
+    let selectedMesh = null;
 
     // DAMOS UN COLOR OSCURO A LA ESCENA
     scene.clearColor = new Babylon.Color3(0, 0, 0)
@@ -104,102 +126,84 @@ const onSceneReady = async (e) => {
     var [ solPanel, mercurioPanel, venusPanel, tierraPanel, martePanel, jupiterPanel, saturnoPanel, saturnoAnillosPanel, uranoPanel, neptunoPanel ] = paneles
     var [ solBoton, mercurioBoton, venusBoton, tierraBoton, marteBoton, jupiterBoton, saturnoBoton, uranoBoton, neptunoBoton ] = botones
 
-    // Variable global para hacer referencia al objeto seleccionado
-    var highlightLayer = new Babylon.HighlightLayer('highlightLayer', scene);
-    let selectedMesh = null;
+    agregarComportamientoPlanetas()
 
-    // Agregamos el comportamiento a los planetas
-    planetas.forEach(mesh => {
+    verificarElementoSeleccionado()
 
-        mesh.actionManager = new Babylon.ActionManager(scene);
-        mesh.actionManager.registerAction(
-
-            new Babylon.ExecuteCodeAction(Babylon.ActionManager.OnPickTrigger, () => {
-
-                selectedMesh = SistemaSolar.agregarHighLight(mesh, selectedMesh, highlightLayer);
-
-                // Activar el panel y botones de prueba del planeta seleccionado
-                SistemaSolar.activarPanel(mesh, paneles)
-                SistemaSolar.activarBoton(mesh, botones)
-                SistemaSolar.validarNivelPasadoBoton(mesh, botones)
-
-            })
-            
-        );
-
-    });
-
-    canvas.addEventListener('click', function(event) {
-
-        // Verificar si el clic se originó dentro del mesh seleccionado
-        if (selectedMesh && selectedMesh.actionManager && selectedMesh.actionManager.hasSpecificTrigger(Babylon.ActionManager.OnPickTrigger)) {
-        
-            const pickResult = scene.pick(scene.pointerX, scene.pointerY);
-
-            if (pickResult && pickResult.pickedMesh === selectedMesh) {
-
-                return;
-
-            }
-
-        }
-    
-        // Si el clic no se originó dentro del mesh seleccionado, quitar el highlight, ocultar el panel y botones
-        if (selectedMesh) {
-
-            SistemaSolar.quitarHighLight(selectedMesh, highlightLayer);
-            SistemaSolar.desactivarPanel(selectedMesh, paneles);
-            SistemaSolar.desactivarBoton(selectedMesh, botones);
-            selectedMesh = null;
-
-        }
-        
-    });  
-
-    // Agregamos el comportamiento a los botones de "Iniciar prueba"
-    botones.forEach(boton => {
-
-        boton.onPointerClickObservable.add(() => {
-
-            // Obtenemos el index de la escena del planeta seleccionado, esto nos permitirá saber qué escena cargar
-            sceneIndex = SistemaSolar.obtenerIndexEscenaPlaneta(selectedMesh.name.toUpperCase())
-
-        });
-
-    });
-    
-    /// Agregamos la escena de cada planeta
-    console.log("Cargando escena sol")
-    var sceneSol = await EscenaPlanetas.crearEscena(engine, canvas, 0)
-    console.log("Cargando escena Mercurio")
-    var sceneMercurio = await EscenaPlanetas.crearEscena(engine, canvas, 1)
-    console.log("Cargando escena Venus")
-    var sceneVenus = await EscenaPlanetas.crearEscena(engine, canvas, 2)
-    console.log("Cargando escena Tierra")
-    var sceneTierra = await EscenaPlanetas.crearEscena(engine, canvas, 3)
-    console.log("Cargando escena Marte")
-    var sceneMarte = await EscenaPlanetas.crearEscena(engine, canvas, 4)
-    console.log("Cargando escena Jupiter")
-    var sceneJupiter = await EscenaPlanetas.crearEscena(engine, canvas, 5)
-    console.log("Cargando escena Saturno")
-    var sceneSaturno = await EscenaPlanetas.crearEscena(engine, canvas, 6)
-    console.log("Cargando escena Urano")
-    var sceneUrano = await EscenaPlanetas.crearEscena(engine, canvas, 7)
-    console.log("Cargando escena Neptuno")
-    var sceneNeptuno = await EscenaPlanetas.crearEscena(engine, canvas, 8)
+    agregarComportamientoBotones()
     
     // CARGAMOS EL MÓDULO XR
     var xr_module = XR_Module.XR_Experience(ground, skybox, scene);
+
+    function agregarComportamientoPlanetas() {
+
+        planetas.forEach(mesh => {
+
+            mesh.actionManager = new Babylon.ActionManager(scene);
+            mesh.actionManager.registerAction(
     
-    // DAMOS COMPORTAMIENTO AL RENDERIZADO DE LA ESCENA
-    var mercurioMovimiento = 0
-    var venusMovimiento = 0
-    var tierraMovimiento = 0
-    var marteMovimiento = 0
-    var jupiterMovimiento = 0
-    var saturnoMovimiento = 0
-    var uranoMovimiento = 0
-    var neptunoMovimiento = 0
+                new Babylon.ExecuteCodeAction(Babylon.ActionManager.OnPickTrigger, () => {
+    
+                    selectedMesh = SistemaSolar.agregarHighLight(mesh, selectedMesh, highlightLayer);
+    
+                    // Activar el panel y botones de prueba del planeta seleccionado
+                    SistemaSolar.activarPanel(mesh, paneles)
+                    SistemaSolar.activarBoton(mesh, botones)
+                    SistemaSolar.validarNivelPasadoBoton(mesh, botones)
+    
+                })
+                
+            );
+    
+        });
+
+    }
+
+    function agregarComportamientoBotones() {
+
+        botones.forEach(boton => {
+
+            boton.onPointerClickObservable.add(() => {
+    
+                escenaPlaneta = SistemaSolar.obtenerEscenaPlaneta(selectedMesh.name.toUpperCase(), engine, canvas)
+    
+            });
+    
+        });
+
+    }
+
+    // Quita el highlight, oculta el panel y botones del mesh seleccionado
+    function verificarElementoSeleccionado() {
+    
+        canvas.addEventListener('click', function(event) {
+
+            // Verificar si el clic se originó dentro del mesh seleccionado
+            if (selectedMesh && selectedMesh.actionManager && selectedMesh.actionManager.hasSpecificTrigger(Babylon.ActionManager.OnPickTrigger)) {
+            
+                const pickResult = scene.pick(scene.pointerX, scene.pointerY);
+    
+                if (pickResult && pickResult.pickedMesh === selectedMesh) {
+    
+                    return;
+    
+                }
+    
+            }
+        
+            // Si el clic no se originó dentro del mesh seleccionado, quitar el highlight, ocultar el panel y botones
+            if (selectedMesh) {
+    
+                SistemaSolar.quitarHighLight(selectedMesh, highlightLayer);
+                SistemaSolar.desactivarPanel(selectedMesh, paneles);
+                SistemaSolar.desactivarBoton(selectedMesh, botones);
+                selectedMesh = null;
+    
+            }
+            
+        });  
+    
+    }
 
     scene.onBeforeRenderObservable.add(() => {
 
@@ -255,65 +259,13 @@ const onSceneReady = async (e) => {
     })
 
     engine.runRenderLoop(() => {
-
-        switch (sceneIndex) {
-        
-            case 0:
-                scene.dispose()
-            break;
-
-            case 1:
-                scene.dispose()
-                sceneSol.render()
-            break;
-
-            case 2:
-                scene.dispose()
-                sceneMercurio.render()
-            break;
-
-            case 3:
-                scene.dispose()
-                sceneVenus.render()
-            break;
-
-            case 4:
-                scene.dispose()
-                sceneTierra.render()
-            break;
-
-            case 5:
-                scene.dispose()
-                sceneMarte.render()
-            break;
-
-            case 6:
-                scene.dispose()
-                sceneJupiter.render()
-            break;
-
-            case 7:
-                scene.dispose()
-                sceneSaturno.render()
-            break;
-
-            case 8:
-                scene.dispose()
-                sceneUrano.render()
-            break;
-
-            case 9:
-                scene.dispose()
-                sceneNeptuno.render()
-            break;
-            
-            default:
-                scene.render()
-            break;
-        
+    
+        if(escenaPlaneta !== null && escenaPlaneta !== undefined) {
+            scene.dispose()
+            escenaPlaneta.render()
         }
-
-    });
+    
+    })
 
 }
 

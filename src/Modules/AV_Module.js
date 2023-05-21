@@ -2,9 +2,13 @@ import * as BABYLON from "babylonjs";
 import * as GUI from 'babylonjs-gui';
 import "babylonjs-loaders"
 
+/** 
+ * @param {string} videoURL - URL del video a reproducir
+ * @param {BABYLON.Scene} scene - Escena de babylon
+ * @returns {Babylon.MeshBuilder, Babylon.VideoTexture, GUI.Button, GUI.Button, GUI.AdvancedDynamicTexture} - Retorna un objeto con la malla del video, la textura del video, los botones de control y la interfaz de usuario
+**/
 export function VideoTexture(videoURL, scene) {
 
-    // VIDEO
     var planeOpts = {
         height: 1080 * 0.001, 
         width: 1920 * 0.001, 
@@ -37,7 +41,6 @@ export function VideoTexture(videoURL, scene) {
     grid.addColumnDefinition(0.5);
     grid.addColumnDefinition(0.5);
 
-    // BOTONES
     let button_controls = GUI.Button.CreateSimpleButton("button_controls", "Reproducir");
     button_controls.color = "white";
     button_controls.background = "green";
@@ -48,8 +51,6 @@ export function VideoTexture(videoURL, scene) {
     grid.addControl(button_controls, 0, 0);
 
     button_controls.onPointerClickObservable.add(function () {
-
-        debugger
 
         if (ANote0VideoVidTex.video.paused) {
 
