@@ -48,6 +48,7 @@ export function VideoTexture(videoURL, scene) {
     button_controls.height = "40px";
     button_controls.top = "-40px";
     button_controls.left = "40px";
+    button_controls.cornerRadius = 20;
     grid.addControl(button_controls, 0, 0);
 
     button_controls.onPointerClickObservable.add(function () {
@@ -77,6 +78,7 @@ export function VideoTexture(videoURL, scene) {
     button_omited.height = "40px";
     button_omited.top = "-40px";
     button_omited.left = "-40px";
+    button_omited.cornerRadius = 20;
     grid.addControl(button_omited, 0, 1);
 
     advancedTexture.addControl(grid);

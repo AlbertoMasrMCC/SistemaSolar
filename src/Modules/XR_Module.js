@@ -160,19 +160,7 @@ export async function XR_Experience(ground, skybox, scene) {
 
         advancedTextureFullScreen.addControl(btnModoXR)
 
-        // // GUI
-        // var meshGUI = BABYLON.MeshBuilder.CreatePlane("plane", {
-
-        //     width: 1 * 1.8,
-        //     height: 1,
-        //     sideOrientation: BABYLON.Mesh.DOUBLESIDE
-            
-        // }, scene)
-
-        // meshGUI.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL
-        // var advancedTexture = GUI.AdvancedDynamicTexture.CreateForMesh(meshGUI)
-
-        return xrExperience
+        return [xrExperience, btnModoXR]
 
     })
 

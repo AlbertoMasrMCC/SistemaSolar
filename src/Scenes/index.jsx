@@ -9,34 +9,10 @@ import milky_way from "../Resources/2k_stars_milky_way.jpg";
 
 import * as SistemaSolar from "./SistemaSolar"
 
-// Obtenemos los parámetros de la URL
-const urlParams = new URLSearchParams(window.location.search);
+var escenaPlaneta = -1
 
-// Obtenemos los parámetros de la URL, en caso de que no existan se asigna false
-var sol = urlParams.get('sol') || false;
-var mercurio = urlParams.get('mercurio') || false;
-var venus = urlParams.get('venus') || false;
-var tierra = urlParams.get('tierra') || false;
-var marte = urlParams.get('marte') || false;
-var jupiter = urlParams.get('jupiter') || false;
-var saturno = urlParams.get('saturno') || false;
-var urano = urlParams.get('urano') || false;
-var neptuno = urlParams.get('neptuno') || false;
-
-// Convertimos los parámetros a booleanos
-sol = sol === 'true'
-mercurio = mercurio === 'true'
-venus = venus === 'true'
-tierra = tierra === 'true'
-marte = marte === 'true'
-jupiter = jupiter === 'true'
-saturno = saturno === 'true'
-urano = urano === 'true'
-neptuno = neptuno === 'true'
-
-// Creamos un array con los niveles pasados
 // La primera posición corresponde al sol, la segunda a mercurio, la tercera a venus, la cuarta a la tierra, la quinta a marte, la sexta a jupiter, la séptima a saturno, la octava a urano y la novena a neptuno
-var NIVELES_PASADOS = [sol, mercurio, venus, tierra, marte, jupiter, saturno, urano, neptuno]
+var NIVELES_PASADOS = [false, false, false, false, false, false, false, false, false]
 
 /** 
  * @params {int} indexNivel - Indice del nivel que se quiere pasar
@@ -67,12 +43,27 @@ export function getNiveles(){
 
 }
 
+/**
+ * @params {Babylon.Scene} escena - Escena que se quiere asignar a la variable global
+**/ 
+export function setEscenaPlaneta(escena){
+
+    escenaPlaneta = escena
+
+}
+
+/**
+ * @returns {Babylon.Scene} - Devuelve la escena que se ha asignado a la variable global
+**/
+export function getEscenaPlaneta(){
+
+    return escenaPlaneta
+
+}
+
 const onSceneReady = async (e) => {
 
     const { canvas, scene, engine } = e
-
-    // NO ALMACENA LA ESCENA ACTUAL
-    var escenaPlaneta = null
 
     // Se dará comportamiento a los planetas en el render loop
     var mercurioMovimiento = 0
@@ -83,6 +74,9 @@ const onSceneReady = async (e) => {
     var saturnoMovimiento = 0
     var uranoMovimiento = 0
     var neptunoMovimiento = 0
+
+    // Cuando volvemos de la subescena de los planetas, se debe de volver a cargar los contenedores
+    var contenedoresCargados = true
 
     // Variable global para hacer referencia al objeto seleccionado
     var highlightLayer = new Babylon.HighlightLayer('highlightLayer', scene);
@@ -111,6 +105,16 @@ const onSceneReady = async (e) => {
     const skybox = Babylon.Mesh.CreateBox("skyBox", 100.0, scene)
     skybox.material = skyBoxMaterial
 
+    // MENSAJE DE BIENVENIDA
+    var mensajeBienvenida = "Bienvenido al Sistema Solar en XR \n\n\n\n Tu misión aquí es visitar cada planeta y aprender sobre ellos. \n\n Para conocer cómo funciona el planeta en el sistema solar debes seleccionarlo. \n\n Si quieres aprender más acerca de este planeta selecciona el botón 'Visitar...' y conoce cómo es por dentro. \n\n Si crees saber lo suficiente del planeta lo pondrás a prueba con un cuestionario para pasar el nivel del planeta. \n\n\n ¡Disfruta tu viaje!"
+    SistemaSolar.crearMensaje(mensajeBienvenida, scene)
+
+    // IMAGENES DE LOS PLANETAS
+    var [textura_planetas, rectangle_planetas, img_niveles_planetas] = SistemaSolar.crearImagenesPlanetas(scene)
+
+    // BOTON DE AYUDA
+    var [boton_ayuda, textura_ayuda] = SistemaSolar.crearBotonAyuda(scene)
+
     // CREANDO EL SISTEMA SOLAR
     var planetas = SistemaSolar.crearPlanetas(scene)
     var orbitas = SistemaSolar.crearOrbitas()
@@ -125,15 +129,32 @@ const onSceneReady = async (e) => {
     var [ mercurioCirculo, venusCirculo, tierraCirculo, marteCirculo, jupiterCirculo, saturnoCirculo, uranoCirculo, neptunoCirculo ] = circulos
     var [ solPanel, mercurioPanel, venusPanel, tierraPanel, martePanel, jupiterPanel, saturnoPanel, saturnoAnillosPanel, uranoPanel, neptunoPanel ] = paneles
     var [ solBoton, mercurioBoton, venusBoton, tierraBoton, marteBoton, jupiterBoton, saturnoBoton, uranoBoton, neptunoBoton ] = botones
+    var [ nivel_sol, nivel_mercurio, nivel_venus, nivel_tierra, nivel_marte, nivel_jupiter, nivel_saturno, nivel_urano, nivel_neptuno ] = img_niveles_planetas
+
+    // CARGAMOS EL MÓDULO XR
+    var [xr_module, btnModoXR] = await XR_Module.XR_Experience(ground, skybox, scene);
+
+    // Agregamos los planetas y orbitas a un contenedor para poder manipularlos más fácilmente
+    var planetasContenedor = new Babylon.AssetContainer(scene)
+    planetasContenedor.meshes.push(sol, mercurio, venus, tierra, luna, marte, jupiter, saturno, saturnoAnillos, urano, neptuno)
+
+    var circulosContenedor = new Babylon.AssetContainer(scene)
+    circulosContenedor.meshes.push(mercurioCirculo, venusCirculo, tierraCirculo, marteCirculo, jupiterCirculo, saturnoCirculo, uranoCirculo, neptunoCirculo)
+
+    var cieloContenedor = new Babylon.AssetContainer(scene)
+    cieloContenedor.meshes.push(skybox)
+
+    var sueloContenedor = new Babylon.AssetContainer(scene)
+    sueloContenedor.meshes.push(ground)
+
+    var luzContenedor = new Babylon.AssetContainer(scene)
+    luzContenedor.lights.push(light)
 
     agregarComportamientoPlanetas()
 
     verificarElementoSeleccionado()
 
     agregarComportamientoBotones()
-    
-    // CARGAMOS EL MÓDULO XR
-    var xr_module = XR_Module.XR_Experience(ground, skybox, scene);
 
     function agregarComportamientoPlanetas() {
 
@@ -149,7 +170,7 @@ const onSceneReady = async (e) => {
                     // Activar el panel y botones de prueba del planeta seleccionado
                     SistemaSolar.activarPanel(mesh, paneles)
                     SistemaSolar.activarBoton(mesh, botones)
-                    SistemaSolar.validarNivelPasadoBoton(mesh, botones)
+                    SistemaSolar.validarNivelPasado(mesh, botones/*, img_niveles_planetas*/)
     
                 })
                 
@@ -164,11 +185,44 @@ const onSceneReady = async (e) => {
         botones.forEach(boton => {
 
             boton.onPointerClickObservable.add(() => {
+
+                planetasContenedor.removeAllFromScene()
+                circulosContenedor.removeAllFromScene()
+                cieloContenedor.removeAllFromScene()
+                sueloContenedor.removeAllFromScene()
+                luzContenedor.removeAllFromScene()
+                ocultarPaneles()
+                ocultarBotones()
+                rectangle_planetas.isVisible = false
+                boton_ayuda.isVisible = false
+                textura_ayuda.isVisible = false
+
+                contenedoresCargados = false
     
-                escenaPlaneta = SistemaSolar.obtenerEscenaPlaneta(selectedMesh.name.toUpperCase(), engine, canvas)
+                escenaPlaneta = SistemaSolar.obtenerEscenaPlaneta(selectedMesh.name.toUpperCase(), camera, scene)
+
+            });
+    
+        });
+
+    }
+
+    function ocultarPaneles() {
+            
+            paneles.forEach(panel => {
+    
+                panel.isVisible = false
     
             });
     
+    }
+
+    function ocultarBotones() {
+
+        botones.forEach(boton => {
+
+            boton.isVisible = false
+
         });
 
     }
@@ -207,63 +261,78 @@ const onSceneReady = async (e) => {
 
     scene.onBeforeRenderObservable.add(() => {
 
-        sol.rotation.y += 0.0037037
-        mercurio.rotation.y += 0.00169492
-        venus.rotation.y += 0.00041152
-        tierra.rotation.y += 0.1
-        marte.rotation.y += 0.09600614
-        jupiter.rotation.y += 0.24038462
-        saturno.rotation.y += 0.21819769
-        urano.rotation.y += 0.014118311
-        neptuno.rotation.y += 0.16
+        if(escenaPlaneta === -1) {
 
-        mercurio.position.x = mercurioOrbita[mercurioMovimiento].x
-        mercurio.position.z = mercurioOrbita[mercurioMovimiento].z
+            if(!contenedoresCargados) {
 
-        venus.position.x = venusOrbita[venusMovimiento].x
-        venus.position.z = venusOrbita[venusMovimiento].z
+                planetasContenedor.addAllToScene()
+                circulosContenedor.addAllToScene()
+                cieloContenedor.addAllToScene()
+                sueloContenedor.addAllToScene()
+                luzContenedor.addAllToScene()
+                rectangle_planetas.isVisible = true
+                boton_ayuda.isVisible = true
 
-        tierra.position.x = tierraOrbita[tierraMovimiento].x
-        tierra.position.z = tierraOrbita[tierraMovimiento].z
+                contenedoresCargados = true
 
-        luna.position.x = tierra.absolutePosition.x
-        luna.position.z = tierra.absolutePosition.z
+            }
 
-        marte.position.x = marteOrbita[marteMovimiento].x
-        marte.position.z = marteOrbita[marteMovimiento].z
+            sol.rotation.y += 0.0037037
+            mercurio.rotation.y += 0.00169492
+            venus.rotation.y += 0.00041152
+            tierra.rotation.y += 0.1
+            marte.rotation.y += 0.09600614
+            jupiter.rotation.y += 0.24038462
+            saturno.rotation.y += 0.21819769
+            urano.rotation.y += 0.014118311
+            neptuno.rotation.y += 0.16
 
-        jupiter.position.x = jupiterOrbita[jupiterMovimiento].x
-        jupiter.position.z = jupiterOrbita[jupiterMovimiento].z
+            mercurio.position.x = mercurioOrbita[mercurioMovimiento].x
+            mercurio.position.z = mercurioOrbita[mercurioMovimiento].z
 
-        saturno.position.x = saturnoOrbita[saturnoMovimiento].x
-        saturno.position.z = saturnoOrbita[saturnoMovimiento].z
+            venus.position.x = venusOrbita[venusMovimiento].x
+            venus.position.z = venusOrbita[venusMovimiento].z
 
-        saturnoAnillos.position.x = saturnoOrbita[saturnoMovimiento].x
-        saturnoAnillos.position.z = saturnoOrbita[saturnoMovimiento].z
+            tierra.position.x = tierraOrbita[tierraMovimiento].x
+            tierra.position.z = tierraOrbita[tierraMovimiento].z
 
-        urano.position.x = uranoOrbita[uranoMovimiento].x
-        urano.position.z = uranoOrbita[uranoMovimiento].z
+            luna.position.x = tierra.absolutePosition.x
+            luna.position.z = tierra.absolutePosition.z
 
-        neptuno.position.x = neptunoOrbita[neptunoMovimiento].x
-        neptuno.position.z = neptunoOrbita[neptunoMovimiento].z
+            marte.position.x = marteOrbita[marteMovimiento].x
+            marte.position.z = marteOrbita[marteMovimiento].z
 
-        mercurioMovimiento = (mercurioMovimiento + 1) % (mercurioOrbita.length - 1)
-        venusMovimiento = (venusMovimiento + 1) % (venusOrbita.length - 1)
-        tierraMovimiento = (tierraMovimiento + 1) % (tierraOrbita.length - 1)
-        marteMovimiento = (marteMovimiento + 1) % (marteOrbita.length - 1)
-        jupiterMovimiento = (jupiterMovimiento + 1) % (jupiterOrbita.length - 1)
-        saturnoMovimiento = (saturnoMovimiento + 1) % (saturnoOrbita.length - 1)
-        uranoMovimiento = (uranoMovimiento + 1) % (uranoOrbita.length - 1)
-        neptunoMovimiento = (neptunoMovimiento + 1) % (neptunoOrbita.length - 1)
+            jupiter.position.x = jupiterOrbita[jupiterMovimiento].x
+            jupiter.position.z = jupiterOrbita[jupiterMovimiento].z
+
+            saturno.position.x = saturnoOrbita[saturnoMovimiento].x
+            saturno.position.z = saturnoOrbita[saturnoMovimiento].z
+
+            saturnoAnillos.position.x = saturnoOrbita[saturnoMovimiento].x
+            saturnoAnillos.position.z = saturnoOrbita[saturnoMovimiento].z
+
+            urano.position.x = uranoOrbita[uranoMovimiento].x
+            urano.position.z = uranoOrbita[uranoMovimiento].z
+
+            neptuno.position.x = neptunoOrbita[neptunoMovimiento].x
+            neptuno.position.z = neptunoOrbita[neptunoMovimiento].z
+
+            mercurioMovimiento = (mercurioMovimiento + 1) % (mercurioOrbita.length - 1)
+            venusMovimiento = (venusMovimiento + 1) % (venusOrbita.length - 1)
+            tierraMovimiento = (tierraMovimiento + 1) % (tierraOrbita.length - 1)
+            marteMovimiento = (marteMovimiento + 1) % (marteOrbita.length - 1)
+            jupiterMovimiento = (jupiterMovimiento + 1) % (jupiterOrbita.length - 1)
+            saturnoMovimiento = (saturnoMovimiento + 1) % (saturnoOrbita.length - 1)
+            uranoMovimiento = (uranoMovimiento + 1) % (uranoOrbita.length - 1)
+            neptunoMovimiento = (neptunoMovimiento + 1) % (neptunoOrbita.length - 1)
+
+        }
 
     })
 
     engine.runRenderLoop(() => {
     
-        if(escenaPlaneta !== null && escenaPlaneta !== undefined) {
-            scene.dispose()
-            escenaPlaneta.render()
-        }
+        scene.render()
     
     })
 

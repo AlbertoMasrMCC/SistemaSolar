@@ -35,7 +35,7 @@
                 "correctAnswer": 3
             },
             {
-                "question": "¿Qué diferencia al Sol de otras estrellas en términos de tamaño y temperatura?",
+                "question": "¿Qué diferencía al Sol de otras estrellas del sistema solar en términos de tamaño y temperatura?",
                 "answers": [
                     "Es más pequeño y más frío",
                     "Es más grande y más caliente",
@@ -60,34 +60,34 @@
                 "correctAnswer": 1
             },
             {
-                "question": "¿Por qué Mercurio es conocido como un planeta terrestre?",
+                "question": "¿Por qué en el día es muy caliente y en la noche muy helado?",
                 "answers": [
-                    "Porque es un planeta rocoso",
-                    "Porque es un planeta gaseoso",
-                    "Porque es un planeta helado",
-                    "Porque es un planeta de agua"
-                ],
-                "correctAnswer": 0
-            },
-            {
-                "question": "¿Cuál es la temperatura promedio en la superficie de Mercurio duante el día?",
-                "answers": [
-                    "1000 °C",
-                    "500 °C",
-                    "200 °C",
-                    "100 °C"
-                ],
-                "correctAnswer": 0
-            },
-            {
-                "question": "¿Por qué la temperatura de mercurio por las noches es alrededor de -180 °C?",
-                "answers": [
-                    "Porque no tiene agua",
-                    "Porque no tiene oxígeno",
-                    "Porque no tiene nitrógeno",
-                    "Porque no tiene atmósfera"
+                    "Porque su atomósfera es muy densa",
+                    "Porque está muy cerca del sol",
+                    "Porque es rocoso",
+                    "Porque su atmósfera es poco densa"
                 ],
                 "correctAnswer": 3
+            },
+            {
+                "question": "¿Por qué es el planeta más rápido en dar vuelta al sol?",
+                "answers": [
+                    "Porque es el más cercano al sol",
+                    "Porque es el más lejano al sol",
+                    "Porque es el más pequeño",
+                    "Porque es el más grande"
+                ],
+                "correctAnswer": 0
+            },
+            {
+                "question": "¿Por qué a mercurio se le puede ver a simple vista desde la tierra y a Neptuno apenas se le aprecia con telescopio?",
+                "answers": [
+                    "Porque Mercurio es más grande que neptuno",
+                    "Porque Mercurio es más pequeño que neptuno",
+                    "Porque Mercurio está más cerca de la tierra",
+                    "Porque Neptuno es azul"
+                ],
+                "correctAnswer": 2
             }
         ]
     },
@@ -106,14 +106,15 @@
             },
             {
 
-                "question": "¿Cuál es la temperatura promedio en la superficie de Venus?",
+                "question": "¿Cuál es el diámetro aproximado de la superficie de venus?",
                 "answers": [
-                    "1000 °C",
-                    "500 °C",
-                    "200 °C",
-                    "100 °C"
+                    "12,104 km",
+                    "12,104,000 km",
+                    "2,000 km",
+                    "2,000,000 km"
+
                 ],
-                "correctAnswer": 0
+                "correctAnswer": 2
 
             },
             {
@@ -122,10 +123,10 @@
                 "answers": [
                     "Porque es el más cercano al sol",
                     "Porque es el más lejano al sol",
-                    "Porque tiene una atmósfera muy densa y atrapa el calor",
+                    "Debido a su superficie volcánica y su atmósfera densa",
                     "Porque tiene una atmósfera muy delgada"
                 ],
-                "correctAnswer": 1
+                "correctAnswer": 2
 
             },
             {
@@ -148,12 +149,12 @@
             {
                 "question": "¿Cuál es la atmósfera predominante en la Tierra?",
                 "answers": [
-                    "Dióxido de carbono",
-                    "Nitrógeno",
-                    "Oxígeno",
-                    "Helio"
+                    "Dióxido de carbono y nitrógeno",
+                    "Nitrógeno y oxígeno",
+                    "Oxígeno y dióxido de carbono",
+                    "Helio y nitrógeno"
                 ],
-                "correctAnswer": 3
+                "correctAnswer": 1
             },
             {
 
@@ -250,12 +251,12 @@
             {
                 "question": "¿Cuál es el diámetro aproximado de Júpiter?",
                 "answers": [
-                    "1000 km",
-                    "5000 km",
-                    "10000 km",
-                    "50000 km"
+                    "142,000 km",
+                    "1,000,000 km",
+                    "50,000 km",
+                    "500,000 km"
                 ],
-                "correctAnswer": 3
+                "correctAnswer": 0
             },
             {
 
@@ -275,8 +276,8 @@
                 "answers": [
                     "365 días terrestres",
                     "88 días terrestres",
-                    "687 días terrestres",
-                    "3650 días terrestres"
+                    "11 años terrestres",
+                    "3 años terrestres"
                 ],
                 "correctAnswer": 2
 
@@ -285,8 +286,8 @@
 
                 "question": "¿Cómo ayuda Júpiter a la Tierra?",
                 "answers": [
-                    "Atrapa asteroides y cometas con su gravedad",
-                    "Atrapa meteoritos con su gravedad",
+                    "Atrapa asteroides y cometas con su gravedad debido a su tamaño",
+                    "Atrapa meteoritos con su gravedad debido a que es gaseoso",
                     "Atrapa satélites con su gravedad",
                     "Atrapa naves espaciales con su gravedad"
                 ],
@@ -310,21 +311,21 @@
             },
             {
 
-                "question": "¿Cuál es el número aproximado de lunas conocidas que orbitan Saturno?",
+                "question": "¿Por qué es considerado planeta gaseoso?",
                 "answers": [
-                    "10",
-                    "20",
-                    "30",
-                    "40"
+                    "Por la composición de su superficie",
+                    "Por la composición de su atmósfera",
+                    "Porque está al lado de Júpiter",
+                    "Porque se ve gigante desde la Tierra"
                 ],
-                "correctAnswer": 2
+                "correctAnswer": 1
 
             },
             {
 
                 "question": "¿Cuánto tarda Saturno en dar una vuelta alrededor del Sol?",
                 "answers": [
-                    "30 años terrestres",
+                    "29 años terrestres",
                     "60 años terrestres",
                     "90 años terrestres",
                     "120 años terrestres"
@@ -334,14 +335,14 @@
             },
             {
 
-                "question": "¿Qué posición ocupa en el sistema solar?",
+                "question": "¿Por qué se dice que la vida tal como la conocemos no sería posible en Saturno?",
                 "answers": [
-                    "El segundo",
-                    "El tercero",
-                    "El cuarto",
-                    "El sexto"
+                    "Porque no tiene atmósfera",
+                    "Porque no tiene agua",
+                    "Porque no tiene oxígeno",
+                    "Porque no tiene nitrógeno"
                 ],
-                "correctAnswer": 3
+                "correctAnswer": 2
 
             }
         ]
@@ -363,12 +364,12 @@
 
                 "question": "¿Cuál es la composición principal de la atmósfera de Urano?",
                 "answers": [
-                    "Hidrógeno",
-                    "Helio",
-                    "Metano",
-                    "Oxígeno"
+                    "Hidrógeno, Helio y Metano",
+                    "Hidrógeno, Helio y Amoniaco",
+                    "Hidrógeno, Helio y Oxigeno",
+                    "Hidrógeno, Helio y Nitrógeno"
                 ],
-                "correctAnswer": 2
+                "correctAnswer": 0
 
             },
             {
@@ -385,12 +386,12 @@
             },
             {
 
-                "question": "¿Cuánto tarda Urano en dar una vuelta alrededor del Sol?",
+                "question": "¿Cuánto tarda Urano en dar una vuelta sobre su propio eje?",
                 "answers": [
-                    "30 años terrestres",
-                    "60 años terrestres",
-                    "90 años terrestres",
-                    "120 años terrestres"
+                    "15 horas",
+                    "17 horas",
+                    "1 día terrestre",
+                    "3 horas"
                 ],
                 "correctAnswer": 1
 
@@ -414,17 +415,17 @@
 
                 "question": "¿Cuál es la composición principal de la atmósfera de Neptuno?",
                 "answers": [
-                    "Hidrógeno",
-                    "Helio",
-                    "Metano",
-                    "Oxígeno"
+                    "Hidrógeno, Helio y Metano",
+                    "Hidrógeno, Helio y Amoniaco",
+                    "Hidrógeno, Helio y Oxigeno",
+                    "Hidrógeno, Helio y Nitrógeno"
                 ],
-                "correctAnswer": 2
+                "correctAnswer": 0
 
             },
             {
 
-                "question": "¿Cuántas lunas conocidas orbitan alrededor de Neptuno?",
+                "question": "¿Cuántos salites naturales conocidas orbitan alrededor de Neptuno?",
                 "answers": [
                     "10",
                     "20",
@@ -440,7 +441,7 @@
                 "answers": [
                     "Porque está muy lejos del Sol",
                     "Porque es muy grande",
-                    "Porque es muy pequeño",
+                    "Porque está muy cercas del Sol",
                     "Porque es muy lento"
                 ],
                 "correctAnswer": 0

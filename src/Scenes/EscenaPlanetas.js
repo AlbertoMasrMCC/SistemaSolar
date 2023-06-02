@@ -11,72 +11,91 @@ import preguntas_respuestas from '../Resources/preguntas_respuestas.json'
 import * as XR_Module from "../Modules/XR_Module";
 import * as AV_Module from "../Modules/AV_Module";
 
+import * as SistemaSolar from "./SistemaSolar"
+
 /**
  * @param {Babylon.Engine} engine motor de renderizado
  * @param {HTMLCanvasElement} canvas lienzo de renderizado
  * @param {int} idTest id de las preguntas y respuestas
  * @returns {Babylon.Scene} escena del planeta
 **/
-export function crearEscena(engine, canvas, idTest) {
+export function crearEscena(camera, scene, idTest) {
 
     var preguntas_respuestas_escena = preguntas_respuestas[idTest]
 
-    var subScene = new Babylon.Scene(engine);
-    var camera = new Babylon.ArcRotateCamera("camera"+ idTest, 0, 0, -3, Babylon.Vector3.Zero(), subScene);
-    camera.setPosition(new Babylon.Vector3(0, 0, -3));
-    camera.attachControl(canvas, false);
+    // camera.setPosition(new Babylon.Vector3(0, 0, -3));
+    camera.position = new Babylon.Vector3(0, 2, -3);
 
-    var videoPlayer = AV_Module.VideoTexture(video_planetas[idTest], subScene)
+    var videoPlayer = AV_Module.VideoTexture(video_planetas[idTest], scene)
+
+    var ventanas = null
 
     videoPlayer.button_omited.onPointerClickObservable.add(function () {
 
-        var ventanas = formulariosUI(preguntas_respuestas_escena, subScene);
+        ventanas = formulariosUI(preguntas_respuestas_escena, scene);
 
         // Detenemos el video y lo ocultamos
         videoPlayer.ANote0VideoVidTex.muted = true;
         videoPlayer.ANote0VideoVidTex.video.pause();
         mostrarOcultarVideo(videoPlayer, false)
 
-        cargarFormulario(ventanas, idTest, subScene)
+        cargarFormulario(ventanas, idTest, scene, cieloContenedor, sueloContenedor, advancedTexture, videoPlayer, camera)
 
     })
 
-    var skybox = Babylon.Mesh.CreateBox("skyBox", 200, subScene);
-    var skyboxMaterial = new Babylon.StandardMaterial("skyBox", subScene);
+    var skybox = Babylon.Mesh.CreateBox("skyBox", 200, scene);
+    var skyboxMaterial = new Babylon.StandardMaterial("skyBox", scene);
     skyboxMaterial.backFaceCulling = false;
-    skyboxMaterial.reflectionTexture = new Babylon.HDRCubeTexture(fondo_planetas[idTest], subScene, 512);
+    skyboxMaterial.reflectionTexture = new Babylon.HDRCubeTexture(fondo_planetas[idTest], scene, 512);
     skyboxMaterial.reflectionTexture.coordinatesMode = Babylon.Texture.SKYBOX_MODE;
     skyboxMaterial.diffuseColor = new Babylon.Color3(0, 0, 0);
     skyboxMaterial.specularColor = new Babylon.Color3(0, 0, 0);
     skyboxMaterial.colisionMask = 0;
     skybox.material = skyboxMaterial;
 
-    var ground = Babylon.Mesh.CreateGround("ground"+ idTest, 1000, 1000, 1, subScene);
+    var ground = Babylon.Mesh.CreateGround("ground"+ idTest, 1000, 1000, 1, scene);
     ground.isVisible = false;
 
-    var xr_module = XR_Module.XR_Experience(ground, skybox, subScene);
+    // var xr_module = XR_Module.XR_Experience(ground, skybox, scene);
 
     var advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 
-    var button = GUI.Button.CreateSimpleButton("button"+ idTest, "Regresar");
-    button.width = "150px"
-    button.height = "40px"
-    button.color = "white"
-    button.background = "green"
-    button.top = "10px"
-    button.left = "10px"
-    button.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
-    button.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
+    var btnMenuPrincipal = GUI.Button.CreateSimpleButton("btnMenuPrincipal"+ idTest, "Regresar");
+    btnMenuPrincipal.width = "150px"
+    btnMenuPrincipal.height = "40px"
+    btnMenuPrincipal.cornerRadius = 20;
+    btnMenuPrincipal.color = "white";
+    btnMenuPrincipal.thickness = 4;
+    btnMenuPrincipal.background = "black";
+    btnMenuPrincipal.alpha = 0.5;
+    btnMenuPrincipal.onPointerEnterObservable.add(function () {
+        btnMenuPrincipal.background = "white";
+        btnMenuPrincipal.color = "black";
+    });
+    btnMenuPrincipal.onPointerOutObservable.add(function () {
+        btnMenuPrincipal.background = "black";
+        btnMenuPrincipal.color = "white";
+    });
+    btnMenuPrincipal.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+    btnMenuPrincipal.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
 
-    button.onPointerUpObservable.add(function () {
+    btnMenuPrincipal.onPointerUpObservable.add(function () {
 
-        redireccionar();
+        advancedTexture.dispose();
+        redireccionar(camera, cieloContenedor, sueloContenedor, advancedTexture, videoPlayer, ventanas);
         
     });
 
-    advancedTexture.addControl(button);
+    advancedTexture.addControl(btnMenuPrincipal);
 
-    return subScene;
+    // Agregar elementos a contenedores
+    var cieloContenedor = new Babylon.AssetContainer(scene);
+    cieloContenedor.meshes.push(skybox);
+
+    var sueloContenedor = new Babylon.AssetContainer(scene);
+    sueloContenedor.meshes.push(ground);
+
+
 
 }
 
@@ -118,7 +137,7 @@ function validarPasoPrueba(ventanas) {
 
 }
 
-function cargarFormulario(ventanas, idTest, subScene) {
+function cargarFormulario(ventanas, idTest, subScene, cieloContenedor, sueloContenedor, advancedTexture, videoPlayer, camera) {
     
     for (var i = 0; i < ventanas.length; i++) {
     
@@ -155,6 +174,7 @@ function cargarFormulario(ventanas, idTest, subScene) {
             if(validarPasoPrueba(ventanas)) {
                 ventanaPasoPrueba = mensajeEmergente(true, subScene)
                 PaginaPrincipal.pasoNivel(idTest, true);
+                SistemaSolar.setPasoNivelImagen(idTest);
             } else {
                 ventanaPasoPrueba = mensajeEmergente(false, subScene)
                 PaginaPrincipal.pasoNivel(idTest, false);
@@ -167,7 +187,7 @@ function cargarFormulario(ventanas, idTest, subScene) {
             ventanaPasoPrueba.boton.onPointerClickObservable.add(function () {
 
                 mostrarOcultarVentanaFormulario(ventanaPasoPrueba, false);
-                redireccionar();
+                redireccionar(camera, cieloContenedor, sueloContenedor, advancedTexture, videoPlayer, ventanas);
 
             });
 
@@ -177,10 +197,32 @@ function cargarFormulario(ventanas, idTest, subScene) {
 
 }
 
-function redireccionar() {
+function redireccionar(camera, cieloContenedor, sueloContenedor, advancedTexture, videoPlayer, ventanas) {
 
-    var niveles = PaginaPrincipal.getNiveles();
 
-    window.location.href = `/?sol=${niveles[0]}&mercurio=${niveles[1]}&venus=${niveles[2]}&tierra=${niveles[3]}&marte=${niveles[4]}&jupiter=${niveles[5]}&saturno=${niveles[6]}&urano=${niveles[7]}&neptuno=${niveles[8]}`;
+    // Eliminamos los elementos de la escena
+    cieloContenedor.dispose();
+    sueloContenedor.dispose();
+    advancedTexture.dispose();
+    videoPlayer.ANote0VideoVidTex.muted = true;
+    videoPlayer.ANote0VideoVidTex.video.pause();
+    mostrarOcultarVideo(videoPlayer, false)
+
+    if(ventanas != null) {
+
+        for(var i = 0; i < ventanas.length; i++) {
+            ventanas[i].barMesh.dispose();
+            ventanas[i].bar_rectangle.dispose();
+            ventanas[i].windowMesh.dispose();
+            ventanas[i].window_rectangle.dispose();
+        }
+
+    }
+
+    // Acomodamos la cámara en la posición inicial
+    camera.position = new Babylon.Vector3(0, 9, -15)
+
+    // Asignamos null para que se renderice la escena del menu principal
+    PaginaPrincipal.setEscenaPlaneta(-1)
 
 }

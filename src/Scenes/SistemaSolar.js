@@ -17,6 +17,10 @@ import saturno_img from "../Resources/2k_saturn.jpg"
 import urano_img from "../Resources/2k_uranus.jpg"
 import neptuno_img from "../Resources/2k_neptune.jpg"
 
+import niveles_planetas from '../Resources/niveles_planetas/index.js';
+
+var img_niveles_planetas = [9]
+
 function degrees_to_radians(degrees) {
 
     return degrees * (Math.PI / 180)
@@ -42,32 +46,242 @@ function orbit_planet(points, ratio) {
     return orbit
 }
 
+export function setPasoNivelImagen(id_nivel_planeta) {
+
+    debugger
+
+    var img_nivel_planeta = img_niveles_planetas[id_nivel_planeta]
+
+    img_nivel_planeta.source = niveles_planetas[9]
+
+}
+
+function setPasoNivelBoton(boton) {
+
+    boton.isEnabled = false
+    boton.color = "green"
+    boton.background = "green"
+    boton.textBlock.color = "white"
+    boton.textBlock.text = "¡Nivel pasado!"
+
+}
+
+export function crearImagenesPlanetas(scene) {
+
+    var advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+
+    // Contenedor de las imagenes de los planetas
+
+    var rectangle_planetas = new GUI.Rectangle();
+    rectangle_planetas.width = "30%";
+    rectangle_planetas.height = "10%";
+    rectangle_planetas.cornerRadius = 20;
+    rectangle_planetas.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+    rectangle_planetas.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
+
+    var grid = new GUI.Grid();
+
+    grid.addColumnDefinition(0.1);
+    grid.addColumnDefinition(0.1);
+    grid.addColumnDefinition(0.1);
+    grid.addColumnDefinition(0.1);
+    grid.addColumnDefinition(0.1);
+    grid.addColumnDefinition(0.1);
+    grid.addColumnDefinition(0.1);
+    grid.addColumnDefinition(0.1);
+    grid.addColumnDefinition(0.1);
+
+    var nivel_sol = new GUI.Image("sol", niveles_planetas[0]);
+    nivel_sol.width = "25px";
+    nivel_sol.height = "25px";
+    img_niveles_planetas[0] = nivel_sol
+
+    var nivel_mercurio = new GUI.Image("mercurio", niveles_planetas[1]);
+    nivel_mercurio.width = "25px";
+    nivel_mercurio.height = "25px";
+    img_niveles_planetas[1] = nivel_mercurio
+
+    var nivel_venus = new GUI.Image("venus", niveles_planetas[2]);
+    nivel_venus.width = "25px";
+    nivel_venus.height = "25px";
+    img_niveles_planetas[2] = nivel_venus
+
+    var nivel_tierra = new GUI.Image("tierra", niveles_planetas[3]);
+    nivel_tierra.width = "25px";
+    nivel_tierra.height = "25px";
+    img_niveles_planetas[3] = nivel_tierra
+
+    var nivel_marte = new GUI.Image("marte", niveles_planetas[4]);
+    nivel_marte.width = "25px";
+    nivel_marte.height = "25px";
+    img_niveles_planetas[4] = nivel_marte
+
+    var nivel_jupiter = new GUI.Image("jupiter", niveles_planetas[5]);
+    nivel_jupiter.width = "25px";
+    nivel_jupiter.height = "25px";
+    img_niveles_planetas[5] = nivel_jupiter
+
+    var nivel_saturno = new GUI.Image("saturno", niveles_planetas[6]);
+    nivel_saturno.width = "25px";
+    nivel_saturno.height = "25px";
+    img_niveles_planetas[6] = nivel_saturno
+
+    var nivel_urano = new GUI.Image("urano", niveles_planetas[7]);
+    nivel_urano.width = "25px";
+    nivel_urano.height = "25px";
+    img_niveles_planetas[7] = nivel_urano
+
+    var nivel_neptuno = new GUI.Image("neptuno", niveles_planetas[8]);
+    nivel_neptuno.width = "25px";
+    nivel_neptuno.height = "25px";
+    img_niveles_planetas[8] = nivel_neptuno
+
+    grid.addControl(nivel_sol, 0, 0);
+    grid.addControl(nivel_mercurio, 0, 1);
+    grid.addControl(nivel_venus, 0, 2);
+    grid.addControl(nivel_tierra, 0, 3);
+    grid.addControl(nivel_marte, 0, 4);
+    grid.addControl(nivel_jupiter, 0, 5);
+    grid.addControl(nivel_saturno, 0, 6);
+    grid.addControl(nivel_urano, 0, 7);
+    grid.addControl(nivel_neptuno, 0, 8);
+
+    rectangle_planetas.addControl(grid);
+
+    advancedTexture.addControl(rectangle_planetas);
+
+    return [advancedTexture, rectangle_planetas, img_niveles_planetas]
+
+}
+
+export function crearBotonAyuda(scene) {
+
+    var advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+
+    var boton_ayuda = GUI.Button.CreateSimpleButton("boton_ayuda", "Ayuda");
+    boton_ayuda.width = "15%";
+    boton_ayuda.height = "7%";
+    boton_ayuda.cornerRadius = 20;
+    boton_ayuda.color = "white";
+    boton_ayuda.thickness = 4;
+    boton_ayuda.background = "black";
+    boton_ayuda.alpha = 0.8;
+    boton_ayuda.onPointerEnterObservable.add(function () {
+        boton_ayuda.background = "white";
+        boton_ayuda.color = "black";
+    });
+    boton_ayuda.onPointerOutObservable.add(function () {
+        boton_ayuda.background = "black";
+        boton_ayuda.color = "white";
+    });
+    boton_ayuda.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+    boton_ayuda.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
+
+    boton_ayuda.onPointerUpObservable.add(function () {
+
+        var mensaje = "En la parte superior izquierda se muestran los planetas. \n\n Si están marcados con una palomita significa que ya han sido aprobados, por lo que puedes enfocarte en los siguientes niveles. ¡Mucha suerte y diviertete!"
+        crearMensaje(mensaje, scene);
+
+    });
+
+
+    advancedTexture.addControl(boton_ayuda);
+
+    return [boton_ayuda, advancedTexture]
+
+}
+
+export function crearMensaje(mensaje, scene) {
+
+    var advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+
+    var ventana_inicial = new GUI.Rectangle();
+    ventana_inicial.width = 0.8;
+    ventana_inicial.height = 0.8;
+    ventana_inicial.cornerRadius = 20;
+    ventana_inicial.color = "white";
+    ventana_inicial.thickness = 4;
+    ventana_inicial.background = "black";
+    ventana_inicial.alpha = 0.8;
+    ventana_inicial.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+    ventana_inicial.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
+
+    var grid = new GUI.Grid();
+
+    grid.addRowDefinition(0.8);
+    grid.addRowDefinition(0.2);
+
+    let mensaje_bienvenida = new GUI.TextBlock();
+    mensaje_bienvenida.text = mensaje;
+    mensaje_bienvenida.color = "white";
+    mensaje_bienvenida.fontSize = 24;
+    mensaje_bienvenida.textWrapping = true;
+    mensaje_bienvenida.textHorizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+    mensaje_bienvenida.textVerticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
+
+    grid.addControl(mensaje_bienvenida, 0, 0);
+
+    let boton_continuar = GUI.Button.CreateSimpleButton("boton_continuar", "Continuar");
+    boton_continuar.width = 0.2;
+    boton_continuar.height = "40px";
+    boton_continuar.cornerRadius = 20;
+    boton_continuar.color = "white";
+    boton_continuar.thickness = 4;
+    boton_continuar.background = "black";
+    boton_continuar.alpha = 0.8;
+    boton_continuar.onPointerEnterObservable.add(function () {
+        boton_continuar.background = "white";
+        boton_continuar.color = "black";
+    });
+    boton_continuar.onPointerOutObservable.add(function () {
+        boton_continuar.background = "black";
+        boton_continuar.color = "white";
+    });
+
+    boton_continuar.onPointerUpObservable.add(function () {
+
+        advancedTexture.dispose();
+
+    });
+
+    grid.addControl(boton_continuar, 1, 0);
+
+    ventana_inicial.addControl(grid);
+
+    advancedTexture.addControl(ventana_inicial);
+
+}
+
 /** 
  * @param {String} planeta - Nombre del planeta a crear
  * @param {BABYLON.Engine} engine - Motor de babylon
  * @param {BABYLON.Scene} canvas - Escena de babylon
  * @returns {BABYLON.Scene} - Retorna la escena del planeta 
 **/
-export function obtenerEscenaPlaneta(planeta, engine, canvas) {
+export function obtenerEscenaPlaneta(planeta, camera, scene) {
 
-    var escenaPlaneta = null
+    var escenaPlaneta = -1
 
     switch (planeta) {
 
         case "SOL":
-            escenaPlaneta = EscenaPlanetas.crearEscena(engine, canvas, 0)
+            EscenaPlanetas.crearEscena(camera, scene, 0)
+            escenaPlaneta = 0
             break;
 
         case "MERCURIO":
-            escenaPlaneta = EscenaPlanetas.crearEscena(engine, canvas, 1)
+            EscenaPlanetas.crearEscena(camera, scene, 1)
+            escenaPlaneta = 1
             break;
 
         case "VENUS":
-            escenaPlaneta = EscenaPlanetas.crearEscena(engine, canvas, 2)
+            EscenaPlanetas.crearEscena(camera, scene, 2)
+            escenaPlaneta = 2
             break;
 
         case "TIERRA":
-            escenaPlaneta = EscenaPlanetas.crearEscena(engine, canvas, 3)
+            EscenaPlanetas.crearEscena(camera, scene, 3)
+            escenaPlaneta = 3
             break;
 
         case "LUNA":
@@ -75,15 +289,18 @@ export function obtenerEscenaPlaneta(planeta, engine, canvas) {
             break;
 
         case "MARTE":
-            escenaPlaneta = EscenaPlanetas.crearEscena(engine, canvas, 4)
+            EscenaPlanetas.crearEscena(camera, scene, 4)
+            escenaPlaneta = 4
             break;
 
         case "JUPITER":
-            escenaPlaneta = EscenaPlanetas.crearEscena(engine, canvas, 5)
+            EscenaPlanetas.crearEscena(camera, scene, 5)
+            escenaPlaneta = 5
             break;
 
         case "SATURNO":
-            escenaPlaneta = EscenaPlanetas.crearEscena(engine, canvas, 6)
+            EscenaPlanetas.crearEscena(camera, scene, 6)
+            escenaPlaneta = 6
             break;
 
         case "SATURNOANILLOS":
@@ -91,11 +308,13 @@ export function obtenerEscenaPlaneta(planeta, engine, canvas) {
             break;
 
         case "URANO":
-            escenaPlaneta = EscenaPlanetas.crearEscena(engine, canvas, 7)
+            EscenaPlanetas.crearEscena(camera, scene, 7)
+            escenaPlaneta = 7
             break;
 
         case "NEPTUNO":
-            escenaPlaneta = EscenaPlanetas.crearEscena(engine, canvas, 8)
+            EscenaPlanetas.crearEscena(camera, scene, 8)
+            escenaPlaneta = 8
             break;
 
         default:
@@ -315,7 +534,7 @@ export function crearPaneles(planetas) {
                 break;
 
             case "MARTE":
-                textoPanel = "\u2022 Tiene un diámetro de 6,787 kilómetros \n\n\u2022 Tarda aproximadamente 24.6 horas terrestres en completar una rotación sobre su propio eje \n\n\u2022 Tarda 686.98 días terrestres en dar una vuelta alrededor del sol \n\n\u2022 Tiene una atmósfera muy delgada compuesta principalmente de dióxido de carbono \n\n\u2022 Tiene dos satélites naturales llamados Fobos y Deimos"
+                textoPanel = "\u2022 Tiene un diámetro de 6,787 kilómetros \n\n\u2022 Tarda aproximadamente 24.6 horas terrestres en completar una rotación sobre su propio eje \n\n\u2022 Tarda 686.98 días terrestres en dar una vuelta alrededor del sol \n\n\u2022 Tiene una atmósfera muy delgada compuesta principalmente de dióxido de carbono \n\n\u2022 Tiene dos satélites naturales llamados Fobos y Deimos \n\n\u2022 Se le conoce como el planeta rojo debido a su superficie rica en óxido de hierro"
                 break;
 
             case "JUPITER":
@@ -331,11 +550,11 @@ export function crearPaneles(planetas) {
                 break;
 
             case "URANO":
-                textoPanel = "\u2022 Tiene un diámetro de 51,118 kilómetros \n\n\u2022 Tarda aproximadamente 17.2 horas terrestres en completar una rotación sobre su propio eje \n\n\u2022 Tarda 84.01 años terrestres en dar una vuelta alrededor del sol \n\n\u2022 Tiene una atmósfera compuesta principalmente de hidrógeno, helio y metano \n\n\u2022 Tiene muchos satelites naturales"
+                textoPanel = "\u2022 Tiene un diámetro de 51,118 kilómetros \n\n\u2022 Tarda aproximadamente 17.2 horas terrestres en completar una rotación sobre su propio eje \n\n\u2022 Tarda 84.01 años terrestres en dar una vuelta alrededor del sol \n\n\u2022 Tiene una atmósfera compuesta principalmente de hidrógeno, helio y metano \n\n\u2022 Tiene 20 satelites naturales conocidos"
                 break;
 
             case "NEPTUNO":
-                textoPanel = "\u2022 Tiene un diámetro de 49,528 kilómetros \n\n\u2022 Tarda aproximadamente 16.1 horas terrestres en completar una rotación sobre su propio eje \n\n\u2022 Tarda 164.79 años terrestres en dar una vuelta alrededor del sol \n\n\u2022 Tiene una atmósfera compuesta principalmente de hidrógeno, helio y metano \n\n\u2022 Tiene muchos satelites naturales"
+                textoPanel = "\u2022 Tiene un diámetro de 49,528 kilómetros \n\n\u2022 Tarda aproximadamente 16.1 horas terrestres en completar una rotación sobre su propio eje \n\n\u2022 Tarda 164.79 años terrestres en dar una vuelta alrededor del sol \n\n\u2022 Tiene una atmósfera compuesta principalmente de hidrógeno, helio y metano \n\n\u2022 Tiene 30 satelites naturales conocidos"
                 break;
 
         }
@@ -383,7 +602,7 @@ export function crearBotones(advancedTexture, planetas) {
             let boton = GUI.Button.CreateSimpleButton("boton" + i);
             boton.width = "15%";
             boton.height = "7%";
-            boton.textBlock.text = "Iniciar prueba de " + planetas[i].name.toUpperCase()
+            boton.textBlock.text = "Visitar " + planetas[i].name.toUpperCase()
             boton.cornerRadius = 20;
             boton.color = "white";
             boton.thickness = 4;
@@ -414,7 +633,7 @@ export function crearBotones(advancedTexture, planetas) {
  * @param {Babylon.Mesh} selectedMesh Mesh seleccionado
  * @param {Array Babylon.GUI.Button} botones Array con los botones para iniciar las pruebas de los planetas
 **/
-export function validarNivelPasadoBoton(selectedMesh, botones) {
+export function validarNivelPasado(selectedMesh, botones/*, niveles_planetas*/) {
 
     for (let i = 0; i < botones.length; i++) {
 
@@ -424,11 +643,8 @@ export function validarNivelPasadoBoton(selectedMesh, botones) {
 
             if (nivelpasado[i]) {
 
-                botones[i].isEnabled = false
-                botones[i].color = "green"
-                botones[i].background = "green"
-                botones[i].textBlock.color = "white"
-                botones[i].textBlock.text = "¡Nivel pasado!"
+                setPasoNivelBoton(botones[i])
+                // setPasoNivelImagen(niveles_planetas[i])
 
             }
 
