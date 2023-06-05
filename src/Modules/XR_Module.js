@@ -131,16 +131,23 @@ export async function XR_Experience(ground, skybox, scene) {
         var advancedTextureFullScreen = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI", true, scene)
 
         var btnModoXR = GUI.Button.CreateSimpleButton("btnModoXR", "Entrar a modo AR")
-        btnModoXR.width = "200px"
-        btnModoXR.height = "40px"
-        btnModoXR.color = "white"
-        btnModoXR.cornerRadius = 20
-        btnModoXR.background = "blue"
-        btnModoXR.fontSize = "20px"
+        btnModoXR.width = "14%"
+        btnModoXR.height = "7%"
+        btnModoXR.cornerRadius = 20;
+        btnModoXR.color = "white";
+        btnModoXR.thickness = 4;
+        btnModoXR.background = "black";
+        btnModoXR.alpha = 0.5;
+        btnModoXR.onPointerEnterObservable.add(function () {
+            btnModoXR.background = "white";
+            btnModoXR.color = "black";
+        });
+        btnModoXR.onPointerOutObservable.add(function () {
+            btnModoXR.background = "black";
+            btnModoXR.color = "white";
+        });
         btnModoXR.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT
         btnModoXR.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_BOTTOM
-        btnModoXR.topInPixels = -5
-        btnModoXR.leftInPixels =-5
 
         btnModoXR.onPointerUpObservable.add(function () {
 

@@ -8,38 +8,35 @@ import * as PaginaPrincipal from "./index";
 import { formulariosUI, mensajeEmergente } from "../Modules/FormularioUI";
 import preguntas_respuestas from '../Resources/preguntas_respuestas.json'
 
-import * as XR_Module from "../Modules/XR_Module";
 import * as AV_Module from "../Modules/AV_Module";
 
 import * as SistemaSolar from "./SistemaSolar"
 
 /**
- * @param {Babylon.Engine} engine motor de renderizado
- * @param {HTMLCanvasElement} canvas lienzo de renderizado
- * @param {int} idTest id de las preguntas y respuestas
- * @returns {Babylon.Scene} escena del planeta
+ * @param {Babylon.Camera} camera - Camara de la escena
+ * @param {Babylon.Scene} scene - Escena actual
+ * @param {int} idTest id de las preguntas y respuestas del planeta
 **/
 export function crearEscena(camera, scene, idTest) {
 
     var preguntas_respuestas_escena = preguntas_respuestas[idTest]
 
-    // camera.setPosition(new Babylon.Vector3(0, 0, -3));
+    // Posicionamos la cámara en el centro de la escena
     camera.position = new Babylon.Vector3(0, 2, -3);
 
     var videoPlayer = AV_Module.VideoTexture(video_planetas[idTest], scene)
 
-    var ventanas = null
+    var formularios = null
 
     videoPlayer.button_omited.onPointerClickObservable.add(function () {
 
-        ventanas = formulariosUI(preguntas_respuestas_escena, scene);
+        formularios = formulariosUI(preguntas_respuestas_escena, scene);
 
-        // Detenemos el video y lo ocultamos
-        videoPlayer.ANote0VideoVidTex.muted = true;
-        videoPlayer.ANote0VideoVidTex.video.pause();
+        detenerVideo(videoPlayer)
         mostrarOcultarVideo(videoPlayer, false)
 
-        cargarFormulario(ventanas, idTest, scene, cieloContenedor, sueloContenedor, advancedTexture, videoPlayer, camera)
+        // Más abajo se crean los contenedores y el advancedTexture
+        cargarFormulario(formularios, idTest, scene, cieloContenedor, sueloContenedor, advancedTexture, videoPlayer, camera)
 
     })
 
@@ -56,13 +53,11 @@ export function crearEscena(camera, scene, idTest) {
     var ground = Babylon.Mesh.CreateGround("ground"+ idTest, 1000, 1000, 1, scene);
     ground.isVisible = false;
 
-    // var xr_module = XR_Module.XR_Experience(ground, skybox, scene);
-
     var advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 
     var btnMenuPrincipal = GUI.Button.CreateSimpleButton("btnMenuPrincipal"+ idTest, "Regresar");
-    btnMenuPrincipal.width = "150px"
-    btnMenuPrincipal.height = "40px"
+    btnMenuPrincipal.width = "14%"
+    btnMenuPrincipal.height = "7%"
     btnMenuPrincipal.cornerRadius = 20;
     btnMenuPrincipal.color = "white";
     btnMenuPrincipal.thickness = 4;
@@ -82,20 +77,24 @@ export function crearEscena(camera, scene, idTest) {
     btnMenuPrincipal.onPointerUpObservable.add(function () {
 
         advancedTexture.dispose();
-        redireccionar(camera, cieloContenedor, sueloContenedor, advancedTexture, videoPlayer, ventanas);
+        redireccionar(camera, cieloContenedor, sueloContenedor, advancedTexture, videoPlayer, formularios);
         
     });
 
     advancedTexture.addControl(btnMenuPrincipal);
 
-    // Agregar elementos a contenedores
     var cieloContenedor = new Babylon.AssetContainer(scene);
     cieloContenedor.meshes.push(skybox);
 
     var sueloContenedor = new Babylon.AssetContainer(scene);
     sueloContenedor.meshes.push(ground);
 
+}
 
+function detenerVideo(videoPlayer) {
+
+    videoPlayer.ANote0VideoVidTex.muted = true;
+    videoPlayer.ANote0VideoVidTex.video.pause();
 
 }
 
@@ -110,10 +109,12 @@ function mostrarOcultarVideo(videoPlayer, mostrar) {
 }
 
 function mostrarOcultarVentanaFormulario(ventana, mostrar) {
+
     ventana.barMesh.isVisible = mostrar;
     ventana.bar_rectangle.isVisible = mostrar;
     ventana.windowMesh.isVisible = mostrar;
     ventana.window_rectangle.isVisible = mostrar;
+
 }
 
 function validarPasoPrueba(ventanas) {
@@ -142,7 +143,9 @@ function cargarFormulario(ventanas, idTest, subScene, cieloContenedor, sueloCont
     for (var i = 0; i < ventanas.length; i++) {
     
         if (i === 0) {
+
             mostrarOcultarVentanaFormulario(ventanas[i], true);
+
         }
     
         ventanas[i].btn_next.onPointerClickObservable.add(function () {
@@ -172,12 +175,16 @@ function cargarFormulario(ventanas, idTest, subScene, cieloContenedor, sueloCont
             var ventanaPasoPrueba = null
 
             if(validarPasoPrueba(ventanas)) {
+
                 ventanaPasoPrueba = mensajeEmergente(true, subScene)
                 PaginaPrincipal.pasoNivel(idTest, true);
                 SistemaSolar.setPasoNivelImagen(idTest);
+
             } else {
+
                 ventanaPasoPrueba = mensajeEmergente(false, subScene)
                 PaginaPrincipal.pasoNivel(idTest, false);
+
             }
 
             // Mostramos la ventana de paso de prueba
@@ -199,15 +206,14 @@ function cargarFormulario(ventanas, idTest, subScene, cieloContenedor, sueloCont
 
 function redireccionar(camera, cieloContenedor, sueloContenedor, advancedTexture, videoPlayer, ventanas) {
 
-
-    // Eliminamos los elementos de la escena
+    // Eliminamos los elementos de la escena, para que no se rendericen, y no consuman recursos
     cieloContenedor.dispose();
     sueloContenedor.dispose();
     advancedTexture.dispose();
-    videoPlayer.ANote0VideoVidTex.muted = true;
-    videoPlayer.ANote0VideoVidTex.video.pause();
+    detenerVideo(videoPlayer)
     mostrarOcultarVideo(videoPlayer, false)
 
+    // En caso de que no se haya llegado al formulario
     if(ventanas != null) {
 
         for(var i = 0; i < ventanas.length; i++) {

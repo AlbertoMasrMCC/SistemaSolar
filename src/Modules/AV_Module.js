@@ -3,7 +3,7 @@ import * as GUI from 'babylonjs-gui';
 import "babylonjs-loaders"
 
 /** 
- * @param {string} videoURL - URL del video a reproducir
+ * @param {String} videoURL - URL del video a reproducir
  * @param {BABYLON.Scene} scene - Escena de babylon
  * @returns {Babylon.MeshBuilder, Babylon.VideoTexture, GUI.Button, GUI.Button, GUI.AdvancedDynamicTexture} - Retorna un objeto con la malla del video, la textura del video, los botones de control y la interfaz de usuario
 **/
@@ -26,9 +26,7 @@ export function VideoTexture(videoURL, scene) {
     ANote0Video.position = vidPos;
     var ANote0VideoMat = new BABYLON.StandardMaterial("m", scene);
     ANote0VideoMat.diffuseColor = new BABYLON.Color3.White();
-    var ANote0VideoVidTex = new BABYLON.VideoTexture("videoTexture", videoURL,
-    scene, true, false,
-    BABYLON.VideoTexture.TRILINEAR_SAMPLINGMODE, videoTextureSettings);
+    var ANote0VideoVidTex = new BABYLON.VideoTexture("videoTexture", videoURL, scene, true, false, BABYLON.VideoTexture.TRILINEAR_SAMPLINGMODE, videoTextureSettings);
     ANote0VideoMat.diffuseTexture = ANote0VideoVidTex;
     ANote0VideoMat.roughness = 1;
     ANote0VideoMat.emissiveColor = new BABYLON.Color3.White();
@@ -44,10 +42,8 @@ export function VideoTexture(videoURL, scene) {
     let button_controls = GUI.Button.CreateSimpleButton("button_controls", "Reproducir");
     button_controls.color = "white";
     button_controls.background = "green";
-    button_controls.width = "150px";
-    button_controls.height = "40px";
-    button_controls.top = "-40px";
-    button_controls.left = "40px";
+    button_controls.width = "30%";
+    button_controls.height = "7%";
     button_controls.cornerRadius = 20;
     grid.addControl(button_controls, 0, 0);
 
@@ -74,10 +70,8 @@ export function VideoTexture(videoURL, scene) {
     let button_omited = GUI.Button.CreateSimpleButton("button_omited", "Omitir");
     button_omited.color = "white";
     button_omited.background = "red";
-    button_omited.width = "150px";
-    button_omited.height = "40px";
-    button_omited.top = "-40px";
-    button_omited.left = "-40px";
+    button_omited.width = "30%";
+    button_omited.height = "7%";
     button_omited.cornerRadius = 20;
     grid.addControl(button_omited, 0, 1);
 

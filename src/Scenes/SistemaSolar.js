@@ -46,16 +46,6 @@ function orbit_planet(points, ratio) {
     return orbit
 }
 
-export function setPasoNivelImagen(id_nivel_planeta) {
-
-    debugger
-
-    var img_nivel_planeta = img_niveles_planetas[id_nivel_planeta]
-
-    img_nivel_planeta.source = niveles_planetas[9]
-
-}
-
 function setPasoNivelBoton(boton) {
 
     boton.isEnabled = false
@@ -66,14 +56,25 @@ function setPasoNivelBoton(boton) {
 
 }
 
-export function crearImagenesPlanetas(scene) {
+/**
+ * Asignamos la imagen del nivel pasado al planeta correspondiente
+ * @param {Integer} id_nivel_planeta - ID del planeta al que se le asignará la imagen
+ */
+export function setPasoNivelImagen(id_nivel_planeta) {
+
+    img_niveles_planetas[id_nivel_planeta].source = niveles_planetas[9]
+
+}
+
+/**
+ * Creamos una ventana de los planetas con sus respectivas imagenes en la parte superior izquierda de la GUI de la escena principal
+**/
+export function crearImagenesPlanetas() {
 
     var advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 
-    // Contenedor de las imagenes de los planetas
-
     var rectangle_planetas = new GUI.Rectangle();
-    rectangle_planetas.width = "30%";
+    rectangle_planetas.width = "40%";
     rectangle_planetas.height = "10%";
     rectangle_planetas.cornerRadius = 20;
     rectangle_planetas.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
@@ -154,18 +155,23 @@ export function crearImagenesPlanetas(scene) {
 
 }
 
-export function crearBotonAyuda(scene) {
+/**
+ * 
+ * @returns {GUI.Button, GUI.AdvancedDynamicTexture} - Botón de ayuda y la GUI con el mensaje de ayuda
+ */
+export function crearBotonMensajeAyuda() {
 
     var advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 
-    var boton_ayuda = GUI.Button.CreateSimpleButton("boton_ayuda", "Ayuda");
-    boton_ayuda.width = "15%";
-    boton_ayuda.height = "7%";
-    boton_ayuda.cornerRadius = 20;
+    var boton_ayuda = GUI.Button.CreateSimpleButton("boton_ayuda", "?");
+    boton_ayuda.width = "5%";
+    boton_ayuda.height = "5%";
+    boton_ayuda.cornerRadius = 50;
     boton_ayuda.color = "white";
     boton_ayuda.thickness = 4;
     boton_ayuda.background = "black";
     boton_ayuda.alpha = 0.8;
+    boton_ayuda.textBlock.fontSize = 30;
     boton_ayuda.onPointerEnterObservable.add(function () {
         boton_ayuda.background = "white";
         boton_ayuda.color = "black";
@@ -179,8 +185,8 @@ export function crearBotonAyuda(scene) {
 
     boton_ayuda.onPointerUpObservable.add(function () {
 
-        var mensaje = "En la parte superior izquierda se muestran los planetas. \n\n Si están marcados con una palomita significa que ya han sido aprobados, por lo que puedes enfocarte en los siguientes niveles. ¡Mucha suerte y diviertete!"
-        crearMensaje(mensaje, scene);
+        var mensaje = "\n\n ¡Sección de ayuda! \n\n\n\n En la parte superior izquierda se encuentran los planetas. Si están marcados con una palomita, significa que ya los has aprobado y completado con éxito. \n\n Si seleccionas un planeta, podrás ver si has superado su nivel o si aún necesitas completarlo. Esto te ayudará a tener claridad sobre tu progreso y te permitirá centrarte en los siguientes niveles por explorar. \n\n Recuerda que para avanzar en el juego, es importante conocer y comprender los planetas en el sistema solar, así como comprender su funcionamiento individual. Puedes lograrlo ingresando en cada uno de ellos y explorando su información detallada antes de poner a prueba tus conocimientos en el cuestionario. \n\n\n\n ¡Mucha suerte y diviértete explorando el Sistema Solar en XR! \n\n"
+        crearMensaje(mensaje);
 
     });
 
@@ -191,7 +197,11 @@ export function crearBotonAyuda(scene) {
 
 }
 
-export function crearMensaje(mensaje, scene) {
+/**
+ * @param {string} mensaje - Mensaje que se quiere mostrar en la ventana emergente
+ * Crea un mensaje emergente con el texto que se le pase por parámetro, también un botón para cerrar la ventana
+ **/
+export function crearMensaje(mensaje) {
 
     var advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 
@@ -211,19 +221,38 @@ export function crearMensaje(mensaje, scene) {
     grid.addRowDefinition(0.8);
     grid.addRowDefinition(0.2);
 
+    let scrollViewer = new GUI.ScrollViewer();
+    scrollViewer.width = "100%";
+    scrollViewer.height = "100%";
+    scrollViewer.color = "white";
+    scrollViewer.background = "black";
+    scrollViewer.alpha = 0.8;
+
+    let stackPanel = new GUI.StackPanel();
+    stackPanel.width = "100%";
+
+    scrollViewer.addControl(stackPanel);
+
     let mensaje_bienvenida = new GUI.TextBlock();
     mensaje_bienvenida.text = mensaje;
     mensaje_bienvenida.color = "white";
     mensaje_bienvenida.fontSize = 24;
-    mensaje_bienvenida.textWrapping = true;
+    mensaje_bienvenida.resizeToFit = true;
+    mensaje_bienvenida.textWrapping = GUI.TextWrapping.WordWrap;
+    mensaje_bienvenida.paddingTop = "5%";
+    mensaje_bienvenida.paddingLeft = "5%";
+    mensaje_bienvenida.paddingRight = "5%";
+    mensaje_bienvenida.paddingBottom = "5%";
     mensaje_bienvenida.textHorizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
     mensaje_bienvenida.textVerticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
 
-    grid.addControl(mensaje_bienvenida, 0, 0);
+    stackPanel.addControl(mensaje_bienvenida);
+
+    grid.addControl(scrollViewer, 0, 0);
 
     let boton_continuar = GUI.Button.CreateSimpleButton("boton_continuar", "Continuar");
-    boton_continuar.width = 0.2;
-    boton_continuar.height = "40px";
+    boton_continuar.width = "20%";
+    boton_continuar.height = "50%";
     boton_continuar.cornerRadius = 20;
     boton_continuar.color = "white";
     boton_continuar.thickness = 4;
@@ -253,10 +282,11 @@ export function crearMensaje(mensaje, scene) {
 }
 
 /** 
- * @param {String} planeta - Nombre del planeta a crear
- * @param {BABYLON.Engine} engine - Motor de babylon
- * @param {BABYLON.Scene} canvas - Escena de babylon
- * @returns {BABYLON.Scene} - Retorna la escena del planeta 
+ * Función que crea los elementos del planeta seleccionado, los elementos de la escena principal se ocultan y muestran los nuevos (No se crea una nueva escena, sino que hace la ilusión de que se cambia de escena)
+ * @param {String} planeta - Nombre del planeta que se quiere crear la escena
+ * @param {BABYLON.camera} camera - Cárama de babylon
+ * @param {BABYLON.Scene} scene - Escena de babylon
+ * @returns {Integer} - Retorna el indice de la escena a la que se ha cambiado
 **/
 export function obtenerEscenaPlaneta(planeta, camera, scene) {
 
@@ -265,22 +295,18 @@ export function obtenerEscenaPlaneta(planeta, camera, scene) {
     switch (planeta) {
 
         case "SOL":
-            EscenaPlanetas.crearEscena(camera, scene, 0)
             escenaPlaneta = 0
             break;
 
         case "MERCURIO":
-            EscenaPlanetas.crearEscena(camera, scene, 1)
             escenaPlaneta = 1
             break;
 
         case "VENUS":
-            EscenaPlanetas.crearEscena(camera, scene, 2)
             escenaPlaneta = 2
             break;
 
         case "TIERRA":
-            EscenaPlanetas.crearEscena(camera, scene, 3)
             escenaPlaneta = 3
             break;
 
@@ -289,17 +315,14 @@ export function obtenerEscenaPlaneta(planeta, camera, scene) {
             break;
 
         case "MARTE":
-            EscenaPlanetas.crearEscena(camera, scene, 4)
             escenaPlaneta = 4
             break;
 
         case "JUPITER":
-            EscenaPlanetas.crearEscena(camera, scene, 5)
             escenaPlaneta = 5
             break;
 
         case "SATURNO":
-            EscenaPlanetas.crearEscena(camera, scene, 6)
             escenaPlaneta = 6
             break;
 
@@ -308,17 +331,21 @@ export function obtenerEscenaPlaneta(planeta, camera, scene) {
             break;
 
         case "URANO":
-            EscenaPlanetas.crearEscena(camera, scene, 7)
             escenaPlaneta = 7
             break;
 
         case "NEPTUNO":
-            EscenaPlanetas.crearEscena(camera, scene, 8)
             escenaPlaneta = 8
             break;
 
         default:
             break;
+
+    }
+
+    if(escenaPlaneta !== -1) {
+
+        EscenaPlanetas.crearEscena(camera, scene, escenaPlaneta)
 
     }
 
@@ -329,7 +356,7 @@ export function obtenerEscenaPlaneta(planeta, camera, scene) {
 /**
  * Función para crear los planetas del sistema solar
  * @param {Babylon.Scene} scene la escena de Babylon
- * @returns {Babylon.Mesh} Array con los planetas del sistema solar
+ * @returns {Array Babylon.Mesh} Array con los planetas del sistema solar
 **/
 export function crearPlanetas(scene) {
 
@@ -580,10 +607,10 @@ export function crearPaneles(planetas) {
 }
 
 /**
- * Función que crea los botones para iniciar las pruebas de los planetas
+ * Función que crea los botones para visitar los planetas
  * @param {Babylon.GUI.AdvancedDynamicTexture} advancedTexture Textura avanzada de Babylon
  * @param {Array Babylon.Mesh} planetas Array con los planetas
- * @returns {Array Babylon.GUI.Button} Array con los botones para iniciar las pruebas de los planetas
+ * @returns {Array Babylon.GUI.Button} Array con los botones para visitar los planetas
 **/
 export function crearBotones(advancedTexture, planetas) {
 
@@ -600,7 +627,7 @@ export function crearBotones(advancedTexture, planetas) {
             }
     
             let boton = GUI.Button.CreateSimpleButton("boton" + i);
-            boton.width = "15%";
+            boton.width = "20%";
             boton.height = "7%";
             boton.textBlock.text = "Visitar " + planetas[i].name.toUpperCase()
             boton.cornerRadius = 20;
@@ -630,10 +657,11 @@ export function crearBotones(advancedTexture, planetas) {
 }
 
 /**
+ * Función que valida si el nivel ya fue pasado y mostrar el botón de paso de nivel
  * @param {Babylon.Mesh} selectedMesh Mesh seleccionado
  * @param {Array Babylon.GUI.Button} botones Array con los botones para iniciar las pruebas de los planetas
 **/
-export function validarNivelPasado(selectedMesh, botones/*, niveles_planetas*/) {
+export function validarNivelPasado(selectedMesh, botones) {
 
     for (let i = 0; i < botones.length; i++) {
 
@@ -644,7 +672,6 @@ export function validarNivelPasado(selectedMesh, botones/*, niveles_planetas*/) 
             if (nivelpasado[i]) {
 
                 setPasoNivelBoton(botones[i])
-                // setPasoNivelImagen(niveles_planetas[i])
 
             }
 

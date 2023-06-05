@@ -35,7 +35,7 @@ export function getNivel(indexNivel){
 }
 
 /**
- * @returns {Array} - Devuelve un array con los niveles pasados
+ * @returns {Array boolean} - Devuelve un array con los niveles pasados
 **/
 export function getNiveles(){
 
@@ -44,6 +44,7 @@ export function getNiveles(){
 }
 
 /**
+ * Asigna el indice de la escena que se quiere cargar a la variable global
  * @params {Babylon.Scene} escena - Escena que se quiere asignar a la variable global
 **/ 
 export function setEscenaPlaneta(escena){
@@ -53,7 +54,7 @@ export function setEscenaPlaneta(escena){
 }
 
 /**
- * @returns {Babylon.Scene} - Devuelve la escena que se ha asignado a la variable global
+ * @returns {Babylon.Scene} - Devuelve el indice que se ha asignado a la variable global
 **/
 export function getEscenaPlaneta(){
 
@@ -82,40 +83,40 @@ const onSceneReady = async (e) => {
     var highlightLayer = new Babylon.HighlightLayer('highlightLayer', scene);
     let selectedMesh = null;
 
-    // DAMOS UN COLOR OSCURO A LA ESCENA
+    // Damos color oscurso a la escena
     scene.clearColor = new Babylon.Color3(0, 0, 0)
 
-    // CREAMOS LA CÁMARA
+    // Cámara que se asociará a todas las escenas
     const camera = new Babylon.FreeCamera("camera", new Babylon.Vector3(0, 9, -15), scene)
     camera.setTarget(Babylon.Vector3.Zero())
     camera.attachControl(canvas, true)
 
-    // CREAMOS LA LUZ
+    // Luz que puede ser manipulada en cualquier escena
     const light = new Babylon.PointLight("light", new Babylon.Vector3(0, -1, 0), scene)
     light.intensity = 5
 
-    // CREAMOS EL SUELO
+    // Suelo de la escena principal (sistema solar)
     const ground = Babylon.MeshBuilder.CreateGround("ground", { width: 20, height: 20 }, scene)
     const groundMaterial = new Babylon.StandardMaterial("groundMaterial", scene)
     groundMaterial.diffuseTexture = new Babylon.Texture(milky_way, scene)
     ground.material = groundMaterial
 
-    // CREAMOS EL CIELO
+    // Cielo de la escena principal (sistema solar)
     const skyBoxMaterial = new Materials.SkyMaterial("skyBoxMaterial", scene)
     const skybox = Babylon.Mesh.CreateBox("skyBox", 100.0, scene)
     skybox.material = skyBoxMaterial
 
-    // MENSAJE DE BIENVENIDA
-    var mensajeBienvenida = "Bienvenido al Sistema Solar en XR \n\n\n\n Tu misión aquí es visitar cada planeta y aprender sobre ellos. \n\n Para conocer cómo funciona el planeta en el sistema solar debes seleccionarlo. \n\n Si quieres aprender más acerca de este planeta selecciona el botón 'Visitar...' y conoce cómo es por dentro. \n\n Si crees saber lo suficiente del planeta lo pondrás a prueba con un cuestionario para pasar el nivel del planeta. \n\n\n ¡Disfruta tu viaje!"
+    // Mensaje de bienvenida al sistema solar
+    var mensajeBienvenida = "\n\n ¡Bienvenido al Sistema Solar en XR! \n\n\n\n Tu misión aquí es visitar cada planeta y aprender sobre ellos. Cada planeta es una misión, por lo que deberás pasar la prueba de todos para ganar. \n\n Para conocer cómo funciona cada planeta en el sistema solar, simplemente selecciónalo. Si deseas aprender más acerca de un planeta en particular, presiona el botón 'Visitar...' y sumérgete en su interior. \n\n Una vez que sientas que has adquirido suficiente conocimiento sobre el planeta y crees comprender cómo funciona tanto individualmente como en el contexto del sistema solar, pon a prueba tus habilidades completando un cuestionario. \n\n Si en algún momento de tu viaje te sientes perdido, no dudes en utilizar el botón de ayuda ubicado en la parte superior derecha de la pantalla. \n\n Además, para una experiencia aún más inmersiva, aprovecha los recursos de realidad aumentada de tu dispositivo. En la esquina inferior derecha, encontrarás un botón para cambiar entre el modo de realidad virtual y realidad aumentada. \n\n\n\n ¡Disfruta tu viaje! \n\n"
     SistemaSolar.crearMensaje(mensajeBienvenida, scene)
 
-    // IMAGENES DE LOS PLANETAS
-    var [textura_planetas, rectangle_planetas, img_niveles_planetas] = SistemaSolar.crearImagenesPlanetas(scene)
+    // Imagenes de los planetas que se mostrarán en la parte superior izquierda de la pantalla en la escena principal
+    var [textura_planetas, rectangle_planetas, img_niveles_planetas] = SistemaSolar.crearImagenesPlanetas()
 
-    // BOTON DE AYUDA
-    var [boton_ayuda, textura_ayuda] = SistemaSolar.crearBotonAyuda(scene)
+    // Botón de ayuda que se mostrará en la parte superior derecha de la pantalla en la escena principal
+    var [boton_ayuda, mensaje_ayuda] = SistemaSolar.crearBotonMensajeAyuda()
 
-    // CREANDO EL SISTEMA SOLAR
+    // Se crean todos los componentes del sistema solar
     var planetas = SistemaSolar.crearPlanetas(scene)
     var orbitas = SistemaSolar.crearOrbitas()
     var circulos = SistemaSolar.crearCirculos(scene, orbitas)
@@ -131,10 +132,11 @@ const onSceneReady = async (e) => {
     var [ solBoton, mercurioBoton, venusBoton, tierraBoton, marteBoton, jupiterBoton, saturnoBoton, uranoBoton, neptunoBoton ] = botones
     var [ nivel_sol, nivel_mercurio, nivel_venus, nivel_tierra, nivel_marte, nivel_jupiter, nivel_saturno, nivel_urano, nivel_neptuno ] = img_niveles_planetas
 
-    // CARGAMOS EL MÓDULO XR
+    // Módulo XR que se asociará a todas las escenas
     var [xr_module, btnModoXR] = await XR_Module.XR_Experience(ground, skybox, scene);
 
-    // Agregamos los planetas y orbitas a un contenedor para poder manipularlos más fácilmente
+    /***** Agregamos los elementos a contenedor para poder manipularlos más fácilmente *****/
+
     var planetasContenedor = new Babylon.AssetContainer(scene)
     planetasContenedor.meshes.push(sol, mercurio, venus, tierra, luna, marte, jupiter, saturno, saturnoAnillos, urano, neptuno)
 
@@ -149,6 +151,8 @@ const onSceneReady = async (e) => {
 
     var luzContenedor = new Babylon.AssetContainer(scene)
     luzContenedor.lights.push(light)
+
+    /****************************************************************************************/
 
     agregarComportamientoPlanetas()
 
@@ -167,10 +171,9 @@ const onSceneReady = async (e) => {
     
                     selectedMesh = SistemaSolar.agregarHighLight(mesh, selectedMesh, highlightLayer);
     
-                    // Activar el panel y botones de prueba del planeta seleccionado
                     SistemaSolar.activarPanel(mesh, paneles)
                     SistemaSolar.activarBoton(mesh, botones)
-                    SistemaSolar.validarNivelPasado(mesh, botones/*, img_niveles_planetas*/)
+                    SistemaSolar.validarNivelPasado(mesh, botones)
     
                 })
                 
@@ -195,7 +198,7 @@ const onSceneReady = async (e) => {
                 ocultarBotones()
                 rectangle_planetas.isVisible = false
                 boton_ayuda.isVisible = false
-                textura_ayuda.isVisible = false
+                mensaje_ayuda.isVisible = false
 
                 contenedoresCargados = false
     
