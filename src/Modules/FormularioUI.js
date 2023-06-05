@@ -19,8 +19,8 @@ function formularioUI(name, question, answers, correct_answer, scene, ultima_pre
     var height = 1080
 
     var barMesh = BABYLON.MeshBuilder.CreatePlane("barMesh_"+ name, {
-        width: 1920 * 0.001  ,
-        height: 150 * 0.001,
+        width: 1920 * 0.01,
+        height: 150 * 0.01,
         sideOrientation: BABYLON.Mesh.DOUBLESIDE
     }, scene);
 
@@ -51,8 +51,8 @@ function formularioUI(name, question, answers, correct_answer, scene, ultima_pre
     bar_texture.addControl(bar_rectangle);
 
     var windowMesh = BABYLON.MeshBuilder.CreatePlane("windowMesh_"+ name, {
-        width: width * (0.001),
-        height: height * (0.001),
+        width: width * 0.01,
+        height: height * 0.01,
         sideOrientation: BABYLON.Mesh.DOUBLESIDE
     }, scene);
 
@@ -62,9 +62,9 @@ function formularioUI(name, question, answers, correct_answer, scene, ultima_pre
     };
 
     var ajust_pos = windowMesh.getBoundingInfo().boundingBox.maximum.y + barMesh.getBoundingInfo().boundingBox.maximum.y
-    var change_axis = new BABYLON.Vector3(0, -ajust_pos, .02);
+    var change_axis = new BABYLON.Vector3(0, -ajust_pos, 0);
 
-    var local_pos = new BABYLON.Vector3(0, 0.5, 0);
+    var local_pos = new BABYLON.Vector3(0, 0, 20);
     barMesh.position = local_pos;
 
     windowMesh.parent = barMesh;
@@ -296,8 +296,8 @@ export function mensajeEmergente(pasoPrueba, scene) {
     var height = 1080
     
     var barMesh = BABYLON.MeshBuilder.CreatePlane("mensaje", {
-        width: width*0.001  ,
-        height: 150*0.001,
+        width: width * 0.01  ,
+        height: 150 * 0.01,
         sideOrientation: BABYLON.Mesh.DOUBLESIDE,
         isVisible: false
     }, scene);
@@ -328,8 +328,8 @@ export function mensajeEmergente(pasoPrueba, scene) {
     bar_texture.addControl(bar_rectangle);
 
     var windowMesh = BABYLON.MeshBuilder.CreatePlane("mensaje", {
-        width: width * (0.001),
-        height: height * (0.001),
+        width: width * 0.01,
+        height: height * 0.01,
         sideOrientation: BABYLON.Mesh.DOUBLESIDE,
         isVisible: false
     }, scene);
@@ -340,9 +340,9 @@ export function mensajeEmergente(pasoPrueba, scene) {
       };
 
     var ajust_pos = windowMesh.getBoundingInfo().boundingBox.maximum.y + barMesh.getBoundingInfo().boundingBox.maximum.y
-    var change_axis = new BABYLON.Vector3(0, -ajust_pos, .02);
+    var change_axis = new BABYLON.Vector3(0, -ajust_pos, 0);
 
-    var local_pos = new BABYLON.Vector3(0, 0.5, 0);
+    var local_pos = new BABYLON.Vector3(0, 0, 20);
     barMesh.position = local_pos;
 
     windowMesh.parent = barMesh;

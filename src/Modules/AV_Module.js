@@ -10,8 +10,8 @@ import "babylonjs-loaders"
 export function VideoTexture(videoURL, scene) {
 
     var planeOpts = {
-        height: 1080 * 0.001, 
-        width: 1920 * 0.001, 
+        height: 1080 * 0.01, 
+        width: 1920 * 0.01, 
         sideOrientation: BABYLON.Mesh.DOUBLESIDE
     };
 
@@ -22,7 +22,7 @@ export function VideoTexture(videoURL, scene) {
     };
     
     var ANote0Video = BABYLON.MeshBuilder.CreatePlane("plane", planeOpts, scene);
-    var vidPos = (new BABYLON.Vector3(0,0,0.1))
+    var vidPos = (new BABYLON.Vector3(0, 0, 15))
     ANote0Video.position = vidPos;
     var ANote0VideoMat = new BABYLON.StandardMaterial("m", scene);
     ANote0VideoMat.diffuseColor = new BABYLON.Color3.White();

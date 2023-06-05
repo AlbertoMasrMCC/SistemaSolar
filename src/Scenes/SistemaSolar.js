@@ -164,8 +164,8 @@ export function crearBotonMensajeAyuda() {
     var advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 
     var boton_ayuda = GUI.Button.CreateSimpleButton("boton_ayuda", "?");
-    boton_ayuda.width = "5%";
-    boton_ayuda.height = "5%";
+    boton_ayuda.width = "8%";
+    boton_ayuda.height = "8%";
     boton_ayuda.cornerRadius = 50;
     boton_ayuda.color = "white";
     boton_ayuda.thickness = 4;

@@ -22,7 +22,7 @@ export function crearEscena(camera, scene, idTest) {
     var preguntas_respuestas_escena = preguntas_respuestas[idTest]
 
     // Posicionamos la cámara en el centro de la escena
-    camera.position = new Babylon.Vector3(0, 2, -3);
+    camera.position = new Babylon.Vector3(0, 10, -5);
 
     var videoPlayer = AV_Module.VideoTexture(video_planetas[idTest], scene)
 
