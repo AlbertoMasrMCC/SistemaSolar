@@ -106,8 +106,8 @@ function formularioUI(name, question, answers, correct_answer, scene, ultima_pre
     var selected_answer;
 
     var raddio_button_1 = new GUI.RadioButton("radio_button_1_"+ name);
-    raddio_button_1.width = "30%";
-    raddio_button_1.height = "60%";
+    raddio_button_1.width = "60%";
+    raddio_button_1.height = "90%";
     raddio_button_1.color = "white";
     raddio_button_1.isChecked = false;
     raddio_button_1.text = answers[0];
@@ -132,8 +132,8 @@ function formularioUI(name, question, answers, correct_answer, scene, ultima_pre
     windows_answer_grid.addControl(text_radio_button_1, 1, 0);
 
     var raddio_button_2 = new GUI.RadioButton("radio_button_2_"+ name);
-    raddio_button_2.width = "30%";
-    raddio_button_2.height = "60%";
+    raddio_button_2.width = "60%";
+    raddio_button_2.height = "90%";
     raddio_button_2.color = "white";
     raddio_button_2.isChecked = false;
     raddio_button_2.text = answers[1];
@@ -158,8 +158,8 @@ function formularioUI(name, question, answers, correct_answer, scene, ultima_pre
     windows_answer_grid.addControl(text_radio_button_2, 1, 1);
 
     var raddio_button_3 = new GUI.RadioButton("radio_button_3_"+ name);
-    raddio_button_3.width = "30%";
-    raddio_button_3.height = "60%";
+    raddio_button_3.width = "60%";
+    raddio_button_3.height = "90%";
     raddio_button_3.color = "white";
     raddio_button_3.isChecked = false;
     raddio_button_3.text = answers[2];
@@ -184,8 +184,8 @@ function formularioUI(name, question, answers, correct_answer, scene, ultima_pre
     windows_answer_grid.addControl(text_radio_button_3, 1, 2);
 
     var raddio_button_4 = new GUI.RadioButton("radio_button_4_"+ name);
-    raddio_button_4.width = "30%";
-    raddio_button_4.height = "60%";
+    raddio_button_4.width = "60%";
+    raddio_button_4.height = "90%";
     raddio_button_4.color = "white";
     raddio_button_4.isChecked = false;
     raddio_button_4.text = answers[3];

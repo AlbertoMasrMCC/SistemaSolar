@@ -105,6 +105,7 @@ function mostrarOcultarVideo(videoPlayer, mostrar) {
     videoPlayer.button_controls.isVisible = mostrar
     videoPlayer.button_omited.isVisible = mostrar
     videoPlayer.advancedTexture.isVisible = mostrar
+    videoPlayer.botons_mesh.isVisible = mostrar
 
 }
 
